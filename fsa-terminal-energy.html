@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Energy & Utilities</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}
+.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}
+.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}
+.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}
+.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}
+.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}
+.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}
+.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}
+.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}
+.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}
+.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}
+.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}
+.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}
+.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+
+.c-row{display:grid;grid-template-columns:1.5fr 0.7fr 0.6fr 0.6fr 1.1fr;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.c-row:hover{background:var(--bg3)}
+.c-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}
+.c-row.hdr:hover{background:transparent}
+.c-name{color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem}
+.c-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}
+.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-natgas{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}
+.db-electric{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}
+.db-diesel{background:linear-gradient(90deg,#FFB898,#ffd0b8)}
+.db-water{background:linear-gradient(90deg,#B0CCFF,#c8daff)}
+.db-propane{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}
+.db-waste{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}
+.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.tbl-row:hover{background:var(--bg4)}
+.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}
+.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.4fr 0.8fr 0.7fr 0.7fr 0.7fr}
+.reg-cols{grid-template-columns:1.2fr 0.6fr 0.6fr 1.2fr}
+.rate-cols{grid-template-columns:1.2fr 0.8fr 0.8fr 0.8fr 0.6fr}
+
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}
+.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}
+.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}
+.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}
+.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}
+.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}
+.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}
+.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}
+.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}
+.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}
+.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}
+.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}
+.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}
+@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}
+.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr">
+  <div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div>
+  <div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div>
+</div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Energy & Utilities</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Natural gas, electricity, diesel/fuel, water, propane, and waste management for industrial and commercial facilities. Energy typically represents 15-25% of total manufacturing cost and is the single largest variable cost driver affected by the Hormuz disruption.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">15-25%</div><div class="cs-lbl">of Mfg Cost</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">+12.2%</div><div class="cs-lbl">Nat Gas YTD</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">Hormuz Impact</div></div>
+    <div><div class="cs-val">$3.13</div><div class="cs-lbl">Nat Gas $/MMBtu</div></div>
+    <div><div class="cs-val">$98.71</div><div class="cs-lbl">WTI Crude $/bbl</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Energy Prices</div>
+  <div class="tab" data-tab="rates">Rate Benchmarks</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Markets</div>
+  <div class="tab" data-tab="regulatory">Regulatory</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Crude Oil<br>$98.71/bbl</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">HIGH</div><div class="risk-lbl">Natural Gas<br>$3.13/MMBtu</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Diesel/Fuel<br>+18% YTD</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">STABLE</div><div class="risk-lbl">Electricity<br>Grid Normal</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Live Energy Prices</span><span class="pnl-badge">EIA · DAILY</span></div>
+      <div class="c-row hdr"><span>Commodity</span><span style="text-align:right">Price</span><span style="text-align:right">Unit</span><span style="text-align:right">Chg</span><span style="text-align:right">Impact</span></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FF8FA0"></span>WTI Crude</div><div class="c-val">$98.71</div><div class="c-val" style="color:var(--t3)">/bbl</div><div class="c-val up">+3.42%</div><div class="c-val" style="color:#FF8FA0;font-family:'DM Sans';font-size:0.63rem">All petro-derived inputs</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FF8FA0"></span>Brent Crude</div><div class="c-val">$103.14</div><div class="c-val" style="color:var(--t3)">/bbl</div><div class="c-val up">+2.87%</div><div class="c-val" style="color:#FF8FA0;font-family:'DM Sans';font-size:0.63rem">Global benchmark</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FFB898"></span>Natural Gas</div><div class="c-val">$3.13</div><div class="c-val" style="color:var(--t3)">/MMBtu</div><div class="c-val up">+1.22%</div><div class="c-val" style="color:#FFB898;font-family:'DM Sans';font-size:0.63rem">Mfg heating, process</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FFB898"></span>RBOB Gasoline</div><div class="c-val">$3.07</div><div class="c-val" style="color:var(--t3)">/gal</div><div class="c-val up">+1.88%</div><div class="c-val" style="color:#FFB898;font-family:'DM Sans';font-size:0.63rem">Fleet, transportation</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FFDF80"></span>Heating Oil</div><div class="c-val">$3.99</div><div class="c-val" style="color:var(--t3)">/gal</div><div class="c-val up">+2.44%</div><div class="c-val" style="color:#FFDF80;font-family:'DM Sans';font-size:0.63rem">Facility heating</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#6FFFB0"></span>Propane</div><div class="c-val">$0.82</div><div class="c-val" style="color:var(--t3)">/gal</div><div class="c-val dn">-0.6%</div><div class="c-val" style="color:#6FFFB0;font-family:'DM Sans';font-size:0.63rem">Process, rural ops</div></div>
+      <div class="src">Source: U.S. Energy Information Administration (EIA) — daily spot prices</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Crude above $98/bbl and climbing. Every contract with energy-linked pricing or fuel surcharges is repricing against you. Review all pass-through clauses now.</div><div class="act-cat">CRUDE · CONTRACTS</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">If you haven't hedged natural gas for Q2-Q3, you're exposed. Financial hedges or fixed-price forward contracts are available — but the window is narrowing as prices rise.</div><div class="act-cat">NAT GAS · HEDGING</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Electricity grid stable in most US regions. But if Hormuz extends through summer and nat gas prices spike further, expect electricity rate increases in gas-dependent regions (ERCOT, PJM).</div><div class="act-cat">ELECTRICITY · GRID</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ENERGY PRICES -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Facility Energy Cost Breakdown</span><span class="pnl-badge">EIA · BLS</span></div>
+      <div class="driver"><div class="driver-name">Natural Gas</div><div class="driver-bar-bg"><div class="driver-bar db-natgas" style="width:35%">35%</div></div><div class="driver-pct">35%</div><div class="driver-trend up">+12.2%</div></div>
+      <div class="driver"><div class="driver-name">Electricity</div><div class="driver-bar-bg"><div class="driver-bar db-electric" style="width:30%">30%</div></div><div class="driver-pct">30%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="driver"><div class="driver-name">Diesel / Fuel</div><div class="driver-bar-bg"><div class="driver-bar db-diesel" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+18.3%</div></div>
+      <div class="driver"><div class="driver-name">Water / Sewer</div><div class="driver-bar-bg"><div class="driver-bar db-water" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+3.2%</div></div>
+      <div class="driver"><div class="driver-name">Propane / LPG</div><div class="driver-bar-bg"><div class="driver-bar db-propane" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend dn">-0.6%</div></div>
+      <div class="driver"><div class="driver-name">Waste Mgmt</div><div class="driver-bar-bg"><div class="driver-bar db-waste" style="width:4%">4%</div></div><div class="driver-pct">4%</div><div class="driver-trend up">+2.1%</div></div>
+      <div class="src">Source: EIA, BLS PPI-Utilities, typical industrial facility profile</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Hormuz Impact on Energy Costs</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Direct Impact — Crude Oil</div><div class="alert-text">20% of global oil supply transits Hormuz. Closure has pushed WTI to $98.71/bbl and Brent to $103.14. Every energy-intensive manufacturer is seeing cost increases across transportation, heating, and process energy. This is structural — not a spike that corrects in weeks.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Indirect Impact — Natural Gas</div><div class="alert-text">US natural gas is largely domestic (shale), but global LNG demand is pulling on US export capacity. Henry Hub at $3.13/MMBtu is elevated but not crisis-level. Risk: if Hormuz extends through summer, LNG export demand could push domestic prices to $4-5/MMBtu — a 30-60% increase from today.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Downstream Impact — Electricity</div><div class="alert-text">40% of US electricity comes from natural gas. If gas prices spike, electricity rates follow with a 30-60 day lag. ERCOT (Texas), PJM (Mid-Atlantic), and ISO-NE (New England) are most exposed. Regions with high hydro/nuclear/renewable mix (Pacific NW, upper Midwest) are insulated.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- RATE BENCHMARKS -->
+<div class="tab-content" id="tab-rates">
+  <div class="pnl-hdr"><span class="pnl-title">Industrial Energy Rate Benchmarks by Region</span><span class="pnl-badge">EIA · FERC · STATE PUC</span></div>
+  <div class="tbl-row hdr rate-cols"><span>Region / ISO</span><span style="text-align:right">Elec ¢/kWh</span><span style="text-align:right">Nat Gas $/MMBtu</span><span style="text-align:right">YoY Change</span><span style="text-align:right">Risk</span></div>
+  <div class="tbl-row rate-cols"><div class="c-name">ERCOT (Texas)</div><div class="c-val">7.2¢</div><div class="c-val">$3.18</div><div class="c-val up">+8.4%</div><div style="text-align:right"><span class="badge-sm b-risk">HIGH</span></div></div>
+  <div class="tbl-row rate-cols"><div class="c-name">PJM (Mid-Atlantic)</div><div class="c-val">9.8¢</div><div class="c-val">$3.42</div><div class="c-val up">+6.2%</div><div style="text-align:right"><span class="badge-sm b-watch">ELEVATED</span></div></div>
+  <div class="tbl-row rate-cols"><div class="c-name">MISO (Midwest)</div><div class="c-val">8.1¢</div><div class="c-val">$2.95</div><div class="c-val up">+3.8%</div><div style="text-align:right"><span class="badge-sm b-watch">ELEVATED</span></div></div>
+  <div class="tbl-row rate-cols"><div class="c-name">ISO-NE (New England)</div><div class="c-val">14.2¢</div><div class="c-val">$4.10</div><div class="c-val up">+11.6%</div><div style="text-align:right"><span class="badge-sm b-risk">HIGH</span></div></div>
+  <div class="tbl-row rate-cols"><div class="c-name">CAISO (California)</div><div class="c-val">16.8¢</div><div class="c-val">$3.85</div><div class="c-val up">+5.1%</div><div style="text-align:right"><span class="badge-sm b-watch">ELEVATED</span></div></div>
+  <div class="tbl-row rate-cols"><div class="c-name">SPP (Central US)</div><div class="c-val">6.9¢</div><div class="c-val">$2.78</div><div class="c-val up">+2.4%</div><div style="text-align:right"><span class="badge-sm b-strong">STABLE</span></div></div>
+  <div class="tbl-row rate-cols"><div class="c-name">NYISO (New York)</div><div class="c-val">12.4¢</div><div class="c-val">$3.68</div><div class="c-val up">+7.8%</div><div style="text-align:right"><span class="badge-sm b-watch">ELEVATED</span></div></div>
+  <div class="tbl-row rate-cols"><div class="c-name">BPA (Pacific NW)</div><div class="c-val">4.8¢</div><div class="c-val">$2.45</div><div class="c-val up">+1.2%</div><div style="text-align:right"><span class="badge-sm b-strong">STABLE</span></div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">Highest Risk Regions</div><div class="alert-text">ERCOT (Texas) and ISO-NE (New England) are most exposed to natural gas price spikes. Both regions are heavily gas-dependent for electricity generation with limited pipeline capacity. If Hormuz extends through summer peak demand, expect 15-25% electricity rate increases in these regions.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Lowest Risk Regions</div><div class="alert-text">BPA (Pacific Northwest) at 4.8¢/kWh is the cheapest industrial electricity in the US — hydro-powered and largely insulated from fossil fuel price swings. SPP (Central US) is also well-positioned with wind generation offsetting gas dependency. If you have location flexibility for new facilities, these regions offer structural energy cost advantages.</div></div>
+  <div class="src">Source: EIA Electric Power Monthly, FERC Form 714, State PUC rate filings</div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Energy Supplier Landscape</span><span class="pnl-badge">EIA · SEC EDGAR · FERC</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Supplier / Utility</span><span style="text-align:center">Type</span><span style="text-align:center">Region</span><span style="text-align:center">Market</span><span style="text-align:center">Risk</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Constellation Energy</div><div style="text-align:center;color:var(--t1);font-weight:500">Elec Retail</div><div style="text-align:center;color:var(--t2)">National</div><div style="text-align:center;color:var(--t2)">Deregulated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Direct Energy / NRG</div><div style="text-align:center;color:var(--t1);font-weight:500">Elec + Gas</div><div style="text-align:center;color:var(--t2)">Multi-State</div><div style="text-align:center;color:var(--t2)">Deregulated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Shell Energy</div><div style="text-align:center;color:var(--t1);font-weight:500">Nat Gas</div><div style="text-align:center;color:var(--t2)">National</div><div style="text-align:center;color:var(--t2)">Wholesale</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">NextEra Energy</div><div style="text-align:center;color:var(--t1);font-weight:500">Elec Utility</div><div style="text-align:center;color:var(--t2)">FL / National</div><div style="text-align:center;color:var(--t2)">Regulated + Renewable</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Duke Energy</div><div style="text-align:center;color:var(--t1);font-weight:500">Elec Utility</div><div style="text-align:center;color:var(--t2)">SE US</div><div style="text-align:center;color:var(--t2)">Regulated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Talen Energy</div><div style="text-align:center;color:var(--t1);font-weight:500">Power Gen</div><div style="text-align:center;color:var(--t2)">PJM</div><div style="text-align:center;color:var(--t2)">Wholesale</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Deregulated vs Regulated Markets</div><div class="alert-text">In deregulated states (Texas, Ohio, Pennsylvania, Illinois, New York, Connecticut, and others), you can choose your electricity and gas supplier and negotiate rates. In regulated states, your utility is your only option — but you can still negotiate rate schedules, demand charges, and time-of-use structures. Know your market structure before negotiating.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Renewable PPA Opportunity</div><div class="alert-text">Corporate renewable PPAs (Power Purchase Agreements) lock in electricity pricing for 10-20 years at fixed rates, typically $0.03-0.06/kWh — well below current industrial rates. NextEra, Enel, and AES are the largest PPA counterparties. A PPA hedges your electricity cost permanently while also meeting ESG commitments.</div></div>
+  <div class="src">Source: EIA, FERC, SEC EDGAR filings, state PUC rate schedules</div>
+</div>
+
+<!-- REGULATORY -->
+<div class="tab-content" id="tab-regulatory">
+  <div class="pnl-hdr"><span class="pnl-title">Regulatory & Policy Tracker — Energy</span><span class="pnl-badge">FEDERAL REGISTER · FERC · EPA</span></div>
+  <div class="tbl-row hdr reg-cols"><span>Regulation / Policy</span><span style="text-align:center">Agency</span><span style="text-align:center">Status</span><span style="text-align:right">Impact</span></div>
+  <div class="tbl-row reg-cols"><div class="c-name">EPA Power Plant Emissions Rule</div><div style="text-align:center;color:var(--t2)">EPA</div><div style="text-align:center"><span class="badge-sm b-watch">IN EFFECT</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Coal plant retirements → tighter grid in SE/MW</div></div>
+  <div class="tbl-row reg-cols"><div class="c-name">FERC Transmission Planning Reform</div><div style="text-align:center;color:var(--t2)">FERC</div><div style="text-align:center"><span class="badge-sm b-watch">PROPOSED</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Long-term: better grid reliability. Short-term: rate base increases</div></div>
+  <div class="tbl-row reg-cols"><div class="c-name">IRA Clean Energy Tax Credits</div><div style="text-align:center;color:var(--t2)">Treasury</div><div style="text-align:center"><span class="badge-sm b-strong">ACTIVE</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">30% ITC for solar, 2.75¢/kWh PTC for wind — lowers PPA costs</div></div>
+  <div class="tbl-row reg-cols"><div class="c-name">FERC Natural Gas Pipeline Permitting</div><div style="text-align:center;color:var(--t2)">FERC</div><div style="text-align:center"><span class="badge-sm b-risk">DELAYED</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">New England pipeline constraints keep gas prices elevated</div></div>
+  <div class="tbl-row reg-cols"><div class="c-name">State RPS (Renewable Portfolio Std)</div><div style="text-align:center;color:var(--t2)">States</div><div style="text-align:center"><span class="badge-sm b-watch">VARIES</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Mandatory renewable procurement increases utility costs 2-4%</div></div>
+  <div class="tbl-row reg-cols"><div class="c-name">Carbon Border Adjustment (CBAM-like)</div><div style="text-align:center;color:var(--t2)">Congress</div><div style="text-align:center"><span class="badge-sm b-watch">PROPOSED</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">If enacted: carbon cost on energy-intensive imports. Monitor closely.</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">IRA Opportunity</div><div class="alert-text">The Inflation Reduction Act's clean energy tax credits are the single largest energy cost reduction opportunity available today. A 1MW solar installation with the 30% ITC and accelerated depreciation can reduce facility electricity costs by 40-60% over 25 years with payback in 4-6 years. If you're not evaluating on-site solar or a renewable PPA, you're leaving money on the table.</div></div>
+  <div class="src">Source: Federal Register, FERC dockets, EPA rulemaking, state PUC filings</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Energy & Utilities</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Review every supplier contract with energy-linked pricing, fuel surcharges, or energy escalation clauses. Crude at $98.71/bbl means those clauses are activating NOW. You need to know your exposure before the surcharges hit — not after.</div><div class="act-cat">CRUDE · PASS-THROUGH · CONTRACTS</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">If you haven't hedged natural gas for Q2-Q3, the window is closing. Financial hedges (NYMEX futures/options) or physical fixed-price contracts from your gas supplier are both available. Henry Hub at $3.13 is elevated but could go to $4-5 if Hormuz extends through summer. Lock what you can.</div><div class="act-cat">NAT GAS · HEDGING · FUTURES</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">In deregulated states, run a competitive solicitation for electricity and gas supply. Current contracts signed 12+ months ago are likely below market — but new competitive bids may still beat your incumbent. Get 3-5 quotes from retail energy suppliers. Constellation, Direct Energy/NRG, and Shell Energy all compete aggressively for industrial load.</div><div class="act-cat">ELECTRICITY · GAS · DEREGULATED MARKETS</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Evaluate a corporate renewable PPA. Fixed electricity at $0.03-0.06/kWh for 10-20 years is the most powerful energy hedge available. IRA tax credits make the economics better than ever. Even if you don't sign today, get indicative pricing from NextEra, Enel, or AES so you have the data when leadership asks.</div><div class="act-cat">RENEWABLE · PPA · HEDGING</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Evaluate on-site solar + storage for facilities with large rooftops or adjacent land. 30% ITC plus accelerated depreciation creates 4-6 year payback. This permanently reduces your grid dependency and insulates you from future energy price spikes. The IRA credits are available now — they may not be forever.</div><div class="act-cat">SOLAR · IRA · ON-SITE GENERATION</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">For facilities in ERCOT (Texas) or ISO-NE (New England) — the two highest-risk regions — develop an energy contingency plan. Identify backup fuel options (propane, diesel gen), evaluate demand response programs (get paid to curtail during peaks), and review your interruptible vs firm rate structure.</div><div class="act-cat">GRID RISK · CONTINGENCY · DEMAND RESPONSE</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Watch EPA's power plant emissions rule implementation. Accelerated coal plant retirements will tighten grid capacity in the Southeast and Midwest over the next 2-3 years. If your facilities are in these regions, plan for gradually increasing electricity costs and evaluate backup generation or energy storage.</div><div class="act-cat">REGULATORY · GRID · COAL RETIREMENT</div></div>
+  <div class="src">Source: FSA analyst assessment based on EIA, FERC, EPA, IRA provisions, state PUC data</div>
+</div>
+
+<div class="ftr">
+  <span>FSA Procurement Intelligence Terminal v2.1 · Energy & Utilities · All data from public sources: EIA, FERC, EPA, BLS, Federal Register</span>
+  <span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}
+}
+document.getElementById('tab-bar').addEventListener('click',function(e){
+  var tab=e.target.closest('.tab');if(!tab)return;
+  var id=tab.getAttribute('data-tab');if(id)showTab(id);
+});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}
+setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Oils, Lubricants & Fluids</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-base{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-additive{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-packaging{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-labor{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-logistics{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-testing{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}.hs-cols{grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr}
+.c-name{color:var(--t1);font-weight:600}.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Oils, Lubricants & Fluids</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Base oils (Group I-V), engine oils, hydraulic fluids, gear oils, greases, metalworking fluids, coolants, transformer oils, and specialty lubricants. Directly crude-oil-derived — the most Hormuz-exposed MRO category. OEM specifications create switching barriers that suppliers exploit during price escalations.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$168B</div><div class="cs-lbl">Global Lubricants</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">Crude Exposure</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">$98.71</div><div class="cs-lbl">WTI $/bbl</div></div>
+    <div><div class="cs-val">85%</div><div class="cs-lbl">Petroleum-Derived</div></div>
+    <div><div class="cs-val">OEM Spec</div><div class="cs-lbl">Lock-In Risk</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Ownership<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="specs">OEM Specs & Lock-In</div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Base Oil<br>Crude $98.71</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">HIGH</div><div class="risk-lbl">Gulf Refineries<br>Hormuz Exposed</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">OEM Spec Lock-In<br>Switching Barriers</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">STABLE</div><div class="risk-lbl">Synthetic Base<br>Less Crude-Tied</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Base Oil Pricing</span><span class="pnl-badge">EIA · ICIS</span></div>
+      <div class="driver"><div class="driver-name">Group I Base Oil</div><div class="driver-bar-bg"><div class="driver-bar db-base" style="width:65%"></div></div><div class="driver-trend up">+14.8%</div></div>
+      <div class="driver"><div class="driver-name">Group II Base Oil</div><div class="driver-bar-bg"><div class="driver-bar db-base" style="width:55%"></div></div><div class="driver-trend up">+11.2%</div></div>
+      <div class="driver"><div class="driver-name">Group III (Synthetic)</div><div class="driver-bar-bg"><div class="driver-bar db-additive" style="width:40%"></div></div><div class="driver-trend up">+6.4%</div></div>
+      <div class="driver"><div class="driver-name">PAO (Group IV)</div><div class="driver-bar-bg"><div class="driver-bar db-additive" style="width:30%"></div></div><div class="driver-trend up">+4.2%</div></div>
+      <div class="driver"><div class="driver-name">Additive Packages</div><div class="driver-bar-bg"><div class="driver-bar db-additive" style="width:35%"></div></div><div class="driver-trend up">+7.8%</div></div>
+      <div class="src">Source: EIA crude, ICIS base oil postings, Kline & Co estimates</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Base oil up 11-15% YTD driven by crude. Lubricant suppliers will issue price increase letters within 30 days. Lock annual pricing or negotiate a crude-indexed ceiling NOW.</div><div class="act-cat">BASE OIL · PRICING · CRUDE</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Audit every OEM-spec lubricant requirement. Many specs are outdated or unnecessary. Switching from OEM-branded oil to an equivalent-spec third-party product can save 25-40% with zero performance difference.</div><div class="act-cat">OEM SPEC · COST REDUCTION</div></div>
+    </div>
+  </div>
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">⚠ Shell / Pennzoil / Quaker State / Jiffy Lube</div><div class="alert-text">Shell owns Pennzoil, Quaker State, and the Jiffy Lube brand. If your facilities buy Shell industrial lubricants AND your fleet uses Pennzoil — that's one supplier. See the Suppliers tab.</div></div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Lubricant Cost Breakdown</span><span class="pnl-badge">EIA · BLS</span></div>
+      <div class="driver"><div class="driver-name">Base Oil</div><div class="driver-bar-bg"><div class="driver-bar db-base" style="width:55%">55%</div></div><div class="driver-pct">55%</div><div class="driver-trend up">+12.4%</div></div>
+      <div class="driver"><div class="driver-name">Additive Packages</div><div class="driver-bar-bg"><div class="driver-bar db-additive" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+7.8%</div></div>
+      <div class="driver"><div class="driver-name">Packaging (drums)</div><div class="driver-bar-bg"><div class="driver-bar db-packaging" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+4.2%</div></div>
+      <div class="driver"><div class="driver-name">Blending Labor</div><div class="driver-bar-bg"><div class="driver-bar db-labor" style="width:7%">7%</div></div><div class="driver-pct">7%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="driver"><div class="driver-name">Logistics</div><div class="driver-bar-bg"><div class="driver-bar db-logistics" style="width:6%">6%</div></div><div class="driver-pct">6%</div><div class="driver-trend up">+22.6%</div></div>
+      <div class="driver"><div class="driver-name">Testing/QC</div><div class="driver-bar-bg"><div class="driver-bar db-testing" style="width:4%">4%</div></div><div class="driver-pct">4%</div><div class="driver-trend flat">+1.2%</div></div>
+      <div class="src">Sources: EIA crude, ICIS, BLS PPI-Lubricants, DOT freight indices</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Base Oil Groups — Crude Sensitivity</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Group I — Highest Crude Exposure</div><div class="alert-text">Traditional solvent-refined base oil. Cheapest per gallon but most sensitive to crude price swings. Used in industrial gear oils, hydraulic fluids, and general-purpose lubricants. Price tracks crude almost 1:1.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Group II/III — Moderate Exposure</div><div class="alert-text">Hydrocracked and severely hydrocracked base oils. Better performance, less crude-sensitive than Group I but still petroleum-derived. The mainstream choice for engine oils and premium industrial lubricants. 60-80% crude correlation.</div></div>
+      <div class="alert alert-gold" style="border-left-color:#6FFFB0"><div class="alert-title" style="color:#6FFFB0">Group IV (PAO) / Group V — Lowest Exposure</div><div class="alert-text">Synthetic base oils. Manufactured from ethylene (PAO) or specialty chemistry (esters, PAG). Less tied to crude pricing — driven by chemical feedstock costs instead. Premium priced but most stable during crude volatility. The hedge for your most critical equipment.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major Lubricant Suppliers</span><span class="pnl-badge">SEC EDGAR · ANNUAL REPORTS</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Supplier</span><span>Parent Company</span><span style="text-align:center">Type</span><span style="text-align:center">Health</span><span style="text-align:center">Hormuz Risk</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Shell Lubricants</div><div style="color:var(--t2);font-size:0.65rem">Shell plc (LSE: SHEL)</div><div style="text-align:center;color:var(--t1)">Integrated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FF8FA0">HIGH</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">ExxonMobil (Mobil)</div><div style="color:var(--t2);font-size:0.65rem">Exxon Mobil Corp (NYSE: XOM)</div><div style="text-align:center;color:var(--t1)">Integrated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FF8FA0">HIGH</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Chevron (Texaco/Havoline)</div><div style="color:var(--t2);font-size:0.65rem">Chevron Corp (NYSE: CVX)</div><div style="text-align:center;color:var(--t1)">Integrated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FF8FA0">HIGH</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">TotalEnergies</div><div style="color:var(--t2);font-size:0.65rem">TotalEnergies SE (EPA: TTE)</div><div style="text-align:center;color:var(--t1)">Integrated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FF8FA0">HIGH</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Fuchs Petrolub</div><div style="color:var(--t2);font-size:0.65rem">Fuchs SE (XETRA: FPE)</div><div style="text-align:center;color:var(--t1)">Independent</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Quaker Houghton</div><div style="color:var(--t2);font-size:0.65rem">Quaker Chemical (NYSE: KWR)</div><div style="text-align:center;color:var(--t1)">Specialty</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Castrol</div><div style="color:var(--t2);font-size:0.65rem">BP plc (LSE: BP)</div><div style="text-align:center;color:var(--t1)">Integrated</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FF8FA0">HIGH</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Shell plc <span class="tree-p-tag">LSE: SHEL</span></div>
+    <div class="tree-p-meta">Revenue: $316B · 86,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Shell Lubricants</div><div class="tree-sub-detail">Rotella (diesel), Tellus (hydraulic), Omala (gear)</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Pennzoil</div><div class="tree-sub-detail">Acquired via SOPUS 2002 · Consumer/fleet motor oils</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Quaker State</div><div class="tree-sub-detail">Acquired via Pennzoil · Motor oils, automotive</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Shell Base Oils</div><div class="tree-sub-detail">Group II/III base oil production and trading</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Exxon Mobil Corporation <span class="tree-p-tag">NYSE: XOM</span></div>
+    <div class="tree-p-meta">CIK: 0000034088 · Revenue: $344B · 62,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Mobil (Mobil 1, Mobil SHC, Mobil DTE)</div><div class="tree-sub-detail">Premium synthetic and conventional lubricants</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">ExxonMobil Base Stocks</div><div class="tree-sub-detail">Group I/II/III base oil — among largest producers globally</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">ExxonMobil Chemical (Esterex, Synesstic)</div><div class="tree-sub-detail">Synthetic base stocks and specialty esters</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Quaker Chemical Corp <span class="tree-p-tag">NYSE: KWR</span></div>
+    <div class="tree-p-meta">CIK: 0000081362 · Revenue: $2.0B · 4,700 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Houghton International (merged 2019)</div><div class="tree-sub-detail">Metalworking fluids, industrial process fluids</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Quaker Houghton Metal Forming</div><div class="tree-sub-detail">Rolling oils, drawing compounds, stamping fluids</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Quaker Houghton Industrial</div><div class="tree-sub-detail">Hydraulic, gear, compressor, transformer oils</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Shell / Pennzoil / Quaker State</div><div class="alert-text">Shell acquired Pennzoil-Quaker State in 2002. If your plant uses Shell Rotella for diesel equipment, Shell Tellus for hydraulics, AND your fleet runs Pennzoil — all three brands are Shell. One company, one base oil supply chain. A refinery disruption at Shell affects all three simultaneously.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Quaker / Houghton Merger</div><div class="alert-text">Quaker Chemical and Houghton International merged in 2019. If your machining operation uses Houghton metalworking fluids and your process systems use Quaker industrial oils — those are now one supplier with shared R&D, supply chain, and credit risk.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, annual reports, M&A records</div>
+</div>
+
+<!-- OEM SPECS & LOCK-IN -->
+<div class="tab-content" id="tab-specs">
+  <div class="pnl-hdr"><span class="pnl-title">OEM Specification Lock-In — The Hidden Cost Driver</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">The Problem</div><div class="alert-text">Equipment OEMs specify their own branded lubricants ("use only Mobil SHC 600 Series" or "approved: Shell Tellus S3 M only"). Maintenance teams comply without questioning whether equivalent-spec alternatives exist. The result: you're locked into a single lubricant supplier for the life of the equipment, with zero negotiating leverage during price escalations.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Common OEM Spec Locks</span></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">TYPICAL LOCK-IN</div><div class="act-text"><strong>Compressors:</strong> Atlas Copco specifies Roto-Inject — a Shell-blended product. Alternatives exist at ISO VG46/68 PAO synthetic that meet or exceed the spec at 30% lower cost.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">TYPICAL LOCK-IN</div><div class="act-text"><strong>Hydraulics:</strong> Equipment manual says "Mobil DTE 10 Excel Series." The actual spec is ISO VG32/46 anti-wear hydraulic fluid. Dozens of suppliers make equivalent products.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">TYPICAL LOCK-IN</div><div class="act-text"><strong>Gearboxes:</strong> OEM says "Shell Omala S4 GXV only." The spec is ISO VG220/320 PAG synthetic gear oil. Fuchs, Klüber, and Quaker Houghton all make equivalent formulations.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">How to Break the Lock</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 1</div><div class="act-text">Identify the ACTUAL performance specification behind the brand name. ISO viscosity grade, additive type (AW, EP, R&O), base oil group, and any industry standards (API, AGMA, DIN).</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 2</div><div class="act-text">Request cross-reference from 2-3 independent lubricant suppliers (Fuchs, Quaker Houghton, Castrol, Citgo). They will map their equivalent product to the OEM spec.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 3</div><div class="act-text">Run a side-by-side field trial on non-critical equipment. 90 days with oil analysis. If the alternative meets or exceeds performance, you've just created competitive leverage.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 4</div><div class="act-text">Use the approved alternative as leverage. Even if you stay with the OEM brand, the fact that you have a qualified alternative changes the pricing negotiation entirely.</div></div>
+    </div>
+  </div>
+  <div class="alert alert-gold" style="margin-top:0.5rem"><div class="alert-title" style="color:#FFDF80">Typical Savings</div><div class="alert-text">Breaking OEM lubricant lock-in typically saves 25-40% on lubricant spend without any performance degradation. For a facility spending $500K/year on lubricants, that's $125K-200K in annual savings — every year, recurring. The ROI on a 90-day field trial is measured in weeks, not months.</div></div>
+  <div class="src">Source: FSA analysis, STLE lubrication best practices, independent tribology studies</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Trade Exposure — Lubricants</span><span class="pnl-badge">USTR · ITC</span></div>
+  <div class="tbl-row hdr hs-cols"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">2710.19</div><div style="color:var(--t1)">Lubricating oils — petroleum-based</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+5.25¢/bbl</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">2710.19</div><div style="color:var(--t1)">Lubricating oils — petroleum-based</div><div style="text-align:center;color:var(--t1)">EU/Japan</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">5.25¢/bbl</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">2710.20</div><div style="color:var(--t1)">Base oils — Group I/II/III</div><div style="text-align:center;color:var(--t1)">S. Korea</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">5.25¢/bbl</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3403</div><div style="color:var(--t1)">Lubricating preparations (non-petroleum)</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.7%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">2712</div><div style="color:var(--t1)">Petroleum greases</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+1.3¢/kg</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3819</div><div style="color:var(--t1)">Hydraulic fluids, brake fluids</div><div style="text-align:center;color:var(--t1)">Canada</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0% USMCA</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Low Tariff Category Overall</div><div class="alert-text">Lubricants face relatively low tariffs compared to other industrial categories — the MFN duty is minimal (5.25¢/bbl). Even the 301 tariff on Chinese-origin lubricants is less impactful here because most major lubricant suppliers (Shell, ExxonMobil, Chevron, Total) blend domestically with US Gulf Coast base oils. The real cost driver is crude price, not tariffs.</div></div>
+  <div class="src">Source: USTR HTS, ITC DataWeb</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Oils, Lubricants & Fluids</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Base oil up 11-15% YTD tracking crude at $98.71/bbl. Lubricant suppliers will issue price increase letters within 30 days. Get ahead of it: lock annual pricing or negotiate a crude-indexed price ceiling (e.g., "prices adjust quarterly based on Group II posted price, capped at 8% annual increase").</div><div class="act-cat">BASE OIL · PRICING · INDEX-LINKED</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Audit every OEM-specified lubricant in your plant. For each one, document the actual ISO/ASTM/API specification behind the brand name. Your lubricant supplier rep can help — they want your business and they have cross-reference guides for every OEM spec. Start with your top 10 by spend.</div><div class="act-cat">OEM SPEC · AUDIT · COST REDUCTION</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your Shell/Pennzoil/Quaker State exposure. If you use Shell industrial lubricants and Pennzoil fleet oils, that's one supplier. Same for ExxonMobil (Mobil industrial + Exxon fleet). Qualify an independent (Fuchs, Quaker Houghton) for at least one major application to create competitive leverage.</div><div class="act-cat">CONCENTRATION · SUPPLIER DIVERSIFICATION</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">For your most critical and expensive equipment, evaluate switching from Group I/II mineral oils to Group IV PAO synthetics. Synthetics cost 2-3x more per gallon but last 3-5x longer between changes. The TCO is often lower — AND synthetics are less crude-price-sensitive, which hedges your lubricant cost against Hormuz-driven oil spikes.</div><div class="act-cat">SYNTHETIC · TCO · HEDGING</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Implement oil analysis on your top 20 pieces of rotating equipment. Oil analysis costs $15-25 per sample and tells you when oil actually needs changing (condition-based) vs changing on a fixed schedule (time-based). Most plants change oil too frequently — condition-based maintenance can reduce lubricant consumption 20-40%.</div><div class="act-cat">OIL ANALYSIS · CONDITION-BASED · SAVINGS</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Consolidate lubricant suppliers. Most industrial facilities buy from 5-8 different lubricant brands because each piece of equipment was spec'd independently. Consolidating to 2 suppliers (one integrated major + one independent specialty) gives you volume leverage, simplifies inventory, and reduces the number of SKUs in your storeroom by 30-50%.</div><div class="act-cat">CONSOLIDATION · LEVERAGE · INVENTORY</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">BP (Castrol's parent) flagged as WATCH — their energy transition strategy is reducing refining investment, which could tighten base oil supply from BP-owned refineries over time. If Castrol is your primary lubricant supplier, monitor BP's quarterly earnings for refining capacity updates.</div><div class="act-cat">SUPPLIER RISK · BP · CASTROL</div></div>
+  <div class="src">Source: FSA analyst assessment based on EIA, ICIS, SEC EDGAR, STLE best practices</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v2.1 · Oils, Lubricants & Fluids · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

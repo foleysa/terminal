@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Packaging Materials</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}.db-1{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-2{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-3{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-4{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-5{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-6{background:linear-gradient(90deg,#99A8BE,#b0bccf)}.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}.c-name{color:var(--t1);font-weight:600}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Packaging Materials</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Corrugated boxes, stretch wrap, poly bags, pallets (wood/plastic), labels, strapping, tape, foam/dunnage, and specialty packaging. Dual commodity exposure: plastic packaging tracks crude oil (resin), paper/corrugated tracks OCC (old corrugated containers) and virgin pulp. Sustainability mandates accelerating material shifts from plastic to fiber-based alternatives.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$210B</div><div class="cs-lbl">US Packaging</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">DUAL</div><div class="cs-lbl">Crude + Pulp</div></div>
+    <div><div class="cs-val" style="color:#FFB898">+8-14%</div><div class="cs-lbl">Resin YTD</div></div>
+    <div><div class="cs-val" style="color:#6FFFB0">-4%</div><div class="cs-lbl">OCC Index</div></div>
+    <div><div class="cs-val" style="color:#B0CCFF">ESG</div><div class="cs-lbl">Mandates Active</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Ownership<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="sustainability">Sustainability & Regulation</div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">Plastic Resin<br>Crude-Linked</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">FAVORABLE</div><div class="risk-lbl">OCC/Corrugated<br>Index Down 4%</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#B0CCFF">ACTIVE</div><div class="risk-lbl">ESG Mandates<br>Plastic Restrictions</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Pallet Costs<br>Lumber +12%</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Sub-Category Breakdown</span><span class="pnl-badge">CENSUS · BLS</span></div>
+      <div class="driver"><div class="driver-name">Corrugated/Boxes</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:35%">35%</div></div><div class="driver-pct">35%</div><div class="driver-trend dn">-2.1%</div></div>
+      <div class="driver"><div class="driver-name">Stretch Film/Wrap</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+11.4%</div></div>
+      <div class="driver"><div class="driver-name">Pallets (Wood)</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:14%">14%</div></div><div class="driver-pct">14%</div><div class="driver-trend up">+12.2%</div></div>
+      <div class="driver"><div class="driver-name">Poly Bags/Liners</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+9.8%</div></div>
+      <div class="driver"><div class="driver-name">Labels/Printing</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+3.4%</div></div>
+      <div class="driver"><div class="driver-name">Tape/Strapping</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:7%">7%</div></div><div class="driver-pct">7%</div><div class="driver-trend up">+5.6%</div></div>
+      <div class="driver"><div class="driver-name">Foam/Dunnage</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend up">+7.2%</div></div>
+      <div class="driver"><div class="driver-name">Specialty/Custom</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:3%">3%</div></div><div class="driver-pct">3%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="src">Source: Census Bureau, BLS PPI, AF&PA, Freedonia</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Stretch film and poly bag prices up 10-12% tracking crude-linked resin. If your packaging contracts don't have resin index linkage, you're absorbing uncontrolled pass-throughs. Negotiate a resin index clause tied to published PE/PP spot pricing with a quarterly adjustment cap.</div><div class="act-cat">RESIN · STRETCH FILM · INDEX</div></div>
+      <div class="act"><div class="act-pri pri-act">OPPORTUNITY</div><div class="act-text">OCC (old corrugated containers) index is DOWN 4%. Corrugated box pricing should be declining. If your corrugated supplier hasn't passed this savings through, ask for it. The raw material supports a price decrease — don't accept "costs are up across the board" when the commodity index says otherwise.</div><div class="act-cat">CORRUGATED · OCC · PRICE DECREASE</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Wood pallet prices up 12% driven by lumber costs and heat treatment (ISPM-15) requirements for export pallets. Evaluate pallet pooling (CHEP, PECO) vs. purchase for your highest-volume lanes — pooling converts a volatile CAPEX to a predictable OPEX.</div><div class="act-cat">PALLETS · LUMBER · POOLING</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Plastic Packaging — Resin-Linked</span><span class="pnl-badge">FRED · ICIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Crude Oil → Resin → Your Film/Bags</div><div class="alert-text">Polyethylene (PE) and polypropylene (PP) resin are derived from crude oil and natural gas liquids. Crude at $98.71/bbl is the primary driver. PE resin up 14% YTD, PP resin up 8%. Every product that uses plastic film, bags, stretch wrap, foam, or molded plastic packaging is tracking crude. Hormuz disruption extends this indefinitely.</div></div>
+      <div class="driver"><div class="driver-name">PE Resin</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:65%"></div></div><div class="driver-trend up">+14.2%</div></div>
+      <div class="driver"><div class="driver-name">PP Resin</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:50%"></div></div><div class="driver-trend up">+8.1%</div></div>
+      <div class="driver"><div class="driver-name">EPS Foam</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:45%"></div></div><div class="driver-trend up">+7.2%</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Paper/Fiber Packaging — Pulp-Linked</span><span class="pnl-badge">AF&PA · RISI</span></div>
+      <div class="alert alert-gold" style="border-left-color:#6FFFB0"><div class="alert-title" style="color:#6FFFB0">OCC Index Down — Corrugated Should Be Cheaper</div><div class="alert-text">Old corrugated container (OCC) prices — the raw material for recycled corrugated boxes — are down 4% YTD. Containerboard capacity additions and lower export demand (China import ban still in effect) are keeping the market loose. Your corrugated supplier's raw material is cheaper. Your pricing should reflect that.</div></div>
+      <div class="driver"><div class="driver-name">OCC (Recycled)</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:30%"></div></div><div class="driver-trend dn">-4.0%</div></div>
+      <div class="driver"><div class="driver-name">Virgin Kraftliner</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:40%"></div></div><div class="driver-trend up">+2.8%</div></div>
+      <div class="driver"><div class="driver-name">Lumber (Pallets)</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:55%"></div></div><div class="driver-trend up">+12.2%</div></div>
+    </div>
+  </div>
+  <div class="src">Source: FRED, BLS PPI-Packaging, AF&PA Boxboard/Containerboard reports, RISI pulp pricing</div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major Packaging Suppliers</span><span class="pnl-badge">SEC EDGAR · 10-K</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Supplier</span><span>Parent / Ticker</span><span style="text-align:center">Primary</span><span style="text-align:center">Health</span><span style="text-align:center">Type</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">International Paper</div><div style="color:var(--t2);font-size:0.65rem">NYSE: IP</div><div style="text-align:center;color:var(--t1)">Corrugated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Integrated</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">WestRock (Smurfit WestRock)</div><div style="color:var(--t2);font-size:0.65rem">NYSE: SW</div><div style="text-align:center;color:var(--t1)">Corrugated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Integrated</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Packaging Corp of America</div><div style="color:var(--t2);font-size:0.65rem">NYSE: PKG</div><div style="text-align:center;color:var(--t1)">Corrugated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Integrated</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Berry Global</div><div style="color:var(--t2);font-size:0.65rem">NYSE: BERY</div><div style="text-align:center;color:var(--t1)">Film/Plastic</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Integrated</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Sealed Air</div><div style="color:var(--t2);font-size:0.65rem">NYSE: SEE</div><div style="text-align:center;color:var(--t1)">Protective</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Specialty</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Sonoco Products</div><div style="color:var(--t2);font-size:0.65rem">NYSE: SON</div><div style="text-align:center;color:var(--t1)">Diversified</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Integrated</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">CHEP (Brambles)</div><div style="color:var(--t2);font-size:0.65rem">ASX: BXB</div><div style="text-align:center;color:var(--t1)">Pallets</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Pooling</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Uline</div><div style="color:var(--t2);font-size:0.65rem">Private</div><div style="text-align:center;color:var(--t1)">Distribution</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Distributor</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Smurfit WestRock <span class="tree-p-tag">NYSE: SW</span></div>
+    <div class="tree-p-meta">Revenue: $34B (combined) · Merged July 2024</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">WestRock (legacy)</div><div class="tree-sub-detail">US corrugated, containerboard mills, consumer packaging</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Smurfit Kappa (legacy)</div><div class="tree-sub-detail">European corrugated leader — now combined entity</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">KapStone Paper</div><div class="tree-sub-detail">Acquired by WestRock 2018 · Kraft paper, containerboard</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Berry Global Group <span class="tree-p-tag">NYSE: BERY</span></div>
+    <div class="tree-p-meta">Revenue: $13.4B · 46,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Berry Consumer Packaging</div><div class="tree-sub-detail">Closures, containers, overcaps, tubes</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Berry Engineered Materials</div><div class="tree-sub-detail">Stretch film, shrink film, converter films, tapes</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Berry Health, Hygiene & Specialties</div><div class="tree-sub-detail">Nonwoven materials, healthcare packaging</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Clopay (legacy)</div><div class="tree-sub-detail">Breathable films, laminates</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Sealed Air Corporation <span class="tree-p-tag">NYSE: SEE</span></div>
+    <div class="tree-p-meta">Revenue: $5.5B · 17,000 employees · WATCH — activist pressure</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Bubble Wrap (brand)</div><div class="tree-sub-detail">Protective packaging — the original brand</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Cryovac</div><div class="tree-sub-detail">Food packaging — vacuum/shrink systems</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Autobag</div><div class="tree-sub-detail">Automated bagging systems</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Instapak</div><div class="tree-sub-detail">Foam-in-place protective packaging</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Smurfit WestRock Merger — Market Power</div><div class="alert-text">Smurfit Kappa and WestRock merged in July 2024, creating the world's largest listed corrugated packaging company at $34B revenue. If you bought from both WestRock and Smurfit Kappa pre-merger, you now have one supplier. Combined entity has significant pricing power in North American containerboard.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Sealed Air — Activist Pressure</div><div class="alert-text">Sealed Air is under activist investor pressure. Potential strategic actions include spinning off the food packaging (Cryovac) business from protective packaging (Bubble Wrap). If Sealed Air is a significant supplier, monitor for restructuring announcements that could disrupt supply or change your commercial terms.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Uline — Premium Pricing, Fast Delivery</div><div class="alert-text">Uline is the largest privately held packaging distributor in North America. Their value proposition is same-day shipping from 13 US warehouses. But you pay for it — Uline pricing is typically 15-30% above contract pricing from manufacturers or competitive distributors. Use Uline for emergency/rush orders only. Commodity packaging should be on contract with a manufacturer or competitive distributor.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, annual reports, M&A records</div>
+</div>
+
+<!-- SUSTAINABILITY -->
+<div class="tab-content" id="tab-sustainability">
+  <div class="pnl-hdr"><span class="pnl-title">Sustainability & Regulatory Mandates</span><span class="pnl-badge">EPA · STATE LAW · EU</span></div>
+
+  <div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">Why This Matters for Procurement</div><div class="alert-text">Packaging sustainability is no longer a CSR initiative — it's a compliance requirement. Extended Producer Responsibility (EPR) laws, plastic bans, recycled content mandates, and customer sustainability requirements are rewriting the packaging specification for every industrial shipper. The cost of ignoring this isn't a PR problem — it's a regulatory fine and a lost customer.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Active Regulations</span></div>
+      <div class="act" style="border-left-color:#B0CCFF"><div class="act-pri" style="color:#B0CCFF">EPR — EXTENDED PRODUCER RESPONSIBILITY</div><div class="act-text"><strong>California (SB 54):</strong> All packaging must be recyclable or compostable by 2032. 65% source reduction for single-use plastics by 2032. Producers fund collection/recycling infrastructure.<br><strong>Colorado, Oregon, Maine, Minnesota</strong> have passed similar EPR laws. More states following.</div></div>
+      <div class="act" style="border-left-color:#B0CCFF"><div class="act-pri" style="color:#B0CCFF">RECYCLED CONTENT MANDATES</div><div class="act-text"><strong>California (AB 793):</strong> Plastic beverage containers must contain 15% PCR by 2022, 25% by 2025, 50% by 2030. Other states expanding to non-beverage packaging.<br><strong>New Jersey, Washington</strong> have their own recycled content requirements.</div></div>
+      <div class="act" style="border-left-color:#B0CCFF"><div class="act-pri" style="color:#B0CCFF">EPS FOAM BANS</div><div class="act-text">Expanded polystyrene (EPS/Styrofoam) foam packaging banned in 8+ states and dozens of municipalities. If you ship to California, New York, Maine, Maryland, Virginia, Vermont, Colorado, or Washington — your protective packaging cannot be EPS foam.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Material Transitions</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">EPS FOAM → MOLDED PULP / PAPER</div><div class="act-text">Molded fiber (pulp) packaging replaces EPS foam for protective cushioning. Cost premium: 10-20% vs EPS but avoids regulatory bans and meets customer sustainability requirements. Sonoco, Sealed Air, and Pregis all offer alternatives.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">PLASTIC FILM → PAPER-BASED ALTERNATIVES</div><div class="act-text">Paper-based stretch wrap, paper void fill, and paper mailer bags replacing plastic equivalents. Performance gap is closing. Cost premium: 15-30% but declining as scale increases. Ranpak (NYSE: PACK) is the market leader in paper-based void fill and cushioning.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">VIRGIN → POST-CONSUMER RECYCLED (PCR)</div><div class="act-text">PCR content in plastic packaging is increasingly required by regulation AND by customers (Walmart, Amazon, Target all have packaging sustainability scorecards). PCR resin currently trades at a 10-25% premium over virgin — but the premium may decline as recycling infrastructure scales.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">RIGHT-SIZING</div><div class="act-text">Before switching materials, reduce packaging volume. Most companies over-package by 20-40%. Right-sizing (matching box dimensions to product) reduces material consumption, reduces freight cost (dimensional weight pricing), and improves sustainability scores simultaneously. No material premium required.</div></div>
+    </div>
+  </div>
+  <div class="src">Source: California SB 54, AB 793, state EPR legislation, EU Packaging & Packaging Waste Regulation</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff Exposure — Packaging</span><span class="pnl-badge">USTR · ITC</span></div>
+  <div class="tbl-row hdr" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3920-3921</div><div style="color:var(--t1)">Plastic film — PE, PP, PET</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+4.2%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">4819</div><div style="color:var(--t1)">Corrugated boxes, cartons</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+0-1.4%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">4415</div><div style="color:var(--t1)">Wood pallets and containers</div><div style="text-align:center;color:var(--t1)">All</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0-3.9%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3923</div><div style="color:var(--t1)">Plastic bags, pouches, containers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">5607</div><div style="color:var(--t1)">Strapping — PP, PET</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.6%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">4811</div><div style="color:var(--t1)">Labels — self-adhesive paper</div><div style="text-align:center;color:var(--t1)">EU</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0-1.4%</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Low Tariff Category Overall</div><div class="alert-text">Most packaging is produced domestically or in USMCA countries. The tariff exposure is concentrated in Chinese-origin poly bags, plastic containers, and stretch film. Corrugated boxes are overwhelmingly produced domestically (International Paper, Smurfit WestRock, PCA all have US mills). Pallets are nearly 100% domestic. The real cost driver is crude oil (resin) and OCC (corrugated), not tariffs.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">ISPM-15 — Export Pallet Requirement</div><div class="alert-text">All wood packaging materials (pallets, crates, dunnage) used in international trade must be heat-treated or fumigated per ISPM-15 and stamped with the certified mark. Non-compliant pallets are rejected at port. If you export, verify your pallet supplier is ISPM-15 certified. Violations result in shipment rejection, fumigation at port ($500-2,000), and potential quarantine.</div></div>
+  <div class="src">Source: USTR HTS, ITC DataWeb, ISPM-15 (IPPC)</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Packaging</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Corrugated box pricing should be declining — OCC index is down 4%. If your corrugated supplier is holding or increasing prices, push back with the data. Pull the AF&PA containerboard report and the PPI for corrugated boxes (FRED series WPU0911). The raw material supports a decrease.</div><div class="act-cat">CORRUGATED · OCC · PRICE DECREASE</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Stretch film and poly pricing is rising with crude. Negotiate a resin index clause: pricing adjusts quarterly based on published PE/PP spot pricing (CDI or ICIS), capped at 5% per adjustment. This turns an unpredictable pass-through into a structured, auditable adjustment you can verify with FRED data.</div><div class="act-cat">RESIN · INDEX CLAUSE · STRETCH FILM</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Run a packaging right-sizing analysis on your top 20 SKUs by shipping volume. Most companies over-package by 20-40%. Right-sizing reduces material cost, reduces dimensional weight freight charges, and improves your sustainability metrics — three wins from one initiative. No material substitution required.</div><div class="act-cat">RIGHT-SIZING · MATERIAL · FREIGHT</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Audit EPS foam usage. If you ship to California, New York, or any of the 8+ states with EPS bans, you need an alternative now — not when you get a compliance notice. Molded pulp and paper cushioning are the leading replacements. Pregis, Sealed Air, and Ranpak all offer EPS-free protective packaging.</div><div class="act-cat">EPS · FOAM BAN · COMPLIANCE</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Evaluate pallet pooling (CHEP, PECO, iGPS) vs. white wood purchase for your highest-volume shipping lanes. Pooling converts volatile pallet purchase costs to predictable per-trip fees, eliminates pallet storage/management, and provides consistent quality. Break-even is typically at 3-4 trips per pallet per year.</div><div class="act-cat">PALLETS · POOLING · CHEP · PECO</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Consolidate packaging suppliers. Most plants buy corrugated, stretch film, tape, and poly bags from 5-10 different suppliers. Consolidate to 2-3 (one corrugated manufacturer, one film/plastic supplier, one distributor for tail/specialty). Volume consolidation delivers better pricing and simplifies the supply chain.</div><div class="act-cat">CONSOLIDATION · VOLUME · SIMPLIFICATION</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">EPR (Extended Producer Responsibility) legislation is expanding state by state. California SB 54 is the model — all packaging recyclable or compostable by 2032. If you ship to multiple states, track the regulatory landscape. Your packaging specifications may need to change for compliance, and the sooner you start transitioning, the lower the cost.</div><div class="act-cat">EPR · REGULATION · SUSTAINABILITY</div></div>
+  <div class="src">Source: FSA analyst assessment based on BLS, FRED, AF&PA, state legislation, ICIS</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · Packaging Materials · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

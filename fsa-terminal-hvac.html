@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — HVAC, Chillers & Cooling</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}
+.ref-cols{grid-template-columns:0.7fr 1fr 0.7fr 0.7fr 0.8fr}
+.c-name{color:var(--t1);font-weight:600}.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}.b-ban{background:rgba(255,143,160,0.25);color:#FF8FA0;border:1px solid rgba(255,143,160,0.4);font-size:0.5rem}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">HVAC, Chillers & Cooling</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Chillers (centrifugal, screw, scroll), cooling towers, air handling units, refrigerants, HVAC controls, cooling tower chemicals, and thermal management systems. A category undergoing regulatory transformation — the AIM Act and Kigali Amendment are phasing down HFC refrigerants, forcing equipment replacements and driving refrigerant prices up 200-400%.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$156B</div><div class="cs-lbl">US HVAC Market</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">AIM Act</div><div class="cs-lbl">HFC Phase-Down</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">+200%</div><div class="cs-lbl">R-410A Price YTD</div></div>
+    <div><div class="cs-val">16-30wk</div><div class="cs-lbl">Chiller Lead Time</div></div>
+    <div><div class="cs-val">4 OEMs</div><div class="cs-lbl">Control 80%</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="refrigerants">Refrigerant Phase-Down<span class="tab-count">CRITICAL</span></div>
+  <div class="tab" data-tab="suppliers">OEMs & Ownership<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="cooling">Cooling Tower Chemicals</div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">HFC Phase-Down<br>AIM Act Active</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">R-410A Price<br>+200% in 18mo</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Chiller Lead Time<br>16-30 Weeks</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">OEM Concentration<br>4 Control 80%</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Refrigerant Price Tracker</span><span class="pnl-badge">MARKET DATA</span></div>
+      <div class="tbl-row hdr" style="grid-template-columns:1fr 0.7fr 0.7fr 0.7fr"><span>Refrigerant</span><span style="text-align:right">$/lb</span><span style="text-align:right">YoY Chg</span><span style="text-align:right">Status</span></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 0.7fr 0.7fr 0.7fr"><div class="c-name">R-410A</div><div class="c-val" style="color:#FF8FA0">$38</div><div class="c-val" style="color:#FF8FA0">+210%</div><div style="text-align:right"><span class="badge-sm b-risk">PHASING DOWN</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 0.7fr 0.7fr 0.7fr"><div class="c-name">R-22</div><div class="c-val" style="color:#FF8FA0">$85</div><div class="c-val" style="color:#FF8FA0">+45%</div><div style="text-align:right"><span class="badge-sm b-ban">BANNED NEW</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 0.7fr 0.7fr 0.7fr"><div class="c-name">R-134a</div><div class="c-val" style="color:#FFDF80">$22</div><div class="c-val" style="color:#FF8FA0">+85%</div><div style="text-align:right"><span class="badge-sm b-risk">PHASING DOWN</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 0.7fr 0.7fr 0.7fr"><div class="c-name">R-454B (next gen)</div><div class="c-val" style="color:#FFDF80">$28</div><div class="c-val" style="color:#FFDF80">+15%</div><div style="text-align:right"><span class="badge-sm b-strong">REPLACEMENT</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 0.7fr 0.7fr 0.7fr"><div class="c-name">R-513A (low GWP)</div><div class="c-val" style="color:#6FFFB0">$18</div><div class="c-val" style="color:#6FFFB0">+8%</div><div style="text-align:right"><span class="badge-sm b-strong">REPLACEMENT</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 0.7fr 0.7fr 0.7fr"><div class="c-name">R-1234ze (HFO)</div><div class="c-val" style="color:#6FFFB0">$32</div><div class="c-val" style="color:#6FFFB0">+5%</div><div style="text-align:right"><span class="badge-sm b-strong">FUTURE</span></div></div>
+      <div class="src">Source: AHRI, EPA AIM Act allocations, refrigerant distributor pricing</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">R-410A up 210% in 18 months and climbing. If you have R-410A systems, stockpile refrigerant NOW for maintenance needs. Prices will not come down — they'll accelerate as AIM Act quotas tighten further.</div><div class="act-cat">REFRIGERANT · R-410A · STOCKPILE</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Any chiller or RTU replacement planned for 2026-2028 MUST use next-gen low-GWP refrigerant (R-454B, R-513A, R-1234ze). Installing new R-410A equipment now is buying an asset with a regulatory expiration date.</div><div class="act-cat">CAPITAL · REFRIGERANT · PLANNING</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Chiller lead times 16-30 weeks. If you have a summer cooling failure, there's no emergency replacement option. Pre-position rental chillers or ensure your maintenance program is bulletproof before peak season.</div><div class="act-cat">LEAD TIME · CONTINGENCY</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- REFRIGERANT PHASE-DOWN -->
+<div class="tab-content" id="tab-refrigerants">
+  <div class="pnl-hdr"><span class="pnl-title">HFC Refrigerant Phase-Down — AIM Act & Kigali Amendment</span><span class="pnl-badge">EPA · FEDERAL REGISTER</span></div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">What's Happening</div><div class="alert-text">The American Innovation and Manufacturing (AIM) Act of 2020 mandates an 85% reduction in HFC production and consumption by 2036. The EPA implements this through declining annual quotas on HFC production and imports. Each year, less refrigerant is available — and prices rise accordingly. R-410A (the most common commercial refrigerant) has gone from $12/lb to $38/lb in 18 months. R-22 (already banned for new equipment) is $85/lb for reclaimed stock.</div></div>
+
+  <div class="pnl-hdr" style="margin-top:1rem"><span class="pnl-title">Refrigerant Transition Roadmap</span></div>
+
+  <div class="tbl-row hdr ref-cols"><span>Refrigerant</span><span>Application</span><span style="text-align:center">GWP</span><span style="text-align:center">Status</span><span style="text-align:right">Procurement Impact</span></div>
+  <div class="tbl-row ref-cols"><div class="c-name">R-22 (HCFC)</div><div style="color:var(--t2)">Legacy AC/chillers</div><div class="c-val" style="text-align:center">1,810</div><div style="text-align:center"><span class="badge-sm b-ban">BANNED</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">No new production. Reclaimed only at $85+/lb. Replace equipment ASAP.</div></div>
+  <div class="tbl-row ref-cols"><div class="c-name">R-410A (HFC)</div><div style="color:var(--t2)">Current AC standard</div><div class="c-val" style="text-align:center">2,088</div><div style="text-align:center"><span class="badge-sm b-risk">PHASING OUT</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">EPA quotas declining annually. Price at $38/lb and rising. Banned for new equip by 2025 (CA) / 2027 (EPA proposed).</div></div>
+  <div class="tbl-row ref-cols"><div class="c-name">R-134a (HFC)</div><div style="color:var(--t2)">Chillers, auto AC</div><div class="c-val" style="text-align:center">1,430</div><div style="text-align:center"><span class="badge-sm b-risk">PHASING OUT</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Declining quotas. New chillers should use R-513A or R-1234ze instead. Price rising fast.</div></div>
+  <div class="tbl-row ref-cols"><div class="c-name" style="color:#6FFFB0">R-454B</div><div style="color:var(--t2)">R-410A replacement</div><div class="c-val" style="text-align:center;color:#6FFFB0">466</div><div style="text-align:center"><span class="badge-sm b-strong">NEXT GEN</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">The R-410A replacement for unitary AC and heat pumps. Mildly flammable (A2L). Equipment redesign required.</div></div>
+  <div class="tbl-row ref-cols"><div class="c-name" style="color:#6FFFB0">R-513A</div><div style="color:var(--t2)">R-134a replacement</div><div class="c-val" style="text-align:center;color:#6FFFB0">631</div><div style="text-align:center"><span class="badge-sm b-strong">NEXT GEN</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Drop-in replacement for R-134a in many chiller applications. Non-flammable (A1). Easiest transition path.</div></div>
+  <div class="tbl-row ref-cols"><div class="c-name" style="color:#6FFFB0">R-1234ze (HFO)</div><div style="color:var(--t2)">Low-GWP chillers</div><div class="c-val" style="text-align:center;color:#6FFFB0">7</div><div style="text-align:center"><span class="badge-sm b-strong">FUTURE</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Ultra-low GWP. Trane, Carrier, and Johnson Controls all offer R-1234ze chillers. Premium priced but future-proof.</div></div>
+  <div class="tbl-row ref-cols"><div class="c-name" style="color:#6FFFB0">R-290 (Propane)</div><div style="color:var(--t2)">Small commercial</div><div class="c-val" style="text-align:center;color:#6FFFB0">3</div><div style="text-align:center"><span class="badge-sm b-strong">EMERGING</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Natural refrigerant. Ultra-low GWP. Flammable — code restrictions apply. Growing in EU, limited US adoption.</div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">AIM Act Phase-Down Schedule</div><div class="alert-text">2024: 60% of baseline → 2029: 30% of baseline → 2034: 20% of baseline → 2036: 15% of baseline. Every step down reduces available HFC supply and increases prices. The 2029 step to 30% will be the most disruptive — it cuts current allocation in half. Plan your equipment transitions to be complete before 2029.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">California Leading</div><div class="alert-text">CARB has already banned R-410A in new residential and light commercial AC systems as of January 2025. Other states (Washington, New York, Colorado, Maryland) are following. If you have facilities in these states, new equipment must use R-454B or equivalent NOW — not when the federal ban takes effect.</div></div>
+  <div class="src">Source: EPA AIM Act Rule, 40 CFR Part 84, CARB regulations, Kigali Amendment schedule</div>
+</div>
+
+<!-- OEMs -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Chiller & HVAC OEMs</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>OEM</span><span>Parent Company</span><span style="text-align:center">Primary</span><span style="text-align:center">Health</span><span style="text-align:center">301 Risk</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Trane</div><div style="color:var(--t2);font-size:0.65rem">Trane Technologies (NYSE: TT)</div><div style="text-align:center;color:var(--t1)">Chillers/HVAC</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Carrier</div><div style="color:var(--t2);font-size:0.65rem">Carrier Global (NYSE: CARR)</div><div style="text-align:center;color:var(--t1)">Chillers/HVAC</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">York / JCI</div><div style="color:var(--t2);font-size:0.65rem">Johnson Controls (NYSE: JCI)</div><div style="text-align:center;color:var(--t1)">Chillers/Controls</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Daikin</div><div style="color:var(--t2);font-size:0.65rem">Daikin Industries (TSE: 6367)</div><div style="text-align:center;color:var(--t1)">Chillers/AC</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Lennox</div><div style="color:var(--t2);font-size:0.65rem">Lennox Intl (NYSE: LII)</div><div style="text-align:center;color:var(--t1)">RTU/Light Comm</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">SPX Cooling</div><div style="color:var(--t2);font-size:0.65rem">SPX Technologies (NYSE: SPXC)</div><div style="text-align:center;color:var(--t1)">Cooling Towers</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:var(--t3)">NEUTRAL</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Evapco</div><div style="color:var(--t2);font-size:0.65rem">Evapco Inc (Private)</div><div style="text-align:center;color:var(--t1)">Cooling Towers</div><div style="text-align:center"><span class="badge-sm b-watch">PRIVATE</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:var(--t3)">NEUTRAL</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Carrier Global Corp <span class="tree-p-tag">NYSE: CARR</span></div>
+    <div class="tree-p-meta">Revenue: $22.1B · 52,000 employees · Spun off from UTC 2020</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Carrier HVAC</div><div class="tree-sub-detail">Commercial and residential HVAC systems</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Carrier Refrigeration (Transport)</div><div class="tree-sub-detail">Truck/trailer/container refrigeration — Carrier Transicold</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Kidde / Edwards (Fire & Security)</div><div class="tree-sub-detail">Fire detection, suppression, security</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Viessmann Climate Solutions</div><div class="tree-sub-detail">Acquired 2023 · Heat pumps, boilers — EU focused</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Johnson Controls International <span class="tree-p-tag">NYSE: JCI</span></div>
+    <div class="tree-p-meta">Revenue: $27.4B · 100,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">York International</div><div class="tree-sub-detail">Acquired 2005 · Centrifugal chillers, air-cooled chillers</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Hitachi-Johnson Controls JV</div><div class="tree-sub-detail">Joint venture · VRF systems, ducted splits</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Metasys Building Automation</div><div class="tree-sub-detail">Building management systems, DDC controls</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Tyco Fire & Security</div><div class="tree-sub-detail">Merged 2016 · Fire suppression, access control</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Daikin Industries <span class="tree-p-tag">TSE: 6367</span></div>
+    <div class="tree-p-meta">Revenue: ¥4.4T (~$30B) · 98,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Goodman Manufacturing</div><div class="tree-sub-detail">Acquired 2012 · Residential/light commercial AC, furnaces — Houston, TX</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Daikin Applied Americas</div><div class="tree-sub-detail">Commercial chillers, AHUs, rooftop units — Minneapolis, MN</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">AAF International</div><div class="tree-sub-detail">Air filtration — commercial and industrial</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Daikin Chemicals</div><div class="tree-sub-detail">Fluorochemicals — refrigerant manufacturing</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Daikin / Goodman</div><div class="alert-text">Daikin acquired Goodman (the largest residential HVAC manufacturer in North America) in 2012. If your facilities use Goodman/Amana equipment AND your commercial side uses Daikin chillers — same company. Daikin also manufactures refrigerants through Daikin Chemicals — they are both the equipment maker AND the refrigerant supplier.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Carrier / Kidde / Viessmann</div><div class="alert-text">Carrier (spun off from United Technologies in 2020) owns Kidde fire suppression AND acquired Viessmann Climate Solutions in 2023. If you buy Carrier HVAC, Kidde fire protection, and Viessmann heat pumps — that's one company for mechanical, fire, and thermal systems.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, annual reports, M&A records</div>
+</div>
+
+<!-- COOLING TOWER CHEMICALS -->
+<div class="tab-content" id="tab-cooling">
+  <div class="pnl-hdr"><span class="pnl-title">Cooling Tower Chemical Treatment</span><span class="pnl-badge">EPA · STATE DISCHARGE</span></div>
+
+  <div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">Why This Matters</div><div class="alert-text">Cooling towers are the largest single water consumer in most industrial facilities. Chemical treatment (biocides, corrosion inhibitors, scale inhibitors, pH control) typically costs $50K-500K/year depending on system size. Most plants outsource this to a single provider — creating the same lock-in dynamics as OEM-spec lubricants. The treatment provider controls your water chemistry, and switching is perceived as risky. That perception costs you 20-30% in overspend.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Major Treatment Providers</span></div>
+      <div class="tbl-row hdr" style="grid-template-columns:1fr 1fr 0.7fr"><span>Provider</span><span>Parent</span><span style="text-align:center">Health</span></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 1fr 0.7fr"><div class="c-name">Nalco Water</div><div style="color:var(--t2);font-size:0.65rem">Ecolab (NYSE: ECL)</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 1fr 0.7fr"><div class="c-name">ChemTreat</div><div style="color:var(--t2);font-size:0.65rem">Danaher (NYSE: DHR)</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 1fr 0.7fr"><div class="c-name">Solenis</div><div style="color:var(--t2);font-size:0.65rem">Solenis (Private/Platinum)</div><div style="text-align:center"><span class="badge-sm b-watch">PRIVATE</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 1fr 0.7fr"><div class="c-name">Veolia Water Tech</div><div style="color:var(--t2);font-size:0.65rem">Veolia (EPA: VIE)</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+      <div class="tbl-row" style="grid-template-columns:1fr 1fr 0.7fr"><div class="c-name">Kurita Water</div><div style="color:var(--t2);font-size:0.65rem">Kurita Water (TSE: 6370)</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Breaking the Lock-In</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 1</div><div class="act-text">Get independent water analysis. Don't rely solely on your treatment provider's lab — they have an incentive to over-treat. Independent testing costs $500-1,000 and gives you an unbiased baseline.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 2</div><div class="act-text">Unbundle chemistry from service. Buy chemicals competitively and contract service separately. Bundled programs obscure markup — typical chemical markup in bundled contracts is 40-60%.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 3</div><div class="act-text">Run a competitive RFP. Nalco, ChemTreat, and Solenis will all compete aggressively for your business. The incumbent's best price is usually the one they offer when they're about to lose the account.</div></div>
+    </div>
+  </div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Ecolab / Nalco Dominance</div><div class="alert-text">Ecolab acquired Nalco in 2011 for $5.4B, creating the dominant water treatment company globally. Nalco Water is now Ecolab's largest business segment. If you also use Ecolab for pest control, food safety, or institutional cleaning — map your total Ecolab spend. You may have more leverage than you think.</div></div>
+  <div class="src">Source: SEC EDGAR, Ecolab/Danaher annual reports, EPA discharge permits</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Trade Exposure — HVAC Equipment</span><span class="pnl-badge">USTR · ITC</span></div>
+  <div class="tbl-row hdr" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8418</div><div style="color:var(--t1)">Refrigerators, freezers, heat pumps, chillers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+1-3%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8415</div><div style="color:var(--t1)">Air conditioning units, split systems</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.2%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">2903</div><div style="color:var(--t1)">Refrigerant gases (HFCs, HFOs)</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.7%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8419</div><div style="color:var(--t1)">Heat exchangers, cooling towers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.4%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8415</div><div style="color:var(--t1)">VRF systems, ductless splits</div><div style="text-align:center;color:var(--t1)">Japan</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2.2%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8418</div><div style="color:var(--t1)">Chillers, heat pumps</div><div style="text-align:center;color:var(--t1)">Mexico</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0% USMCA</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Refrigerant Tariff + AIM Act = Double Hit</div><div class="alert-text">Chinese-origin HFC refrigerants face 25% Section 301 tariff on top of an already supply-constrained market (AIM Act quotas). Non-Chinese refrigerant sources (Chemours/US, Honeywell/US, Daikin/Japan) avoid the tariff. For refrigerant procurement, domestic supply is the only cost-effective path.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">USMCA Manufacturing</div><div class="alert-text">All four major chiller OEMs (Trane, Carrier, York/JCI, Daikin) have manufacturing in the US and/or Mexico. Unlike many industrial categories, HVAC equipment is largely domestically produced. The tariff exposure is concentrated in components, refrigerants, and smaller imported split/VRF systems — not in the major chiller lines.</div></div>
+  <div class="src">Source: USTR HTS, Section 301, ITC DataWeb</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — HVAC, Chillers & Cooling</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Stockpile R-410A refrigerant for existing equipment maintenance. Price is $38/lb and climbing — it was $12/lb eighteen months ago. AIM Act quotas tighten again in 2029. Buy what you'll need for the next 2-3 years of maintenance. This is a depreciating asset only if your equipment runs on it — which it does.</div><div class="act-cat">REFRIGERANT · R-410A · STOCKPILE</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Chiller lead times are 16-30 weeks. If you have summer peak cooling that depends on aging equipment, arrange rental chiller contracts NOW. By May, every rental unit in the market will be spoken for. A $50K/month rental is cheaper than a production shutdown from a cooling failure.</div><div class="act-cat">CONTINGENCY · RENTAL · PEAK SEASON</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Any chiller or rooftop unit replacement in your capital plan for 2026-2028 MUST specify next-gen low-GWP refrigerant. R-454B for unitary AC, R-513A for medium-temp chillers, R-1234ze for large centrifugal chillers. Installing new R-410A equipment now is buying an asset with a 10-year regulatory expiration date. All four OEMs offer low-GWP options.</div><div class="act-cat">CAPITAL PLAN · REFRIGERANT · FUTURE-PROOF</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Run a competitive RFP on cooling tower chemical treatment. If you've been with the same provider for 3+ years without rebidding, you're overpaying 20-30%. Unbundle chemistry from service. Get independent water analysis first so you negotiate from data, not from your provider's recommendations.</div><div class="act-cat">COOLING TOWER · WATER TREATMENT · RFP</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Map your Daikin/Goodman and Carrier/Kidde exposure. Daikin owns Goodman (residential) AND manufactures refrigerants. Carrier owns Kidde (fire) AND Viessmann (heat pumps). If you're buying from multiple brands within either family, consolidate for volume leverage — or diversify to reduce concentration risk.</div><div class="act-cat">CONCENTRATION · OEM · EXHIBIT 21</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Evaluate heat pump conversion for facilities currently using gas-fired heating + separate AC. Modern commercial heat pumps (Carrier AquaEdge, Trane Sintesis) provide heating AND cooling in one system, eliminate gas dependency, and qualify for IRA tax credits. The energy economics have shifted — run the comparison with current gas prices.</div><div class="act-cat">HEAT PUMP · ELECTRIFICATION · IRA</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">EPA proposed rule to ban R-410A in new equipment by 2027. California already banned it for new residential systems in 2025. Washington, New York, Colorado, and Maryland are following. If you have facilities in early-adopter states, your equipment specifications need to reflect state law — not just federal rules. Check state-by-state compliance.</div><div class="act-cat">REGULATORY · STATE LAW · REFRIGERANT BAN</div></div>
+  <div class="src">Source: FSA analyst assessment based on EPA AIM Act, CARB, AHRI, ASHRAE, SEC EDGAR data</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v2.1 · HVAC, Chillers & Cooling · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

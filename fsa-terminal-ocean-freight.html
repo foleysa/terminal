@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Ocean Freight & Logistics</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}
+.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}
+.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}
+.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}
+.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}
+.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}
+.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}
+.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}
+.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}
+.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}
+.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}
+.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}
+.tab-content.active{display:block}
+
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}
+.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+
+/* ROUTE TABLE */
+.rt-row{display:grid;grid-template-columns:1.5fr 0.7fr 0.7fr 0.7fr 1fr;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.rt-row:hover{background:var(--bg3)}
+.rt-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}
+.rt-row.hdr:hover{background:transparent}
+
+/* GENERIC TABLE */
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.tbl-row:hover{background:var(--bg4)}
+.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}
+.tbl-row.hdr:hover{background:transparent}
+.carrier-cols{grid-template-columns:1.4fr 0.6fr 0.6fr 0.8fr 0.7fr 0.7fr}
+.fin-cols{grid-template-columns:1.3fr 0.7fr 0.7fr 0.7fr 0.7fr 0.8fr}
+.c-name{color:var(--t1);font-weight:600}
+.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+
+/* BARS */
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}
+.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-fuel{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}
+.db-surcharge{background:linear-gradient(90deg,#FFB898,#ffd0b8)}
+.db-charter{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}
+.db-port{background:linear-gradient(90deg,#B0CCFF,#c8daff)}
+.db-insurance{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}
+.db-handling{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}
+.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}
+.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}
+.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}
+.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+
+/* DISRUPTION CARDS */
+.disrupt{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid #FF8FA0;border-radius:0 6px 6px 0;padding:0.6rem 0.75rem;margin-bottom:0.5rem}
+.disrupt-title{font-size:0.78rem;color:var(--t1);font-weight:600;margin-bottom:0.15rem}
+.disrupt-meta{font-size:0.55rem;color:var(--t3);font-family:'JetBrains Mono',monospace;margin-bottom:0.3rem}
+.disrupt-text{font-size:0.72rem;color:var(--t2);line-height:1.45}
+.disrupt-impact{font-size:0.68rem;color:var(--t1);line-height:1.4;margin-top:0.25rem;font-weight:500}
+
+/* ALERTS */
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}
+.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}
+.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}
+.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+
+/* ACTIONS */
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}
+.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}
+.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}
+.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+
+/* RISK */
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}
+.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}
+.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}
+.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}
+@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}
+.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr">
+  <div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div>
+  <div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div>
+</div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Ocean Freight & Logistics</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Container shipping, bulk freight, port operations, and global trade logistics. The most disrupted procurement category of 2026 — Hormuz closure, Cape rerouting, carrier surcharges, and structural capacity reduction are permanently repricing global logistics.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$380B</div><div class="cs-lbl">Global Container Market</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">+45%</div><div class="cs-lbl">Rate Increase YTD</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">Hormuz Disruption</div></div>
+    <div><div class="cs-val">+14 days</div><div class="cs-lbl">Added Transit Time</div></div>
+    <div><div class="cs-val">3</div><div class="cs-lbl">Alliances Control 80%</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="disruptions">Active Disruptions<span class="tab-count">4</span></div>
+  <div class="tab" data-tab="carriers">Carriers & Alliances<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="routes">Route Intelligence</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Strait of Hormuz<br>Closed to Tankers</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Container Rates<br>+45% YTD</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Port Congestion<br>Singapore/Rotterdam</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">HIGH</div><div class="risk-lbl">Carrier Surcharges<br>Now Permanent</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Shipping Rates</span><span class="pnl-badge">DREWRY · FREIGHTOS</span></div>
+      <div class="rt-row hdr"><span>Route</span><span style="text-align:right">Rate/FEU</span><span style="text-align:right">Chg %</span><span style="text-align:right">Transit</span><span style="text-align:right">Status</span></div>
+      <div class="rt-row"><div class="c-name">Shanghai → LA</div><div class="c-val">$4,850</div><div class="c-val up">+38%</div><div class="c-val">18d</div><div style="text-align:right;font-size:0.6rem;font-weight:600;color:#FFB898">STRESSED</div></div>
+      <div class="rt-row"><div class="c-name">Shanghai → Rotterdam</div><div class="c-val">$6,200</div><div class="c-val up">+52%</div><div class="c-val">44d</div><div style="text-align:right;font-size:0.6rem;font-weight:600;color:#FF8FA0">CRITICAL</div></div>
+      <div class="rt-row"><div class="c-name">Shanghai → NY/NJ</div><div class="c-val">$5,400</div><div class="c-val up">+41%</div><div class="c-val">35d</div><div style="text-align:right;font-size:0.6rem;font-weight:600;color:#FFB898">STRESSED</div></div>
+      <div class="rt-row"><div class="c-name">Rotterdam → NY/NJ</div><div class="c-val">$2,800</div><div class="c-val up">+18%</div><div class="c-val">14d</div><div style="text-align:right;font-size:0.6rem;font-weight:600;color:#FFDF80">ELEVATED</div></div>
+      <div class="rt-row"><div class="c-name">Busan → LA</div><div class="c-val">$4,200</div><div class="c-val up">+32%</div><div class="c-val">14d</div><div style="text-align:right;font-size:0.6rem;font-weight:600;color:#FFB898">STRESSED</div></div>
+      <div class="src">Source: Drewry World Container Index, Freightos Baltic Index (public)</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">All annual container contracts signed before February are underwater. Renegotiate now or expect carriers to degrade service on below-market contracts.</div><div class="act-cat">CONTRACTS · CARRIER RELATIONS</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Recalculate total landed cost on every Asia-sourced category. Nearshore (Mexico, Central America) may now be cost-competitive after freight repricing.</div><div class="act-cat">SOURCING · TOTAL COST</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Safety stock calculations based on pre-Hormuz lead times are wrong. Add 14 days to every ocean transit time and recalculate immediately.</div><div class="act-cat">INVENTORY · LEAD TIME</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Ocean Freight Cost Breakdown</span><span class="pnl-badge">EIA · DREWRY</span></div>
+      <div class="driver"><div class="driver-name">Bunker Fuel</div><div class="driver-bar-bg"><div class="driver-bar db-fuel" style="width:32%">32%</div></div><div class="driver-pct">32%</div><div class="driver-trend up">+28%</div></div>
+      <div class="driver"><div class="driver-name">Surcharges (GRI/PSS)</div><div class="driver-bar-bg"><div class="driver-bar db-surcharge" style="width:22%">22%</div></div><div class="driver-pct">22%</div><div class="driver-trend up">+200%</div></div>
+      <div class="driver"><div class="driver-name">Charter Rates</div><div class="driver-bar-bg"><div class="driver-bar db-charter" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+35%</div></div>
+      <div class="driver"><div class="driver-name">Port/Terminal</div><div class="driver-bar-bg"><div class="driver-bar db-port" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+8%</div></div>
+      <div class="driver"><div class="driver-name">War Risk Insurance</div><div class="driver-bar-bg"><div class="driver-bar db-insurance" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+300%</div></div>
+      <div class="driver"><div class="driver-name">Handling/THC</div><div class="driver-bar-bg"><div class="driver-bar db-handling" style="width:6%">6%</div></div><div class="driver-pct">6%</div><div class="driver-trend up">+5%</div></div>
+      <div class="src">Sources: EIA bunker fuel, Drewry, Lloyd's List, insurance market reports</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Why This Is Structural, Not Temporary</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="disrupt" style="border-left-color:#FFDF80">
+        <div class="disrupt-title">Rerouting Distance</div>
+        <div class="disrupt-text">Cape of Good Hope adds 3,000-4,000 nautical miles per voyage. Asia-to-Europe transit: 30 days → 44 days. Every round trip ties up a ship for 2 extra weeks.</div>
+      </div>
+      <div class="disrupt" style="border-left-color:#FFDF80">
+        <div class="disrupt-title">Effective Capacity Reduction</div>
+        <div class="disrupt-text">Longer voyages = fewer round trips per ship per year. The global fleet hasn't grown, but the route network just got 15-20% longer. That's a structural capacity squeeze.</div>
+      </div>
+      <div class="disrupt" style="border-left-color:#FFDF80">
+        <div class="disrupt-title">Compounding Costs</div>
+        <div class="disrupt-text">Fuel, insurance, and port fees are stacking simultaneously. Gulf transit insurance premiums up 300%. Bunker fuel consumption rises with every extra mile. These don't unwind when headlines fade.</div>
+      </div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Forecast</div><div class="alert-text">Expect 2-3 years of elevated shipping costs minimum. New vessel deliveries in 2027-2028 will help — but they were ordered for pre-Hormuz route networks, not post-rerouting capacity needs.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVE DISRUPTIONS -->
+<div class="tab-content" id="tab-disruptions">
+  <div class="pnl-hdr"><span class="pnl-title">Active Disruptions — Global Shipping</span><span class="pnl-badge">LIVE MONITORING</span></div>
+  <div class="disrupt">
+    <div class="disrupt-title">Strait of Hormuz — Closure / Restricted Transit</div>
+    <div class="disrupt-meta">STATUS: CRITICAL · SINCE FEB 2026 · DURATION: INDEFINITE</div>
+    <div class="disrupt-text">Iranian naval exercises have effectively closed the Strait to commercial tanker traffic. 20% of global oil supply disrupted. Container vessels rerouting around Cape of Good Hope, adding 14+ days to Asia-Europe and Asia-US East Coast routes.</div>
+    <div class="disrupt-impact">⚡ Impact: +$200-400/TEU surcharge (now permanent), +14 days transit, bunker fuel costs up 28%, war risk insurance up 300%.</div>
+  </div>
+  <div class="disrupt">
+    <div class="disrupt-title">Maersk Permanent Surcharge Restructuring</div>
+    <div class="disrupt-meta">STATUS: HIGH · EFFECTIVE MAR 2026 · PERMANENT</div>
+    <div class="disrupt-text">Maersk has made the $200/TEU and $400/FEU emergency Gulf surcharge permanent through 2027. Hapag-Lloyd, CMA CGM, and MSC have followed with similar structures. This is not a temporary premium — it's the new baseline.</div>
+    <div class="disrupt-impact">⚡ Impact: All annual contracts signed pre-February are below market. Carriers will degrade service quality on unprofitable lanes before they eat the loss.</div>
+  </div>
+  <div class="disrupt">
+    <div class="disrupt-title">Singapore / Rotterdam Port Congestion</div>
+    <div class="disrupt-meta">STATUS: ELEVATED · SINCE MAR 2026 · WORSENING</div>
+    <div class="disrupt-text">Cape rerouting is concentrating vessel arrivals at Singapore (transshipment hub) and Rotterdam (Europe gateway). Both ports reporting 3-5 day berthing delays. Container dwell times up 40%.</div>
+    <div class="disrupt-impact">⚡ Impact: Add 3-5 days to transit estimates on routes through Singapore or Rotterdam. Book early or accept delays.</div>
+  </div>
+  <div class="disrupt">
+    <div class="disrupt-title">US West Coast Labor — ILWU Contract Expiration</div>
+    <div class="disrupt-meta">STATUS: MONITOR · CONTRACT EXPIRES JUL 2026</div>
+    <div class="disrupt-text">ILWU contract covering West Coast ports expires July 2026. Negotiations haven't started. The 2022 contract negotiations caused months of disruption. If talks stall, expect cargo diversion to East and Gulf Coast ports.</div>
+    <div class="disrupt-impact">⚡ Impact: If you route through LA/Long Beach, Oakland, or Seattle-Tacoma — have contingency routes planned through Savannah, Houston, or Charleston by June.</div>
+  </div>
+  <div class="src">Sources: Lloyd's List, Drewry, Journal of Commerce, USMX/ILWU public filings</div>
+</div>
+
+<!-- CARRIERS & ALLIANCES -->
+<div class="tab-content" id="tab-carriers">
+  <div class="pnl-hdr"><span class="pnl-title">Major Ocean Carriers — Market Position</span><span class="pnl-badge">ALPHALINER · PUBLIC FILINGS</span></div>
+  <div class="tbl-row hdr carrier-cols"><span>Carrier</span><span style="text-align:center">Alliance</span><span style="text-align:center">Fleet TEU</span><span style="text-align:center">Market Share</span><span style="text-align:center">Surcharge</span><span style="text-align:center">Reliability</span></div>
+  <div class="tbl-row carrier-cols"><div class="c-name">MSC</div><div style="text-align:center;color:var(--t1)">None (Ind.)</div><div class="c-val" style="text-align:center">5.8M</div><div class="c-val" style="text-align:center">19.2%</div><div style="text-align:center;color:#FF8FA0;font-weight:600;font-size:0.68rem">$220/TEU</div><div style="text-align:center"><span class="badge-sm b-watch">72%</span></div></div>
+  <div class="tbl-row carrier-cols"><div class="c-name">Maersk</div><div style="text-align:center;color:var(--t1)">Gemini</div><div class="c-val" style="text-align:center">4.4M</div><div class="c-val" style="text-align:center">14.8%</div><div style="text-align:center;color:#FF8FA0;font-weight:600;font-size:0.68rem">$200/TEU</div><div style="text-align:center"><span class="badge-sm b-watch">68%</span></div></div>
+  <div class="tbl-row carrier-cols"><div class="c-name">CMA CGM</div><div style="text-align:center;color:var(--t1)">Ocean Alliance</div><div class="c-val" style="text-align:center">3.8M</div><div class="c-val" style="text-align:center">13.1%</div><div style="text-align:center;color:#FF8FA0;font-weight:600;font-size:0.68rem">$250/TEU</div><div style="text-align:center"><span class="badge-sm b-watch">70%</span></div></div>
+  <div class="tbl-row carrier-cols"><div class="c-name">COSCO</div><div style="text-align:center;color:var(--t1)">Ocean Alliance</div><div class="c-val" style="text-align:center">3.1M</div><div class="c-val" style="text-align:center">10.8%</div><div style="text-align:center;color:#FFB898;font-weight:600;font-size:0.68rem">$180/TEU</div><div style="text-align:center"><span class="badge-sm b-strong">75%</span></div></div>
+  <div class="tbl-row carrier-cols"><div class="c-name">Hapag-Lloyd</div><div style="text-align:center;color:var(--t1)">Gemini</div><div class="c-val" style="text-align:center">2.1M</div><div class="c-val" style="text-align:center">7.3%</div><div style="text-align:center;color:#FF8FA0;font-weight:600;font-size:0.68rem">$210/TEU</div><div style="text-align:center"><span class="badge-sm b-risk">64%</span></div></div>
+  <div class="tbl-row carrier-cols"><div class="c-name">Evergreen</div><div style="text-align:center;color:var(--t1)">Ocean Alliance</div><div class="c-val" style="text-align:center">1.8M</div><div class="c-val" style="text-align:center">6.2%</div><div style="text-align:center;color:#FFB898;font-weight:600;font-size:0.68rem">$190/TEU</div><div style="text-align:center"><span class="badge-sm b-strong">76%</span></div></div>
+  <div class="tbl-row carrier-cols"><div class="c-name">ONE</div><div style="text-align:center;color:var(--t1)">Premier Alliance</div><div class="c-val" style="text-align:center">1.6M</div><div class="c-val" style="text-align:center">5.8%</div><div style="text-align:center;color:#FFB898;font-weight:600;font-size:0.68rem">$195/TEU</div><div style="text-align:center"><span class="badge-sm b-strong">74%</span></div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem">
+    <div class="alert-title" style="color:#FF8FA0">⚠ Alliance Concentration Risk</div>
+    <div class="alert-text">Three alliances (Gemini, Ocean Alliance, Premier Alliance) plus MSC independently control 80%+ of global container capacity. If you're 80% with one carrier, you have no leverage. Split volume across 3+ carriers minimum — and across at least 2 alliances.</div>
+  </div>
+  <div class="alert alert-gold">
+    <div class="alert-title" style="color:#FFDF80">⚠ Gemini Alliance — New in 2025</div>
+    <div class="alert-text">Maersk and Hapag-Lloyd launched the Gemini alliance in February 2025, replacing 2M. Early schedule reliability is the lowest in the market at 64-68%. If reliability matters more than price, shift volume toward Evergreen or COSCO (75-76% on-time).</div>
+  </div>
+  <div class="src">Source: Alphaliner fleet data, Drewry schedule reliability index, carrier public surcharge schedules</div>
+</div>
+
+<!-- ROUTE INTELLIGENCE -->
+<div class="tab-content" id="tab-routes">
+  <div class="pnl-hdr"><span class="pnl-title">Route-Level Intelligence</span><span class="pnl-badge">DREWRY · FREIGHTOS · PUBLIC</span></div>
+  <div class="rt-row hdr"><span>Route</span><span style="text-align:right">Rate/FEU</span><span style="text-align:right">Pre-Hormuz</span><span style="text-align:right">Transit</span><span style="text-align:right">Assessment</span></div>
+  <div class="rt-row"><div class="c-name">Asia → US West Coast</div><div class="c-val" style="color:#FF8FA0">$4,850</div><div class="c-val" style="color:var(--t3)">$3,200</div><div class="c-val">14-18d</div><div style="text-align:right;font-size:0.65rem;color:#FFB898;font-weight:500">Fuel surcharges driving. ILWU risk in July.</div></div>
+  <div class="rt-row"><div class="c-name">Asia → US East Coast</div><div class="c-val" style="color:#FF8FA0">$5,400</div><div class="c-val" style="color:var(--t3)">$3,800</div><div class="c-val">30-35d</div><div style="text-align:right;font-size:0.65rem;color:#FF8FA0;font-weight:500">Cape reroute adds 7+ days. Panama Canal restricted.</div></div>
+  <div class="rt-row"><div class="c-name">Asia → North Europe</div><div class="c-val" style="color:#FF8FA0">$6,200</div><div class="c-val" style="color:var(--t3)">$4,100</div><div class="c-val">40-44d</div><div style="text-align:right;font-size:0.65rem;color:#FF8FA0;font-weight:500">Most impacted lane. +14 days via Cape.</div></div>
+  <div class="rt-row"><div class="c-name">Asia → Mediterranean</div><div class="c-val" style="color:#FF8FA0">$5,800</div><div class="c-val" style="color:var(--t3)">$3,600</div><div class="c-val">38-42d</div><div style="text-align:right;font-size:0.65rem;color:#FF8FA0;font-weight:500">Suez access uncertain. Full Cape reroute.</div></div>
+  <div class="rt-row"><div class="c-name">Transatlantic (EU → US)</div><div class="c-val" style="color:#FFDF80">$2,800</div><div class="c-val" style="color:var(--t3)">$2,300</div><div class="c-val">12-14d</div><div style="text-align:right;font-size:0.65rem;color:#FFDF80;font-weight:500">Moderate increase. Not Cape-affected.</div></div>
+  <div class="rt-row"><div class="c-name">Intra-Americas</div><div class="c-val" style="color:#6FFFB0">$1,900</div><div class="c-val" style="color:var(--t3)">$1,600</div><div class="c-val">5-10d</div><div style="text-align:right;font-size:0.65rem;color:#6FFFB0;font-weight:500">Least impacted. USMCA nearshore advantage.</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem">
+    <div class="alert-title" style="color:#FFDF80">Nearshore Advantage</div>
+    <div class="alert-text">Intra-Americas routes (Mexico, Central America, Colombia, Brazil) are the least disrupted and lowest cost. For any category currently sourced from Asia, run a total landed cost comparison using current freight rates. The nearshore math has flipped in many categories — especially for goods with a high freight-to-value ratio.</div>
+  </div>
+  <div class="alert alert-gold">
+    <div class="alert-title" style="color:#FFDF80">Panama Canal Restrictions</div>
+    <div class="alert-text">Panama Canal continues to restrict daily transits due to drought conditions. Asia → US East Coast routing via Panama is unreliable. Most carriers are routing via Cape or Suez (where accessible). Factor this into US East Coast sourcing strategies.</div>
+  </div>
+  <div class="src">Source: Drewry WCI, Freightos Baltic Index, carrier published schedules, Panama Canal Authority</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Ocean Freight</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Any annual container contract signed before February 2026 is now 30-50% below market. Carriers will degrade service quality before they absorb the loss. Renegotiate terms NOW — push for index-linked rates (tied to Drewry WCI or Freightos FBX) with quarterly true-ups instead of fixed annual pricing.</div><div class="act-cat">CONTRACTS · CARRIER RELATIONS · PRICING</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Recalculate ALL safety stock for ocean-shipped goods. Pre-Hormuz lead times are wrong. Add minimum 14 days to Asia-Europe and 7 days to Asia-US transit times. The cost of carrying extra inventory is less than the cost of a stockout.</div><div class="act-cat">INVENTORY · LEAD TIME · PLANNING</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Diversify carriers across alliances. If you're 80%+ with one carrier, you have zero leverage. Split volume across 3+ carriers minimum, spanning at least 2 of the 3 alliances (Gemini, Ocean Alliance, Premier Alliance). Concentration in logistics is as dangerous as in your supply base.</div><div class="act-cat">CARRIER DIVERSIFICATION · LEVERAGE</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Run total landed cost comparison: Asia-sourced vs nearshore for every high-volume category. Include current freight ($4,800-6,200/FEU), transit time cost of capital, safety stock carrying cost, and tariff exposure. Mexico and Central America are now cost-competitive in categories where they weren't 6 months ago.</div><div class="act-cat">NEARSHORE · TOTAL LANDED COST · SOURCING</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">ILWU West Coast port contract expires July 2026. If you route significant volume through LA/Long Beach, Oakland, or Seattle-Tacoma — develop contingency plans to divert to Savannah, Houston, or Charleston by June. Don't wait for the headlines.</div><div class="act-cat">LABOR RISK · PORT DIVERSIFICATION</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Evaluate schedule reliability as a procurement criterion, not just rate. Gemini alliance (Maersk/Hapag-Lloyd) currently has the lowest on-time performance at 64-68%. If your supply chain can't absorb variability, pay the premium for Evergreen or COSCO (75-76% reliability) even if the rate is slightly higher.</div><div class="act-cat">RELIABILITY · CARRIER SELECTION</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Watch for new vessel deliveries in 2027-2028. The current order book is significant — but vessels were ordered for pre-Hormuz routes. If Hormuz reopens AND new capacity arrives simultaneously, rates could correct sharply. Build contract flexibility to capture that downside. Don't lock into 3-year fixed rates at today's peaks.</div><div class="act-cat">MARKET OUTLOOK · CONTRACT STRUCTURE</div></div>
+  <div class="src">Source: FSA analyst assessment based on Drewry, Freightos, Alphaliner, EIA, Lloyd's List, ILWU/USMX public filings</div>
+</div>
+
+<div class="ftr">
+  <span>FSA Procurement Intelligence Terminal v2.1 · Ocean Freight & Logistics · All data from public sources</span>
+  <span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}
+}
+document.getElementById('tab-bar').addEventListener('click',function(e){
+  var tab=e.target.closest('.tab');if(!tab)return;
+  var id=tab.getAttribute('data-tab');if(id)showTab(id);
+});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}
+setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

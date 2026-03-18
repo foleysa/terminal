@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Electrical Components</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}
+.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}
+.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}
+.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}
+.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}
+.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}
+.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}
+.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}
+.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}
+.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}
+.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}
+.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}
+.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}
+.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}
+.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-copper{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}
+.db-semi{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}
+.db-plastic{background:linear-gradient(90deg,#FFB898,#ffd0b8)}
+.db-steel{background:linear-gradient(90deg,#B0CCFF,#c8daff)}
+.db-labor{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}
+.db-logistics{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}
+.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+
+.imp-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0}
+.imp-country{font-size:0.75rem;color:var(--t1);width:85px;flex-shrink:0;font-weight:600}
+.imp-bar-bg{flex:1;height:20px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+.imp-bar{height:100%;background:linear-gradient(90deg,rgba(255,223,128,0.5),rgba(255,223,128,0.25));border-radius:2px}
+.imp-val{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--t1);width:55px;text-align:right;flex-shrink:0;font-weight:500}
+
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.tbl-row:hover{background:var(--bg4)}
+.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}
+.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.4fr 1fr 0.6fr 0.7fr 0.7fr}
+.fin-cols{grid-template-columns:1.3fr 0.7fr 0.7fr 0.7fr 0.7fr 0.8fr}
+.hs-cols{grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr}
+.c-name{color:var(--t1);font-weight:600}
+.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}
+.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}
+.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}
+.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}
+.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
+.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}
+.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}
+.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}
+.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}
+.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}
+.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}
+.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}
+.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}
+.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}
+.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}
+.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}
+.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}
+.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}
+.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}
+.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}
+@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}
+.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr">
+  <div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div>
+  <div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div>
+</div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Electrical Components</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Wire and cable, connectors, circuit breakers, transformers, switchgear, PLCs, motor controls, sensors, relays, and power distribution equipment. The most tariff-exposed procurement category — up to 50% combined duty on Chinese-origin components — with critical copper and semiconductor dependencies.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$520B</div><div class="cs-lbl">Global Market</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">50%</div><div class="cs-lbl">Max China Tariff</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">301 Exposure</div></div>
+    <div><div class="cs-val">$4.52</div><div class="cs-lbl">Copper $/lb</div></div>
+    <div><div class="cs-val">42%</div><div class="cs-lbl">China Import Share</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Ownership<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure<span class="tab-count">9</span></div>
+  <div class="tab" data-tab="financials">Financial Health</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Section 301<br>25-50% Tariff</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">Copper Supply<br>LME 15yr Low</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Semiconductor<br>Chip Availability</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">BIS Entity List<br>Export Controls</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">China Import Dependency</span><span class="pnl-badge">ITC · CENSUS</span></div>
+      <div class="imp-row"><div class="imp-country">China</div><div class="imp-bar-bg"><div class="imp-bar" style="width:42%"></div></div><div class="imp-val">$38.2B</div></div>
+      <div class="imp-row"><div class="imp-country">Mexico</div><div class="imp-bar-bg"><div class="imp-bar" style="width:16%"></div></div><div class="imp-val">$14.6B</div></div>
+      <div class="imp-row"><div class="imp-country">Taiwan</div><div class="imp-bar-bg"><div class="imp-bar" style="width:10%"></div></div><div class="imp-val">$9.1B</div></div>
+      <div class="imp-row"><div class="imp-country">Japan</div><div class="imp-bar-bg"><div class="imp-bar" style="width:8%"></div></div><div class="imp-val">$7.3B</div></div>
+      <div class="imp-row"><div class="imp-country">Germany</div><div class="imp-bar-bg"><div class="imp-bar" style="width:7%"></div></div><div class="imp-val">$6.4B</div></div>
+      <div class="imp-row"><div class="imp-country">S. Korea</div><div class="imp-bar-bg"><div class="imp-bar" style="width:5%"></div></div><div class="imp-val">$4.5B</div></div>
+      <div class="alert alert-red" style="margin-top:0.5rem"><div class="alert-title" style="color:#FF8FA0">Critical Concentration</div><div class="alert-text">42% of US electrical component imports come from China — nearly all subject to 25% Section 301 tariff. Some categories (EV/battery components) face 100% tariff.</div></div>
+      <div class="src">Source: US ITC DataWeb, Census Bureau</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Copper at $4.52/lb with inventories at 15-year low. Every wire, cable, busbar, and connector price is moving. Lock Q2 copper-linked pricing now.</div><div class="act-cat">COPPER · WIRE · PRICING</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">USTR considering expanding Section 301 to industrial automation (PLCs, servos, robotics). If you source automation from China, identify alternatives in Japan, Germany, or US now — before the Federal Register notice.</div><div class="act-cat">TARIFF · AUTOMATION · 301</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Audit your Eaton/Cooper exposure. Cooper Industries was acquired by Eaton in 2012. If you buy from both brands, you have one supplier. Check the Suppliers tab.</div><div class="act-cat">CONCENTRATION · EXHIBIT 21</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Category Cost Breakdown</span><span class="pnl-badge">FRED · EIA · BLS</span></div>
+      <div class="driver"><div class="driver-name">Copper & Alloys</div><div class="driver-bar-bg"><div class="driver-bar db-copper" style="width:28%">28%</div></div><div class="driver-pct">28%</div><div class="driver-trend up">+8.6%</div></div>
+      <div class="driver"><div class="driver-name">Semiconductors</div><div class="driver-bar-bg"><div class="driver-bar db-semi" style="width:22%">22%</div></div><div class="driver-pct">22%</div><div class="driver-trend up">+4.2%</div></div>
+      <div class="driver"><div class="driver-name">Plastics / Insulation</div><div class="driver-bar-bg"><div class="driver-bar db-plastic" style="width:16%">16%</div></div><div class="driver-pct">16%</div><div class="driver-trend up">+6.8%</div></div>
+      <div class="driver"><div class="driver-name">Steel / Enclosures</div><div class="driver-bar-bg"><div class="driver-bar db-steel" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+4.2%</div></div>
+      <div class="driver"><div class="driver-name">Labor</div><div class="driver-bar-bg"><div class="driver-bar db-labor" style="width:14%">14%</div></div><div class="driver-pct">14%</div><div class="driver-trend up">+4.5%</div></div>
+      <div class="driver"><div class="driver-name">Logistics</div><div class="driver-bar-bg"><div class="driver-bar db-logistics" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+22.6%</div></div>
+      <div class="src">Sources: FRED copper/PPI, SIA semiconductor data, BLS wages, Drewry freight</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Dependencies</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Copper — Supply Squeeze</div><div class="alert-text">Copper is 28% of electrical component cost. LME inventories at 15-year low. Chilean mine output down 12%. Every cable, busbar, transformer, and motor winding is affected. This is the single biggest cost driver in the category right now.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Semiconductors — Capacity Improving But Fragile</div><div class="alert-text">The 2021-2023 chip shortage has largely resolved for mature-node chips (MCUs, power semiconductors). But leading-edge capacity is concentrated in Taiwan (TSMC) and South Korea (Samsung). Any Taiwan Strait escalation would be catastrophic for the category. Monitor geopolitical risk.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Plastics & Insulation — Hormuz Exposure</div><div class="alert-text">PVC, polyethylene, and specialty insulation materials are petrochemical-derived. Crude at $98.71/bbl is pushing feedstock costs up 6-8%. Wire and cable insulation costs will follow with a 30-60 day lag.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major Electrical Component Suppliers</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Supplier</span><span>Parent Company</span><span style="text-align:center">Segment</span><span style="text-align:center">Health</span><span style="text-align:center">301 Risk</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Eaton Corporation</div><div style="color:var(--t2);font-size:0.65rem">Eaton Corp plc (NYSE: ETN)</div><div style="text-align:center;color:var(--t1);font-weight:500">Power Dist</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Schneider Electric</div><div style="color:var(--t2);font-size:0.65rem">Schneider Electric SE (EPA: SU)</div><div style="text-align:center;color:var(--t1);font-weight:500">Automation</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Siemens</div><div style="color:var(--t2);font-size:0.65rem">Siemens AG (XETRA: SIE)</div><div style="text-align:center;color:var(--t1);font-weight:500">Automation</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">ABB</div><div style="color:var(--t2);font-size:0.65rem">ABB Ltd (NYSE: ABB)</div><div style="text-align:center;color:var(--t1);font-weight:500">Power/Auto</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Rockwell Automation</div><div style="color:var(--t2);font-size:0.65rem">Rockwell Automation (NYSE: ROK)</div><div style="text-align:center;color:var(--t1);font-weight:500">PLC/Auto</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Hubbell</div><div style="color:var(--t2);font-size:0.65rem">Hubbell Inc (NYSE: HUBB)</div><div style="text-align:center;color:var(--t1);font-weight:500">Wiring/Conn</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">nVent Electric</div><div style="color:var(--t2);font-size:0.65rem">nVent Electric plc (NYSE: NVT)</div><div style="text-align:center;color:var(--t1);font-weight:500">Enclosures</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Eaton Corporation plc <span class="tree-p-tag">NYSE: ETN</span></div>
+    <div class="tree-p-meta">CIK: 0000031462 · Revenue: $23.2B · 92,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Cooper Industries (acquired 2012)</div><div class="tree-sub-detail">Power distribution, circuit breakers, lighting, wiring devices</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Eaton Electrical</div><div class="tree-sub-detail">Switchgear, UPS, transformers, panelboards</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Eaton Aerospace</div><div class="tree-sub-detail">Aerospace electrical systems, fuel/hydraulic</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Eaton Vehicle Group</div><div class="tree-sub-detail">EV drivetrain, commercial vehicle electrical</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">B-Line (acquired via Cooper)</div><div class="tree-sub-detail">Cable trays, strut, support systems</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Schneider Electric SE <span class="tree-p-tag">EPA: SU</span></div>
+    <div class="tree-p-meta">Revenue: €36.4B · 150,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Square D (acquired 1991)</div><div class="tree-sub-detail">Circuit breakers, panelboards, motor control centers</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">APC (acquired 2007)</div><div class="tree-sub-detail">UPS systems, power protection, cooling</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">ASCO Power Technologies</div><div class="tree-sub-detail">Automatic transfer switches, power control</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Foxboro / Eurotherm (via Invensys)</div><div class="tree-sub-detail">Process automation, control systems</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Hubbell Incorporated <span class="tree-p-tag">NYSE: HUBB</span></div>
+    <div class="tree-p-meta">CIK: 0000048898 · Revenue: $5.7B · 18,800 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Burndy (acquired 2009)</div><div class="tree-sub-detail">Electrical connectors, grounding, tooling</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Hubbell Utility Solutions</div><div class="tree-sub-detail">Utility poles, arrestors, insulators, switches</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Hubbell Electrical Solutions</div><div class="tree-sub-detail">Wiring devices, lighting, harsh environment</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">REF /?"PCX (recent acquisitions)</div><div class="tree-sub-detail">Enclosure, cable management additions</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-title" style="color:#FF8FA0">⚠ Concentration Risk — Eaton / Cooper</div>
+    <div class="alert-text">Eaton acquired Cooper Industries in 2012 for $11.8B. If you source circuit breakers from Cooper and switchgear from Eaton, you have one supplier. Cooper's B-Line (cable trays) is also Eaton. Map your full Eaton/Cooper exposure across all electrical subcategories.</div>
+  </div>
+  <div class="alert alert-gold">
+    <div class="alert-title" style="color:#FFDF80">⚠ Hidden Exposure — Schneider / Square D / APC</div>
+    <div class="alert-text">Schneider Electric owns Square D, APC, and ASCO. These brands are often purchased by different teams within the same company — facilities buys APC (UPS), electrical buys Square D (panels), maintenance buys ASCO (transfer switches). All one parent company, one balance sheet.</div>
+  </div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, annual reports, M&A records</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Trade Exposure — Electrical Components</span><span class="pnl-badge">USTR · SECTION 301 · BIS</span></div>
+  <div class="tbl-row hdr hs-cols"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8536</div><div style="color:var(--t1)">Switches, connectors, relays ≤1kV</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.7%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8537</div><div style="color:var(--t1)">Control panels, PLCs, switchboards</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.7%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8504</div><div style="color:var(--t1)">Transformers, inductors, power supplies</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.4%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8544</div><div style="color:var(--t1)">Wire, cable, optical fiber cable</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.5%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8541-42</div><div style="color:var(--t1)">Semiconductors, diodes, transistors, ICs</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+0%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8507</div><div style="color:var(--t1)">Lithium-ion batteries, battery packs</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%→100%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8501</div><div style="color:var(--t1)">Electric motors, generators</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.4%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8537</div><div style="color:var(--t1)">PLCs, servo drives, motor controls</div><div style="text-align:center;color:var(--t1)">Japan/DE</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2.7%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8544</div><div style="color:var(--t1)">Wire & cable</div><div style="text-align:center;color:var(--t1)">Mexico</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0% USMCA</div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">Section 301 — Broadest Impact in Any Category</div><div class="alert-text">Nearly every electrical HS code from China faces 25% Section 301 on top of MFN duty. Lithium-ion batteries are escalating from 25% to 100%. USTR is reviewing expansion to industrial automation components (PLCs, servos, robotics) — if enacted, that's another 25% on automation capex sourced from China.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Alternative Sourcing Advantage</div><div class="alert-text">Japan (Mitsubishi, Omron, Yaskawa) and Germany (Siemens, Phoenix Contact, Wago) produce equivalent PLCs, servos, and automation components at 2.7% MFN duty — a 22% cost advantage over Chinese-origin equivalents. Mexico-origin wire and cable enters at 0% under USMCA. The tariff math makes reshoring and friend-shoring the obvious move.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">BIS Entity List — Export Control Risk</div><div class="alert-text">The Bureau of Industry and Security maintains the Entity List restricting technology exports to certain Chinese companies. If your Chinese electrical suppliers are on or near the Entity List, you face dual risk: they can't get the components they need to build your products AND you may need a license to buy from them. Check BIS regularly.</div></div>
+  <div class="src">Source: USTR HTS, Section 301 Lists 1-4, BIS Entity List, CBP ACE Portal</div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="tab-content" id="tab-financials">
+  <div class="pnl-hdr"><span class="pnl-title">Supplier Financial Health</span><span class="pnl-badge">SEC 10-K / 10-Q · EDGAR</span></div>
+  <div class="tbl-row hdr fin-cols"><span>Company</span><span style="text-align:right">Revenue</span><span style="text-align:right">Gross Margin</span><span style="text-align:right">Debt/EBITDA</span><span style="text-align:right">Current Ratio</span><span style="text-align:right">Signal</span></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Eaton</div><div class="c-val">$23.2B</div><div class="c-val" style="color:#6FFFB0">36.8%</div><div class="c-val" style="color:#6FFFB0">1.4x</div><div class="c-val" style="color:#6FFFB0">1.32</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Schneider Electric</div><div class="c-val">€36.4B</div><div class="c-val" style="color:#6FFFB0">42.1%</div><div class="c-val" style="color:#6FFFB0">1.6x</div><div class="c-val" style="color:#6FFFB0">1.08</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Siemens</div><div class="c-val">€77.8B</div><div class="c-val" style="color:#6FFFB0">38.4%</div><div class="c-val" style="color:#6FFFB0">1.2x</div><div class="c-val" style="color:#6FFFB0">1.18</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">ABB</div><div class="c-val">$32.8B</div><div class="c-val" style="color:#6FFFB0">34.2%</div><div class="c-val" style="color:#6FFFB0">1.1x</div><div class="c-val" style="color:#6FFFB0">1.24</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Rockwell</div><div class="c-val">$9.1B</div><div class="c-val" style="color:#6FFFB0">41.6%</div><div class="c-val" style="color:#FFDF80">2.8x</div><div class="c-val" style="color:#6FFFB0">1.15</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Hubbell</div><div class="c-val">$5.7B</div><div class="c-val" style="color:#6FFFB0">38.9%</div><div class="c-val" style="color:#6FFFB0">1.9x</div><div class="c-val" style="color:#6FFFB0">1.42</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">nVent</div><div class="c-val">$3.1B</div><div class="c-val" style="color:#6FFFB0">44.2%</div><div class="c-val" style="color:#FFDF80">3.2x</div><div class="c-val" style="color:#6FFFB0">1.08</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Overall Category Health: Strong</div><div class="alert-text">The major electrical component suppliers are financially healthy across the board. This is a mature, oligopolistic market with high barriers to entry. The risk in this category is not supplier insolvency — it's tariff exposure, copper price volatility, and geographic concentration in China. Financial risk is low. Trade policy risk is extreme.</div></div>
+  <div class="src">Source: SEC EDGAR 10-K/10-Q filings, annual reports</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Electrical Components</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Copper at $4.52/lb with LME inventories at 15-year low. Lock Q2 pricing on all copper-intensive categories: wire, cable, busbars, connectors, transformer windings, motor windings. Every week you delay, your cost basis moves against you.</div><div class="act-cat">COPPER · WIRE · PRICING · SUPPLY</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Lithium-ion battery tariff escalating from 25% to 100% on Chinese-origin cells and packs. If you source batteries or battery-powered equipment from China, secure supply at current tariff rates or shift to non-Chinese sources (LG Chem/South Korea, Panasonic/Japan, domestic AESC/Tesla). The 100% tariff will make Chinese cells uneconomic.</div><div class="act-cat">BATTERIES · TARIFF · 301 ESCALATION</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Shift PLC and automation sourcing from China to Japan (Mitsubishi, Omron, Keyence) or Germany (Siemens, Beckhoff, Phoenix Contact). The MFN duty is 2.7% vs 27.7% for Chinese-origin. That's a 25-point tariff advantage — and the quality is often superior. Run the total cost comparison including tariff, lead time, and support availability.</div><div class="act-cat">AUTOMATION · PLC · TARIFF ARBITRAGE</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your Eaton/Cooper and Schneider/Square D/APC exposure across all electrical subcategories. Most companies discover these hidden concentration risks only when they do an Exhibit 21 audit. If you buy from 3 brands that are all Schneider subsidiaries, you have one supplier — not three.</div><div class="act-cat">CONCENTRATION RISK · EXHIBIT 21</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Source wire and cable from Mexico under USMCA at 0% duty. Southwire, Encore Wire, and Prysmian all have Mexico manufacturing. If you're buying Chinese-origin cable at 28.5% combined duty, the Mexico switch is a no-brainer on total landed cost alone.</div><div class="act-cat">WIRE · CABLE · USMCA · NEARSHORE</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Check the BIS Entity List quarterly against your Chinese electrical suppliers. If a supplier lands on the Entity List, you face immediate supply disruption AND potential compliance liability. Don't find out from the news — build a quarterly screen into your supplier management process.</div><div class="act-cat">COMPLIANCE · BIS · EXPORT CONTROLS</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">TSMC and Samsung dominate leading-edge semiconductor production. Any Taiwan Strait escalation would disrupt the entire electronics supply chain — not just chips, but every product that contains a chip. This is a low-probability, catastrophic-impact scenario. Don't plan for it tactically — but make sure you have 90-day buffer stock on critical semiconductor-dependent components.</div><div class="act-cat">SEMICONDUCTORS · GEOPOLITICAL · TAIWAN</div></div>
+  <div class="src">Source: FSA analyst assessment based on FRED, ITC, USTR, BIS, SEC EDGAR, SIA data</div>
+</div>
+
+<div class="ftr">
+  <span>FSA Procurement Intelligence Terminal v2.1 · Electrical Components · All data from public sources: ITC, USTR, BIS, FRED, SEC EDGAR</span>
+  <span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}
+}
+document.getElementById('tab-bar').addEventListener('click',function(e){
+  var tab=e.target.closest('.tab');if(!tab)return;
+  var id=tab.getAttribute('data-tab');if(id)showTab(id);
+});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}
+setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

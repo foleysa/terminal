@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Janitorial & Facilities</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Janitorial & Facilities Management</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Cleaning chemicals, restroom supplies (paper, soap, dispensers), floor care equipment, pest control, waste/recycling hauling, landscaping, security services, and facility maintenance contracts. The ultimate tail spend category — 90%+ of POs under $500, highest number of suppliers, and most likely to be completely unmanaged. GPO programs deliver the best ROI here because nobody negotiates tissue paper and trash bags.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$78B</div><div class="cs-lbl">US Jan/San Market</div></div>
+    <div><div class="cs-val" style="color:#FFDF80">90%</div><div class="cs-lbl">Tail Spend POs</div></div>
+    <div><div class="cs-val" style="color:#FFB898">15-40%</div><div class="cs-lbl">Overspend Typical</div></div>
+    <div><div class="cs-val" style="color:#6FFFB0">GPO</div><div class="cs-lbl">Best ROI Category</div></div>
+    <div><div class="cs-val">Ecolab</div><div class="cs-lbl">Dominates Services</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Services</div>
+  <div class="tab" data-tab="managed">Managed Services Model</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">HIGH</div><div class="risk-lbl">Tail Spend<br>Unmanaged</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">15-40%</div><div class="risk-lbl">Typical<br>Overspend</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">GPO</div><div class="risk-lbl">Best Category<br>For GPO Savings</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">LOW</div><div class="risk-lbl">Supply Risk<br>Multi-Source</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Why This Category Matters</span></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">The Unmanaged Spend Problem</div><div class="alert-text">Janitorial and facilities is the category most likely to have ZERO strategic sourcing attention. Every plant, office, and warehouse buys tissue paper, trash bags, hand soap, and cleaning chemicals — but nobody negotiates them. The result: each facility buys from whoever shows up (local janitorial distributor, Staples, Amazon, Costco), at whatever price they quote, with no contract and no volume leverage. Typical overspend: 15-40% vs. what a GPO or consolidated contract would deliver.</div></div>
+      <div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">The Opportunity</div><div class="alert-text">This is the easiest category to save money in because nobody has tried. A single GPO membership (OMNIA Partners, Vizient/Provista) or a consolidated contract with a national distributor (HD Supply, Staples Business Advantage, Cintas) typically saves 15-25% across the entire category. On $500K annual Jan/San spend, that's $75K-125K/year — for a procurement initiative that takes 2-4 weeks to implement.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Sub-Services Breakdown</span></div>
+      <div class="act"><div class="act-pri" style="color:var(--t1)">CLEANING CHEMICALS — 20%</div><div class="act-text">Floor care, disinfectants, degreasers, glass cleaners. Concentrated products diluted on-site save 30-50% vs ready-to-use. Ecolab and Diversey dominate the dispensing systems.</div></div>
+      <div class="act"><div class="act-pri" style="color:var(--t1)">RESTROOM SUPPLIES — 25%</div><div class="act-text">Paper towels, tissue, hand soap, dispensers. Dispenser lock-in is real — proprietary dispensers only accept the manufacturer's product. Georgia-Pacific (Enmotion), Kimberly-Clark (Scott), and SCA (Tork) all use this model.</div></div>
+      <div class="act"><div class="act-pri" style="color:var(--t1)">WASTE HAULING — 20%</div><div class="act-text">Dumpster rental, scheduled pickups, recycling. Waste Management and Republic Services control 60%+ of US market. Auto-renewal contracts with annual escalation clauses. Always rebid at renewal.</div></div>
+      <div class="act"><div class="act-pri" style="color:var(--t1)">PEST CONTROL — 10%</div><div class="act-text">Monthly/quarterly service. Rollins (Orkin, HomeTeam) and Rentokil (Terminix) dominate. Bundled with Ecolab in many facilities. Competitive bid every 3 years — pricing softens 10-15% under competition.</div></div>
+      <div class="act"><div class="act-pri" style="color:var(--t1)">CONTRACT CLEANING — 15%</div><div class="act-text">Outsourced janitorial. ABM, Marsden, C&W Services. High turnover workforce, quality inconsistency. SLA-based contracts with penalty clauses for missed service are essential.</div></div>
+      <div class="act"><div class="act-pri" style="color:var(--t1)">LANDSCAPING / SNOW — 10%</div><div class="act-text">Seasonal services. BrightView dominates commercial landscaping. Snow removal contracts should be fixed-price, not per-event — heavy snow years destroy per-push budgets.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Key Suppliers & Concentration</span><span class="pnl-badge">SEC EDGAR · ANALYSIS</span></div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Products</span></div>
+      <div class="act"><div class="act-pri" style="color:#FFDF80">GEORGIA-PACIFIC (Koch Industries)</div><div class="act-text">Enmotion towels, Compact tissue, ActiveAire. Dispenser lock-in model — proprietary dispensers require GP products. If you have Enmotion dispensers, you're locked into GP paper until you replace the dispensers. That's the business model.</div></div>
+      <div class="act"><div class="act-pri" style="color:#FFDF80">KIMBERLY-CLARK (NYSE: KMB)</div><div class="act-text">Scott, Kleenex, Cottonelle, WypAll. Same dispenser lock-in. Professional division targets commercial/industrial. Typically 10-15% premium over GP but higher brand recognition with end users.</div></div>
+      <div class="act"><div class="act-pri" style="color:#FFDF80">ESSITY / SCA (STO: ESSITY-B)</div><div class="act-text">Tork brand — towels, tissue, soap, dispensers. European parent. Third option for dispenser-based systems. Often the value play vs GP and KC. Tork dispensers have the broadest compatibility with third-party refills.</div></div>
+      <div class="act"><div class="act-pri" style="color:#FFDF80">ECOLAB (NYSE: ECL)</div><div class="act-text">Cleaning chemicals, dispensing systems, pest control, food safety. The 800-lb gorilla in facilities services. If you use Ecolab for cleaning AND Nalco for water AND Ecolab pest — map your total exposure. Significant leverage opportunity.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Services</span></div>
+      <div class="act"><div class="act-pri" style="color:#FFB898">WASTE MANAGEMENT (NYSE: WM)</div><div class="act-text">$20B+. Dominates US waste hauling. Auto-renewal contracts with 3-5% annual escalators. ALWAYS rebid before auto-renewal. WM's best pricing comes when they think they're losing the account.</div></div>
+      <div class="act"><div class="act-pri" style="color:#FFB898">REPUBLIC SERVICES (NYSE: RSG)</div><div class="act-text">$14.9B. #2 in US waste. Use as competitive alternative to WM. In many markets, WM and Republic are the only two options — which limits leverage. Add a regional hauler as a third bid when possible.</div></div>
+      <div class="act"><div class="act-pri" style="color:#FFB898">ROLLINS (NYSE: ROL) — Orkin</div><div class="act-text">$3.1B. Owns Orkin, HomeTeam Pest Defense, Waltham, Western Pest. If you use Orkin at some facilities and HomeTeam at others — same company. Consolidate for multi-site pricing.</div></div>
+      <div class="act"><div class="act-pri" style="color:#FFB898">CINTAS (NASDAQ: CTAS)</div><div class="act-text">$9.6B. Uniforms, facility services, restroom supplies, first aid, fire protection. Cintas bundles everything — and the bundle creates lock-in. Unbundle and bid restroom supplies separately from uniforms for better pricing.</div></div>
+    </div>
+  </div>
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Ecolab Empire</div><div class="alert-text">Ecolab (NYSE: ECL, $14B revenue) touches more facilities categories than any other single company: Nalco Water (cooling/boiler), cleaning chemicals, pest elimination, food safety, textile care, and Purolite (ion exchange). A mid-size manufacturer could easily have $500K-1M+ in total Ecolab spend across 4-5 different service lines — each managed by a different internal team with no cross-visibility. Map it. Negotiate it as one relationship.</div></div>
+  <div class="src">Source: SEC EDGAR 10-K, Exhibit 21, annual reports</div>
+</div>
+
+<!-- MANAGED SERVICES -->
+<div class="tab-content" id="tab-managed">
+  <div class="pnl-hdr"><span class="pnl-title">Managed Services vs. Self-Managed — The Decision</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">GPO / National Contract</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">BEST FOR: Multi-Location, $250K+ Spend</div><div class="act-text">GPO membership (OMNIA Partners, Vizient/Provista) provides pre-negotiated national contracts with HD Supply, Staples Business Advantage, Georgia-Pacific, Kimberly-Clark, Waste Management, Cintas, and others. No membership fee. Savings: 15-25% vs. unmanaged spot buying. Implementation: 2-4 weeks (sign enrollment forms, route orders through GPO catalog).</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">SAVINGS MATH</div><div class="act-text">$500K annual Jan/San spend × 20% GPO savings = $100K/year. Time to implement: 10-20 hours of procurement effort. ROI: $5,000-10,000 per hour invested. This is the highest-ROI procurement initiative in most organizations — and the one nobody does because "it's just toilet paper and trash bags."</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Integrated Facilities Management (IFM)</span></div>
+      <div class="act" style="border-left-color:#FFDF80"><div class="act-pri pri-act">BEST FOR: Large Campus, Complex Needs</div><div class="act-text">Outsource the entire facilities function to a single provider (CBRE, JLL, Cushman & Wakefield, ABM). They manage cleaning, maintenance, landscaping, pest, waste, mail, reception — everything. One contract, one SLA, one invoice. Trade unit-cost savings for management simplicity. Makes sense when facilities management isn't a core competency and internal team is spread thin.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">WATCH OUT</div><div class="act-text">IFM providers make margin by subcontracting services. You're paying their management fee (8-12%) on top of the subcontractor cost. For individual services (waste, pest, cleaning), you can often get better pricing by contracting directly. IFM is a convenience play, not a cost play. Use it when you need it, not as a default.</div></div>
+    </div>
+  </div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Dispenser Lock-In — The Hidden Cost of "Free" Equipment</div><div class="alert-text">GP, KC, and Essity all offer "free" dispenser installation. The catch: proprietary dispensers only accept the manufacturer's paper products. You save $2,000 in dispenser costs and lock yourself into 5+ years of above-market paper product pricing. If you're planning a restroom refresh, specify Tork or universal-compatible dispensers that accept multiple brands. Or negotiate the paper product pricing BEFORE accepting the "free" dispensers.</div></div>
+  <div class="src">Source: FSA analysis, GPO program documentation, IFMA benchmarks</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Janitorial & Facilities</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — EASIEST WIN IN PROCUREMENT</div><div class="act-text">Join a GPO for Jan/San supplies. OMNIA Partners or Vizient/Provista. No membership fee. Sign up, route your Jan/San purchases through their pre-negotiated contracts, and save 15-25% immediately. On $500K annual spend, that's $75K-125K/year for 10 hours of work. Do this today.</div><div class="act-cat">GPO · JAN/SAN · IMMEDIATE SAVINGS</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Check your Waste Management and Republic Services contract auto-renewal dates. These contracts auto-renew with 3-5% annual escalators. File a termination notice 90 days before renewal even if you plan to stay — it opens the negotiation. Get 3 bids: WM, Republic, and one regional hauler. Typical savings on rebid: 10-20%.</div><div class="act-cat">WASTE · AUTO-RENEWAL · REBID</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your total Ecolab spend: Nalco Water (boiler/cooling), cleaning chemicals (jan/san), pest control, food safety, Purolite (resin). Each service is often managed by a different person with no cross-visibility. Consolidate the negotiation. Total Ecolab spend of $500K+ gives you leverage no single service line has.</div><div class="act-cat">ECOLAB · CROSS-CATEGORY · LEVERAGE</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Audit your restroom dispenser fleet. If all dispensers are proprietary (Enmotion, Scott, etc.), you're locked into one paper product supplier. For the next dispenser refresh, specify universal-compatible models or negotiate paper product pricing as a condition of accepting new dispensers. Never accept "free" dispensers without a paper contract.</div><div class="act-cat">DISPENSER · LOCK-IN · PAPER</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Switch from ready-to-use cleaning chemicals to concentrated products with proportioning dispensers. Concentrated chemicals diluted on-site cost 30-50% less per use than pre-mixed. Reduce freight (shipping water is expensive), reduce storage space, and improve consistency (proportioner delivers exact dilution every time vs. employees guessing).</div><div class="act-cat">CONCENTRATED · CHEMICALS · SAVINGS</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">For outsourced janitorial contracts: implement SLA-based agreements with inspection scoring and penalty clauses. ABM, Marsden, and C&W all accept this structure. Monthly inspections with a standardized scorecard (1-5 rating per area), penalty triggers below 3.5 average, and quarterly business reviews. This is how you get consistent quality from a high-turnover workforce.</div><div class="act-cat">SLA · CLEANING · QUALITY</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Waste hauling costs will increase as landfill capacity tightens and recycling markets fluctuate. China's National Sword policy permanently disrupted recycling economics — contaminated recyclables now go to landfill, increasing disposal costs. Monitor your hauler's recycling revenue share (if any) and verify that recyclables are actually being recycled, not landfilled at recycling rates.</div><div class="act-cat">WASTE · RECYCLING · LANDFILL</div></div>
+  <div class="src">Source: FSA analyst assessment based on BLS, Census, GPO programs, IFMA benchmarks</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · Janitorial & Facilities · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Chemicals & Solvents</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}
+.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}
+.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}
+.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}
+.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}
+.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}
+.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}
+.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}
+.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}
+.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}
+.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-petro{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-natgas{background:linear-gradient(90deg,#FFB898,#ffd0b8)}
+.db-specialty{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-labor{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}
+.db-logistics{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-packaging{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}
+.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+.imp-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0}
+.imp-country{font-size:0.75rem;color:var(--t1);width:85px;flex-shrink:0;font-weight:600}
+.imp-bar-bg{flex:1;height:20px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+.imp-bar{height:100%;background:linear-gradient(90deg,rgba(255,223,128,0.5),rgba(255,223,128,0.25));border-radius:2px}
+.imp-val{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--t1);width:55px;text-align:right;flex-shrink:0;font-weight:500}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.4fr 1fr 0.6fr 0.7fr 0.7fr}.fin-cols{grid-template-columns:1.3fr 0.7fr 0.7fr 0.7fr 0.7fr 0.8fr}.hs-cols{grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr}
+.c-name{color:var(--t1);font-weight:600}.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}
+.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}
+.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}
+.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}
+.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
+.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}
+.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}
+.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}
+.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}
+.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}
+.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}
+.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}
+.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}
+.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}
+.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}
+.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}
+.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}
+.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}
+.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}
+@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Chemicals & Solvents</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Industrial chemicals, solvents, adhesives, lubricants, cleaning agents, water treatment chemicals, and specialty formulations. Heavily petrochemical-derived — the most directly Hormuz-exposed category after energy itself. EPA TSCA compliance adds regulatory complexity.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$210B</div><div class="cs-lbl">US Chemical Market</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">Hormuz Exposure</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">+14%</div><div class="cs-lbl">Feedstock YTD</div></div>
+    <div><div class="cs-val">65%</div><div class="cs-lbl">Petro-Derived</div></div>
+    <div><div class="cs-val">TSCA</div><div class="cs-lbl">EPA Regulated</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Ownership<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="regulatory">Regulatory<span class="tab-count">5</span></div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">6</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Petrochemical Feed<br>Crude $98.71</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">HIGH</div><div class="risk-lbl">Gulf Refineries<br>Supply Risk</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">EPA TSCA<br>New Restrictions</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">STABLE</div><div class="risk-lbl">Domestic Supply<br>US Gulf Coast</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Feedstock Prices</span><span class="pnl-badge">EIA · FRED</span></div>
+      <div class="driver"><div class="driver-name">Ethylene</div><div class="driver-bar-bg"><div class="driver-bar db-petro" style="width:65%"></div></div><div class="driver-trend up">+14.2%</div></div>
+      <div class="driver"><div class="driver-name">Propylene</div><div class="driver-bar-bg"><div class="driver-bar db-petro" style="width:55%"></div></div><div class="driver-trend up">+11.8%</div></div>
+      <div class="driver"><div class="driver-name">Benzene</div><div class="driver-bar-bg"><div class="driver-bar db-petro" style="width:50%"></div></div><div class="driver-trend up">+9.6%</div></div>
+      <div class="driver"><div class="driver-name">Methanol</div><div class="driver-bar-bg"><div class="driver-bar db-natgas" style="width:40%"></div></div><div class="driver-trend up">+7.2%</div></div>
+      <div class="driver"><div class="driver-name">Caustic Soda</div><div class="driver-bar-bg"><div class="driver-bar db-specialty" style="width:30%"></div></div><div class="driver-trend up">+4.8%</div></div>
+      <div class="src">Source: EIA, FRED PPI-Chemicals, ICIS public indices</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">65% of industrial chemicals are petrochemical-derived. Crude at $98.71 means feedstock costs are up 14% YTD. Your chemical suppliers will pass this through in 30-60 days. Lock pricing or negotiate caps now.</div><div class="act-cat">FEEDSTOCK · PRICING</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Identify which suppliers source feedstock from Gulf-region refineries with Hormuz exposure at Tier 2. Request contingency plans. Most won't have one.</div><div class="act-cat">SUPPLY RISK · HORMUZ</div></div>
+    </div>
+  </div>
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">⚠ Concentration — Dow / DuPont / Corteva</div><div class="alert-text">The 2017 DowDuPont merger and 2019 three-way split created Dow (materials), DuPont (specialties), and Corteva (agriculture). They share legacy contracts, sites, and supply chains. If you source from more than one, map the actual operational independence.</div></div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Category Cost Breakdown</span><span class="pnl-badge">EIA · FRED · BLS</span></div>
+      <div class="driver"><div class="driver-name">Petrochemical Feed</div><div class="driver-bar-bg"><div class="driver-bar db-petro" style="width:35%">35%</div></div><div class="driver-pct">35%</div><div class="driver-trend up">+14.2%</div></div>
+      <div class="driver"><div class="driver-name">Natural Gas (process)</div><div class="driver-bar-bg"><div class="driver-bar db-natgas" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+12.2%</div></div>
+      <div class="driver"><div class="driver-name">Specialty Inputs</div><div class="driver-bar-bg"><div class="driver-bar db-specialty" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+5.4%</div></div>
+      <div class="driver"><div class="driver-name">Labor</div><div class="driver-bar-bg"><div class="driver-bar db-labor" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+4.3%</div></div>
+      <div class="driver"><div class="driver-name">Logistics (Hazmat)</div><div class="driver-bar-bg"><div class="driver-bar db-logistics" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+26.4%</div></div>
+      <div class="driver"><div class="driver-name">Packaging (drums/IBC)</div><div class="driver-bar-bg"><div class="driver-bar db-packaging" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend up">+3.8%</div></div>
+      <div class="src">Sources: EIA crude/gas, FRED PPI-Chemicals, BLS wages, hazmat freight indices</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">US Import Sources — HS Ch. 28-29</span><span class="pnl-badge">ITC · CENSUS</span></div>
+      <div class="imp-row"><div class="imp-country">Canada</div><div class="imp-bar-bg"><div class="imp-bar" style="width:18%"></div></div><div class="imp-val">$12.4B</div></div>
+      <div class="imp-row"><div class="imp-country">China</div><div class="imp-bar-bg"><div class="imp-bar" style="width:16%"></div></div><div class="imp-val">$11.0B</div></div>
+      <div class="imp-row"><div class="imp-country">Germany</div><div class="imp-bar-bg"><div class="imp-bar" style="width:10%"></div></div><div class="imp-val">$6.8B</div></div>
+      <div class="imp-row"><div class="imp-country">Saudi Arabia</div><div class="imp-bar-bg"><div class="imp-bar" style="width:8%"></div></div><div class="imp-val">$5.5B</div></div>
+      <div class="imp-row"><div class="imp-country">Japan</div><div class="imp-bar-bg"><div class="imp-bar" style="width:6%"></div></div><div class="imp-val">$4.1B</div></div>
+      <div class="imp-row"><div class="imp-country">Mexico</div><div class="imp-bar-bg"><div class="imp-bar" style="width:5%"></div></div><div class="imp-val">$3.4B</div></div>
+      <div class="alert alert-red" style="margin-top:0.5rem"><div class="alert-title" style="color:#FF8FA0">Dual Exposure</div><div class="alert-text">Saudi Arabia is 4th largest source of US chemical imports — directly Hormuz-exposed. Chinese chemicals face 25% Section 301 tariff. Both your cheapest and your most strategic sources are under pressure simultaneously.</div></div>
+      <div class="src">Source: US ITC DataWeb, Census Bureau</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major Chemical Suppliers</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Supplier</span><span>Parent Company</span><span style="text-align:center">Segment</span><span style="text-align:center">Health</span><span style="text-align:center">Hormuz Risk</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Dow Inc</div><div style="color:var(--t2);font-size:0.65rem">Dow Inc (NYSE: DOW)</div><div style="text-align:center;color:var(--t1)">Materials</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">DuPont</div><div style="color:var(--t2);font-size:0.65rem">DuPont de Nemours (NYSE: DD)</div><div style="text-align:center;color:var(--t1)">Specialty</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">BASF</div><div style="color:var(--t2);font-size:0.65rem">BASF SE (XETRA: BAS)</div><div style="text-align:center;color:var(--t1)">Diversified</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FF8FA0">HIGH</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Eastman Chemical</div><div style="color:var(--t2);font-size:0.65rem">Eastman Chemical (NYSE: EMN)</div><div style="text-align:center;color:var(--t1)">Specialty</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Univar Solutions</div><div style="color:var(--t2);font-size:0.65rem">Univar (acquired by Brenntag)</div><div style="text-align:center;color:var(--t1)">Distribution</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:var(--t3)">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Brenntag</div><div style="color:var(--t2);font-size:0.65rem">Brenntag SE (XETRA: BNR)</div><div style="text-align:center;color:var(--t1)">Distribution</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:var(--t3)">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Celanese</div><div style="color:var(--t2);font-size:0.65rem">Celanese Corp (NYSE: CE)</div><div style="text-align:center;color:var(--t1)">Acetyls/Eng</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Dow Inc <span class="tree-p-tag">NYSE: DOW</span></div>
+    <div class="tree-p-meta">CIK: 0001751788 · Revenue: $44.6B · 35,900 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Dow Chemical Company</div><div class="tree-sub-detail">Core operating subsidiary — polyethylene, silicones, coatings materials</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Rohm and Haas</div><div class="tree-sub-detail">Acquired 2009 · Specialty acrylics, adhesives, coatings</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Dow Silicones</div><div class="tree-sub-detail">Silicone sealants, fluids, elastomers (former Dow Corning)</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">SAFECHEM (Dow subsidiary)</div><div class="tree-sub-detail">Chlorinated solvents, closed-loop chemical management</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Brenntag SE <span class="tree-p-tag">XETRA: BNR</span></div>
+    <div class="tree-p-meta">Revenue: €16.8B · 17,500 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Univar Solutions (acquired 2023)</div><div class="tree-sub-detail">Acquired for $6.5B — US chemical distribution network</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Brenntag North America</div><div class="tree-sub-detail">150+ distribution locations across US and Canada</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Brenntag Specialties</div><div class="tree-sub-detail">Specialty and fine chemicals, life science ingredients</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Distribution Consolidation — Brenntag / Univar</div><div class="alert-text">Brenntag acquired Univar in 2023 for $6.5B, creating the dominant chemical distributor in North America. If you buy from both Brenntag and Univar, you now have one supplier. This merger reduced distribution competition significantly — leverage your volume for better terms, because there are fewer alternatives.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Dow / DuPont Legacy</div><div class="alert-text">DowDuPont merged in 2017 then split into three in 2019: Dow (materials science), DuPont (specialty), Corteva (agriculture). Despite the split, shared legacy sites and overlapping supply chains mean a disruption at a shared Dow/DuPont site can affect both companies' output. Map your exposure across all three entities.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, M&A records, annual reports</div>
+</div>
+
+<!-- REGULATORY -->
+<div class="tab-content" id="tab-regulatory">
+  <div class="pnl-hdr"><span class="pnl-title">Regulatory Tracker — Chemicals</span><span class="pnl-badge">EPA · OSHA · DOT</span></div>
+  <div class="tbl-row hdr" style="grid-template-columns:1.2fr 0.6fr 0.6fr 1.2fr"><span>Regulation</span><span style="text-align:center">Agency</span><span style="text-align:center">Status</span><span style="text-align:right">Procurement Impact</span></div>
+  <div class="tbl-row" style="grid-template-columns:1.2fr 0.6fr 0.6fr 1.2fr"><div class="c-name">TSCA — New Chemical Reviews</div><div style="text-align:center;color:var(--t2)">EPA</div><div style="text-align:center"><span class="badge-sm b-watch">ACTIVE</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Longer approval times for new formulations. Plan 6-12 months for novel chemical qualifications.</div></div>
+  <div class="tbl-row" style="grid-template-columns:1.2fr 0.6fr 0.6fr 1.2fr"><div class="c-name">PFAS Restrictions (TSCA §8)</div><div style="text-align:center;color:var(--t2)">EPA</div><div style="text-align:center"><span class="badge-sm b-risk">EXPANDING</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">PFAS bans spreading. Audit every chemical for PFAS content. Reformulation may be required.</div></div>
+  <div class="tbl-row" style="grid-template-columns:1.2fr 0.6fr 0.6fr 1.2fr"><div class="c-name">GHS Labeling (HazCom 2012)</div><div style="text-align:center;color:var(--t2)">OSHA</div><div style="text-align:center"><span class="badge-sm b-strong">STABLE</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Ensure all SDS are current. GHS Rev 7 alignment updates expected.</div></div>
+  <div class="tbl-row" style="grid-template-columns:1.2fr 0.6fr 0.6fr 1.2fr"><div class="c-name">DOT Hazmat Transport Updates</div><div style="text-align:center;color:var(--t2)">DOT/PHMSA</div><div style="text-align:center"><span class="badge-sm b-watch">PROPOSED</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Tighter hazmat shipping rules = higher freight costs for solvents and corrosives. Budget +10-15%.</div></div>
+  <div class="tbl-row" style="grid-template-columns:1.2fr 0.6fr 0.6fr 1.2fr"><div class="c-name">EU REACH Compliance (imports)</div><div style="text-align:center;color:var(--t2)">ECHA</div><div style="text-align:center"><span class="badge-sm b-watch">ONGOING</span></div><div style="text-align:right;color:var(--t1);font-size:0.68rem">If you export finished goods to EU, your chemical inputs must be REACH-registered. Verify with suppliers.</div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">PFAS — The Biggest Regulatory Risk in Chemicals</div><div class="alert-text">EPA is systematically restricting PFAS ("forever chemicals") across all applications. If any of your chemical inputs contain PFAS — including surfactants, coatings additives, lubricants, and fire suppressants — you need a reformulation plan. Several states have already banned PFAS in specific applications. This is accelerating, not slowing down.</div></div>
+  <div class="src">Source: EPA TSCA inventory, Federal Register, OSHA standards, DOT/PHMSA HM-215P</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Trade Exposure — Chemicals</span><span class="pnl-badge">USTR · ITC · CBP</span></div>
+  <div class="tbl-row hdr hs-cols"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">Ch. 28</div><div style="color:var(--t1)">Inorganic chemicals — acids, bases, oxides</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3-5%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">Ch. 29</div><div style="color:var(--t1)">Organic chemicals — solvents, intermediates</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3-6%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3402</div><div style="color:var(--t1)">Surface-active agents, detergents, cleaning</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.7%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3403</div><div style="color:var(--t1)">Lubricants, anti-corrosion preparations</div><div style="text-align:center;color:var(--t1)">Germany</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">3.7%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3506</div><div style="color:var(--t1)">Adhesives, glues</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.1%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">2814-15</div><div style="color:var(--t1)">Ammonia, caustic soda, soda ash</div><div style="text-align:center;color:var(--t1)">Canada</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0% USMCA</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Sourcing Advantage</div><div class="alert-text">Canada and Mexico are the tariff-advantaged sources for commodity chemicals under USMCA. German and Japanese specialty chemicals enter at low MFN rates (3-6%). Chinese-origin chemicals face 25%+ combined duty. For commodity chemicals (caustic soda, soda ash, basic acids), USMCA sources are the obvious choice on total cost.</div></div>
+  <div class="src">Source: USTR HTS, Section 301, CBP ACE Portal</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Chemicals & Solvents</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Petrochemical feedstocks up 14% YTD driven by Hormuz crude disruption. Your chemical suppliers will pass this through within 30-60 days. Request price lock or ceiling agreements for Q2 NOW — before the next round of surcharge letters hits your inbox.</div><div class="act-cat">FEEDSTOCK · PRICING · CRUDE OIL</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Hazmat logistics costs up 26% — the highest increase in any cost component. If you're shipping solvents, corrosives, or flammables, renegotiate hazmat freight terms. Index-link to DOE diesel price. Consider consolidating shipments to reduce per-unit hazmat compliance costs.</div><div class="act-cat">LOGISTICS · HAZMAT · FREIGHT</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Audit every chemical input for PFAS content. EPA restrictions are expanding rapidly and several states have already banned PFAS in specific applications. If reformulation is needed, start the qualification process now — it takes 6-12 months for new chemical approvals under TSCA.</div><div class="act-cat">REGULATORY · PFAS · COMPLIANCE</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your Brenntag/Univar exposure. Since the 2023 acquisition, these are one company. If you used to play them against each other for pricing leverage, that leverage is gone. Consider qualifying a regional distributor (Nexeo, IMCD, Azelis) as a competitive alternative.</div><div class="act-cat">DISTRIBUTION · COMPETITION · LEVERAGE</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Shift commodity chemical sourcing (caustic soda, soda ash, basic acids) to Canadian suppliers under USMCA at 0% duty. OxyChem, Tronox, and several Canadian producers offer competitive pricing without the 25% Section 301 tariff that Chinese sources face.</div><div class="act-cat">SOURCING · USMCA · TARIFF ARBITRAGE</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">BASF's financial health flagged as WATCH — they've disclosed material cost headwinds from European energy prices in recent filings. They're not in crisis, but their European operations are under margin pressure. If BASF is a major supplier, monitor their quarterly earnings and have a backup qualified.</div><div class="act-cat">SUPPLIER RISK · BASF · FINANCIALS</div></div>
+  <div class="src">Source: FSA analyst assessment based on EIA, FRED, EPA, USTR, SEC EDGAR data</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v2.1 · Chemicals & Solvents · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

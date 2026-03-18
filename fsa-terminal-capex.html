@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Capital Equipment</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}.db-1{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-2{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-3{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-4{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-5{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-6{background:linear-gradient(90deg,#99A8BE,#b0bccf)}.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}.c-name{color:var(--t1);font-weight:600}.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Capital Equipment</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">CNC machines, stamping presses, injection molding, industrial furnaces, cranes, forklifts, conveyor systems, and major production equipment. Longest lead times in procurement (6-18 months), highest per-unit spend, and the most consequential buy-vs-lease-vs-used decision. Steel tariffs, semiconductor constraints, and Section 179/bonus depreciation all directly impact the buy decision.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$215B</div><div class="cs-lbl">US Industrial Machinery</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">6-18mo</div><div class="cs-lbl">Lead Time</div></div>
+    <div><div class="cs-val" style="color:#FFB898">+12-18%</div><div class="cs-lbl">Steel in Cost</div></div>
+    <div><div class="cs-val" style="color:#6FFFB0">§179</div><div class="cs-lbl">100% Bonus Depn</div></div>
+    <div><div class="cs-val" style="color:#FFDF80">USED MKT</div><div class="cs-lbl">40-60% Savings</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">OEMs & Ownership<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="buyvsleasevsused">Buy vs Lease vs Used</div>
+  <div class="tab" data-tab="tariffs">Tariff & Tax</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">6-18mo</div><div class="risk-lbl">Lead Times<br>Custom Equipment</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">HIGH</div><div class="risk-lbl">Steel/Material<br>Cost Exposure</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">ACTIVE</div><div class="risk-lbl">Bonus Depreciation<br>80% in 2026</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">STRONG</div><div class="risk-lbl">Used Equipment<br>Market Active</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Sub-Categories</span><span class="pnl-badge">CENSUS · BLS</span></div>
+      <div class="driver"><div class="driver-name">CNC / Machine Tools</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:25%">25%</div></div><div class="driver-pct">25%</div><div class="driver-trend up">+6.8%</div></div>
+      <div class="driver"><div class="driver-name">Material Handling</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+5.4%</div></div>
+      <div class="driver"><div class="driver-name">Presses / Forming</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:15%">15%</div></div><div class="driver-pct">15%</div><div class="driver-trend up">+8.2%</div></div>
+      <div class="driver"><div class="driver-name">Injection Molding</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+4.6%</div></div>
+      <div class="driver"><div class="driver-name">Industrial Furnaces</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+9.1%</div></div>
+      <div class="driver"><div class="driver-name">Cranes / Hoists</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+7.4%</div></div>
+      <div class="driver"><div class="driver-name">Conveyors</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+5.8%</div></div>
+      <div class="src">Source: Census Bureau, BLS PPI-Machinery, AMT</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Custom CNC and press lead times are 9-18 months. If you have 2027 capacity expansion plans, the PO needs to go out NOW. Every month of delay pushes your production start date by a month. Steel Section 232 tariffs are in the price — waiting won't make it cheaper.</div><div class="act-cat">CNC · LEAD TIME · CAPACITY</div></div>
+      <div class="act"><div class="act-pri pri-act">TAX ALERT</div><div class="act-text">Bonus depreciation drops from 80% (2026) to 60% (2027) to 40% (2028). If you're buying capital equipment this year, the 80% first-year write-off significantly improves the cash flow math. Equipment placed in service before December 31, 2026 qualifies. Talk to your tax advisor — this changes the buy-vs-lease decision.</div><div class="act-cat">SECTION 179 · BONUS DEPRECIATION · TAX</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Capital Equipment Cost Breakdown</span><span class="pnl-badge">BLS · ANALYSIS</span></div>
+      <div class="driver"><div class="driver-name">Steel/Castings</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:30%">30%</div></div><div class="driver-pct">30%</div><div class="driver-trend up">+18.2%</div></div>
+      <div class="driver"><div class="driver-name">Precision Components</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="driver"><div class="driver-name">Controls/Electronics</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+5.2%</div></div>
+      <div class="driver"><div class="driver-name">Engineering Labor</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:15%">15%</div></div><div class="driver-pct">15%</div><div class="driver-trend up">+7.2%</div></div>
+      <div class="driver"><div class="driver-name">Assembly/Test</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+5.1%</div></div>
+      <div class="driver"><div class="driver-name">Freight/Rigging</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:7%">7%</div></div><div class="driver-pct">7%</div><div class="driver-trend up">+22.6%</div></div>
+      <div class="src">Sources: BLS PPI-Machinery, Section 232 impact, AMT data</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Dependencies</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Steel — 30% of Equipment Cost</div><div class="alert-text">Every machine tool, press, and furnace is steel-intensive. Section 232 adds 25% tariff on ALL steel imports regardless of origin. Domestic steel HRC up 18% YTD. An OEM quoting a $500K press today is baking in steel at current prices. If steel continues rising, expect requotes on anything ordered more than 90 days ago.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Controls = Automation Lock-In</div><div class="alert-text">Every major piece of capital equipment comes with an integrated control system — and that control system locks you into an automation ecosystem. A press with a Siemens CNC means Siemens drives, Siemens HMI, Siemens programming tools. Specify the control platform at the time of equipment purchase — not after. This is the most expensive decision inside the equipment buy.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Freight & Rigging — Don't Forget</div><div class="alert-text">A 40,000-lb CNC machine costs $15K-40K to ship and rig into place. Specialized hauling (oversize/overweight permits), crane rental, and millwright labor for installation are frequently excluded from the OEM quote. Budget 5-8% of equipment cost for freight, rigging, and installation — and get it quoted before you sign the PO.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- OEMs -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major Capital Equipment OEMs</span><span class="pnl-badge">SEC EDGAR · AMT</span></div>
+  <div class="tbl-row hdr sup-cols"><span>OEM</span><span>Parent / Ticker</span><span style="text-align:center">Primary</span><span style="text-align:center">Health</span><span style="text-align:center">Origin</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">DMG MORI</div><div style="color:var(--t2);font-size:0.65rem">TSE: 6141</div><div style="text-align:center;color:var(--t1)">CNC</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Japan/Germany</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Mazak (Yamazaki)</div><div style="color:var(--t2);font-size:0.65rem">Private (Japan)</div><div style="text-align:center;color:var(--t1)">CNC</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Japan (US mfg)</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Haas Automation</div><div style="color:var(--t2);font-size:0.65rem">Private (US)</div><div style="text-align:center;color:var(--t1)">CNC</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">USA (Oxnard, CA)</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Komatsu (press)</div><div style="color:var(--t2);font-size:0.65rem">TSE: 6301</div><div style="text-align:center;color:var(--t1)">Presses</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Japan</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Toyota Industries</div><div style="color:var(--t2);font-size:0.65rem">TSE: 6201</div><div style="text-align:center;color:var(--t1)">Forklifts</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Japan (US mfg)</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">KION Group (Dematic)</div><div style="color:var(--t2);font-size:0.65rem">XETRA: KGX</div><div style="text-align:center;color:var(--t1)">Material Handling</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Germany</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Engel (injection)</div><div style="color:var(--t2);font-size:0.65rem">Private (Austria)</div><div style="text-align:center;color:var(--t1)">Injection Mold</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">Austria</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Crown Equipment</div><div style="color:var(--t2);font-size:0.65rem">Private (US)</div><div style="text-align:center;color:var(--t1)">Forklifts</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;color:var(--t1)">USA (New Bremen, OH)</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Ownership Trees</span></div></div>
+  <div class="tree-parent">
+    <div class="tree-p-name">KION Group AG <span class="tree-p-tag">XETRA: KGX</span></div>
+    <div class="tree-p-meta">Revenue: €11.4B · 42,000 employees · WATCH — debt from Dematic acquisition</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Linde Material Handling</div><div class="tree-sub-detail">Forklifts, warehouse trucks — European market leader</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">STILL</div><div class="tree-sub-detail">Forklifts, tow tractors, automated guided vehicles</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Dematic</div><div class="tree-sub-detail">Acquired 2016 · Automated warehouse/conveyor systems, AS/RS</div></div>
+    </div>
+  </div>
+  <div class="tree-parent">
+    <div class="tree-p-name">Toyota Industries Corporation <span class="tree-p-tag">TSE: 6201</span></div>
+    <div class="tree-p-meta">Revenue: ¥3.4T (~$23B) · 74,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Toyota Material Handling</div><div class="tree-sub-detail">World's #1 forklift manufacturer — Columbus, IN factory</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Raymond Corporation</div><div class="tree-sub-detail">Acquired · Narrow-aisle, reach trucks, order pickers</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Bastian Solutions</div><div class="tree-sub-detail">Acquired · Automated material handling systems integrator</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Toyota / Raymond / Bastian</div><div class="alert-text">Toyota Industries owns Toyota forklifts, Raymond narrow-aisle trucks, AND Bastian Solutions (automation integrator). If you use Toyota forklifts in the warehouse, Raymond reach trucks in narrow aisles, and Bastian designed your conveyor system — one company. Consolidate the negotiation.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ KION Debt — Monitor</div><div class="alert-text">KION took on significant debt to acquire Dematic in 2016. If you have major Dematic automated systems or Linde/STILL forklifts, monitor KION's quarterly earnings. High leverage + rising interest rates = financial stress that could affect service levels and parts availability.</div></div>
+  <div class="src">Source: SEC EDGAR, TSE filings, AMT industry data</div>
+</div>
+
+<!-- BUY vs LEASE vs USED -->
+<div class="tab-content" id="tab-buyvsleasevsused">
+  <div class="pnl-hdr"><span class="pnl-title">Buy vs Lease vs Used — The Acquisition Decision</span><span class="pnl-badge">FSA ANALYSIS · IRS</span></div>
+
+  <div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">Why This Tab Exists</div><div class="alert-text">The acquisition structure changes the economics more than the equipment price itself. A $1M machine bought new with 80% bonus depreciation, leased over 5 years, or purchased used at $450K from an auction — these are three completely different financial outcomes. Most procurement teams default to "buy new from OEM" without evaluating the alternatives. That default costs money.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Option 1 — Buy New</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">WHEN IT MAKES SENSE</div><div class="act-text">Latest technology/precision required. OEM warranty (typically 1-2 years). Access to OEM training and support. Eligible for Section 179 and bonus depreciation. Long useful life (15-25 years for quality machine tools). Custom configuration for your specific application.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">WHEN IT DOESN'T</div><div class="act-text">6-18 month lead time may be unacceptable. Full price at current steel/material cost peak. Technology may be superseded in 3-5 years (CNC controls evolve fast). Depreciation schedule may not match actual production need.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Option 2 — Buy Used / Rebuilt</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">WHEN IT MAKES SENSE</div><div class="act-text">40-60% of new price for comparable capability. Immediate availability (no 12-month wait). Still eligible for Section 179 / bonus depreciation. Machine tool auction market (Hilco, Heritage, Maynards) has excellent inventory post-COVID. A 10-year-old Mazak CNC that was well-maintained is still a highly capable machine.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">WHEN IT DOESN'T</div><div class="act-text">No OEM warranty (buy from a dealer who offers 90-day warranty). Older controls may be obsolete (parts availability). Unknown maintenance history (get a third-party inspection before purchase — $2K-5K well spent). May not meet latest precision tolerances for tight-tolerance work.</div></div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:0.5rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Option 3 — Lease / Finance</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">WHEN IT MAKES SENSE</div><div class="act-text">Preserve cash for operations. Technology will be obsolete in 5-7 years (upgrade at lease end). Operating lease keeps asset off balance sheet (depending on ASC 842 treatment). Monthly payment may be more predictable than lump-sum capex approval. Some OEMs offer favorable financing (0-2% for 36 months).</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">WHEN IT DOESN'T</div><div class="act-text">Total cost of lease always exceeds purchase price (you're paying for the capital). Interest rates at current levels (6-8%) make leasing expensive. You don't get the Section 179 / bonus depreciation benefit on an operating lease (you do on a capital lease / finance lease). At end of lease, you own nothing unless you exercise a buyout option.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Tax Incentives — 2026</span></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Section 179 — $1.22M Limit (2026)</div><div class="alert-text">Section 179 allows you to expense up to $1.22M (2026 limit) of qualifying equipment in the year it's placed in service instead of depreciating over its useful life. Applies to new AND used equipment. Phase-out begins at $3.05M total equipment purchases.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Bonus Depreciation — 80% in 2026</div><div class="alert-text">For equipment exceeding the Section 179 limit, bonus depreciation allows 80% first-year write-off (2026), declining to 60% (2027), 40% (2028), 20% (2029), 0% (2030). A $2M machine placed in service in 2026 gets $1.6M first-year depreciation. That's real cash flow impact on your tax bill. Applies to new AND used equipment (must be new to you).</div></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Bonus Depreciation Is Declining</div><div class="alert-text">2025: 100% → 2026: 80% → 2027: 60% → 2028: 40% → 2029: 20% → 2030: 0%. Every year you wait, the tax benefit shrinks by 20 points. If you're going to buy capital equipment in the next 2-3 years, there's a strong tax case for doing it in 2026 at 80%.</div></div>
+    </div>
+  </div>
+  <div class="src">Source: IRS Section 179, TCJA bonus depreciation schedule, ASC 842 lease accounting</div>
+</div>
+
+<!-- TARIFFS & TAX -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Tax Exposure — Capital Equipment</span><span class="pnl-badge">USTR · IRS</span></div>
+  <div class="tbl-row hdr" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8456-8462</div><div style="color:var(--t1)">Machine tools — CNC lathes, mills, grinders</div><div style="text-align:center;color:var(--t1)">Japan/Germany</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2.4-4.4%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8456-8462</div><div style="color:var(--t1)">Machine tools — CNC lathes, mills, grinders</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.4%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8462</div><div style="color:var(--t1)">Stamping presses, forming machines</div><div style="text-align:center;color:var(--t1)">Japan</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">3.5%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8477</div><div style="color:var(--t1)">Injection molding machines</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.1%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8427</div><div style="color:var(--t1)">Forklifts — electric and IC</div><div style="text-align:center;color:var(--t1)">Japan (Toyota)</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0% (US mfg)</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8428</div><div style="color:var(--t1)">Conveyor systems, elevators, escalators</div><div style="text-align:center;color:var(--t1)">Various</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0-2.5%</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Machine Tools — Japan/Germany vs China</div><div class="alert-text">The world's premium machine tool manufacturers (DMG MORI, Mazak, Okuma, TRUMPF, Grob) are Japanese and German. They enter at 2.4-4.4% MFN duty. Chinese machine tools (Shenyang, Dalian, Haitian) face 25% Section 301 on top of MFN. For precision CNC work, the quality gap between Japanese/German and Chinese machines is significant. The tariff widens an already unfavorable cost-quality equation for Chinese equipment on critical applications.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Haas — Made in USA</div><div class="alert-text">Haas Automation (Oxnard, CA) is the largest US-based CNC machine tool manufacturer. No import duty, no tariff exposure, 100% domestic. For applications where Haas capability meets your precision requirements, it's the most tariff-protected option. Haas pricing is typically 30-50% below DMG MORI and Mazak — the trade-off is precision tolerance and build quality on the highest-end work.</div></div>
+  <div class="src">Source: USTR HTS, ITC DataWeb, Section 301</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Capital Equipment</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">If you have 2027 production capacity needs, place capital equipment POs now. Custom CNC, presses, and furnaces are 9-18 month lead times. Every month of delay is a month your new capacity isn't producing revenue. The lead time is the constraint — not the price.</div><div class="act-cat">LEAD TIME · CAPACITY · 2027 PLANNING</div></div>
+  <div class="act"><div class="act-pri pri-urg">TAX — ACT BEFORE DECEMBER 31</div><div class="act-text">Bonus depreciation is 80% in 2026, dropping to 60% in 2027. On a $1M equipment purchase, that's a $200K difference in first-year depreciation. Any equipment that can be placed in service before December 31, 2026 should be — the tax math demands it. Work backward from December 31 to determine your latest PO date given lead times.</div><div class="act-cat">BONUS DEPRECIATION · TAX · TIMING</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Before buying new, check the used equipment market. Hilco Industrial, Heritage Global, Maynards, and Perfection Industrial Sales all have active auction inventory. A 5-10 year old Mazak or DMG MORI CNC at 40-60% of new price with a dealer warranty is often the better financial decision — and it's available in weeks, not months.</div><div class="act-cat">USED EQUIPMENT · AUCTION · SAVINGS</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Get freight, rigging, and installation quoted BEFORE signing the equipment PO. A $500K machine with $40K in freight/rigging and $25K in installation is really a $565K purchase. These costs are frequently excluded from OEM quotes and surprise the buyer after the PO is signed. Get total installed cost upfront.</div><div class="act-cat">TOTAL INSTALLED COST · FREIGHT · RIGGING</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Specify the automation/control platform at the time of equipment purchase. A press with a FANUC CNC vs Siemens CNC is a 15-20 year ecosystem decision. Align with your plant's existing automation standard to avoid maintaining two parallel spare parts inventories and two sets of trained technicians.</div><div class="act-cat">CONTROLS · AUTOMATION · LOCK-IN</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Evaluate forklift fleet: own vs lease vs full-service lease. Toyota, Crown, and Hyster-Yale all offer full-service leases that include maintenance, tires, and battery/charger. For a 50-unit fleet, full-service lease often delivers lower total cost than ownership because the OEM's maintenance is more efficient and they replace units before major failures.</div><div class="act-cat">FORKLIFT · FLEET · LEASE vs OWN</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">AMT (Association for Manufacturing Technology) publishes monthly US machine tool orders data. This is the leading indicator for capital equipment pricing and lead times. When orders are high, lead times extend and OEMs have less pricing flexibility. When orders soften, negotiating leverage increases. Track the AMT USMTO report quarterly.</div><div class="act-cat">AMT · ORDERS · MARKET INDICATOR</div></div>
+  <div class="src">Source: FSA analyst assessment based on BLS, AMT, IRS, SEC EDGAR, auction data</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · Capital Equipment · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

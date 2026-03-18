@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Metals & Alloys</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}
+.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}
+.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}
+.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}
+.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}
+.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}
+.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}
+.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}
+.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}
+.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}
+.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}
+.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}
+.tab-content.active{display:block}
+
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}
+.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+
+/* COMMODITY TABLE */
+.c-row{display:grid;grid-template-columns:1.4fr 0.7fr 0.6fr 0.6fr 1.2fr;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.c-row:hover{background:var(--bg3)}
+.c-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}
+.c-row.hdr:hover{background:transparent}
+.c-name{color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem}
+.c-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+
+/* BARS */
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}
+.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-steel{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}
+.db-aluminum{background:linear-gradient(90deg,#FFB898,#ffd0b8)}
+.db-copper{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}
+.db-energy{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}
+.db-labor{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}
+.db-logistics{background:linear-gradient(90deg,#B0CCFF,#c8daff)}
+.db-nickel{background:linear-gradient(90deg,#B0CCFF,#c8daff)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}
+.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+
+/* IMPORTS */
+.imp-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0}
+.imp-country{font-size:0.75rem;color:var(--t1);width:85px;flex-shrink:0;font-weight:600}
+.imp-bar-bg{flex:1;height:20px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+.imp-bar{height:100%;background:linear-gradient(90deg,rgba(255,223,128,0.5),rgba(255,223,128,0.25));border-radius:2px}
+.imp-val{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--t1);width:55px;text-align:right;flex-shrink:0;font-weight:500}
+
+/* TABLES */
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.tbl-row:hover{background:var(--bg4)}
+.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}
+.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.5fr 1.2fr 0.6fr 0.7fr 0.7fr}
+.fin-cols{grid-template-columns:1.3fr 0.7fr 0.7fr 0.7fr 0.7fr 0.8fr}
+.hs-cols{grid-template-columns:0.8fr 1.5fr 0.6fr 0.6fr}
+
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}
+.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}
+.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}
+.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+
+/* TREE */
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}
+.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
+.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}
+.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}
+.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}
+.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}
+.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}
+.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+
+/* ALERTS */
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}
+.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}
+.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}
+.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+
+/* ACTIONS */
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}
+.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}
+.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}
+.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+
+/* RISK */
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}
+.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}
+.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}
+.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}
+@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}
+.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr">
+  <div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div>
+  <div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div>
+</div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Metals & Alloys</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Carbon steel, stainless steel, aluminum, copper, zinc, nickel, and specialty alloys for manufacturing, construction, MRO, and industrial applications. Includes flat-rolled, long products, plate, tube, bar, and wire.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$1.8T</div><div class="cs-lbl">Global Market</div></div>
+    <div><div class="cs-val">3.8%</div><div class="cs-lbl">CAGR</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">Section 232 Tariff</div></div>
+    <div><div class="cs-val">8</div><div class="cs-lbl">Major Suppliers</div></div>
+    <div><div class="cs-val">58%</div><div class="cs-lbl">Top 5 US Share</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Ownership<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="financials">Financial Health</div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Steel HRC<br>+18% YTD</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">Section 232<br>25% Tariff</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Copper Supply<br>LME 15yr Low</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">STABLE</div><div class="risk-lbl">Domestic Alum<br>Supply OK</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Commodity Prices</span><span class="pnl-badge">FRED · LME</span></div>
+      <div class="c-row hdr"><span>Metal</span><span style="text-align:right">Price</span><span style="text-align:right">Unit</span><span style="text-align:right">Chg %</span><span style="text-align:right">Impact</span></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FF8FA0"></span>Steel HRC</div><div class="c-val">$892</div><div class="c-val" style="color:var(--t3)">/ton</div><div class="c-val up">+4.21%</div><div class="c-val" style="color:#FF8FA0;font-family:'DM Sans',sans-serif;font-size:0.65rem">Mfg, construction</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FFDF80"></span>LME Copper</div><div class="c-val">$4.52</div><div class="c-val" style="color:var(--t3)">/lb</div><div class="c-val up">+2.15%</div><div class="c-val" style="color:#FFDF80;font-family:'DM Sans',sans-serif;font-size:0.65rem">Electrical, HVAC</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#6FFFB0"></span>LME Aluminum</div><div class="c-val">$1.18</div><div class="c-val" style="color:var(--t3)">/lb</div><div class="c-val dn">-0.84%</div><div class="c-val" style="color:#6FFFB0;font-family:'DM Sans',sans-serif;font-size:0.65rem">Packaging, auto</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:#FFDF80"></span>LME Nickel</div><div class="c-val">$7.34</div><div class="c-val" style="color:var(--t3)">/lb</div><div class="c-val up">+1.89%</div><div class="c-val" style="color:#FFDF80;font-family:'DM Sans',sans-serif;font-size:0.65rem">Stainless, batteries</div></div>
+      <div class="c-row"><div class="c-name"><span class="c-dot" style="background:var(--t3)"></span>LME Zinc</div><div class="c-val">$1.31</div><div class="c-val" style="color:var(--t3)">/lb</div><div class="c-val up">+0.46%</div><div class="c-val" style="color:var(--t3);font-family:'DM Sans',sans-serif;font-size:0.65rem">Galvanizing</div></div>
+      <div class="src">Source: FRED (Federal Reserve Economic Data), LME delayed</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Steel HRC up 18% YTD. Lock Q2 pricing with your steel distributors this week. Spot market moves daily against you.</div><div class="act-cat">STEEL · PRICING</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Copper at $4.52/lb with LME inventories at 15-year low. Secure Q2 commitments on electrical and HVAC copper before the next price step.</div><div class="act-cat">COPPER · SUPPLY</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Aluminum stable, but Section 232 tariff keeps domestic prices 15-20% above global. Evaluate USMCA-compliant Canadian sources.</div><div class="act-cat">ALUMINUM · TARIFF</div></div>
+    </div>
+  </div>
+  <div class="alert alert-red" style="margin-top:0.75rem">
+    <div class="alert-title" style="color:#FF8FA0">⚠ Concentration Risk — Nucor / Steel Technologies</div>
+    <div class="alert-text">If you buy from Nucor and also source through Steel Technologies, Harris Steel, or Skyline Steel — those are all Nucor subsidiaries. See the Suppliers tab for full ownership trees.</div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Cost Structure — Carbon Steel Products</span><span class="pnl-badge">FRED · EIA · BLS</span></div>
+      <div class="driver"><div class="driver-name">Raw Iron Ore</div><div class="driver-bar-bg"><div class="driver-bar db-steel" style="width:30%">30%</div></div><div class="driver-pct">30%</div><div class="driver-trend up">+6.2%</div></div>
+      <div class="driver"><div class="driver-name">Scrap Steel</div><div class="driver-bar-bg"><div class="driver-bar db-aluminum" style="width:22%">22%</div></div><div class="driver-pct">22%</div><div class="driver-trend up">+9.8%</div></div>
+      <div class="driver"><div class="driver-name">Energy (Nat Gas/Elec)</div><div class="driver-bar-bg"><div class="driver-bar db-energy" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+12.2%</div></div>
+      <div class="driver"><div class="driver-name">Labor</div><div class="driver-bar-bg"><div class="driver-bar db-labor" style="width:16%">16%</div></div><div class="driver-pct">16%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="driver"><div class="driver-name">Logistics</div><div class="driver-bar-bg"><div class="driver-bar db-logistics" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+22.6%</div></div>
+      <div class="src">Sources: FRED PPI-Iron & Steel, EIA nat gas, BLS CES wages, Drewry Index</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">US Steel & Aluminum Imports — HS 72-76</span><span class="pnl-badge">ITC · CENSUS</span></div>
+      <div class="imp-row"><div class="imp-country">Canada</div><div class="imp-bar-bg"><div class="imp-bar" style="width:22%"></div></div><div class="imp-val">$8.2B</div></div>
+      <div class="imp-row"><div class="imp-country">Brazil</div><div class="imp-bar-bg"><div class="imp-bar" style="width:14%"></div></div><div class="imp-val">$5.1B</div></div>
+      <div class="imp-row"><div class="imp-country">Mexico</div><div class="imp-bar-bg"><div class="imp-bar" style="width:12%"></div></div><div class="imp-val">$4.4B</div></div>
+      <div class="imp-row"><div class="imp-country">S. Korea</div><div class="imp-bar-bg"><div class="imp-bar" style="width:10%"></div></div><div class="imp-val">$3.8B</div></div>
+      <div class="imp-row"><div class="imp-country">Japan</div><div class="imp-bar-bg"><div class="imp-bar" style="width:8%"></div></div><div class="imp-val">$3.0B</div></div>
+      <div class="imp-row"><div class="imp-country">Germany</div><div class="imp-bar-bg"><div class="imp-bar" style="width:6%"></div></div><div class="imp-val">$2.3B</div></div>
+      <div class="imp-row"><div class="imp-country">China</div><div class="imp-bar-bg"><div class="imp-bar" style="width:4%"></div></div><div class="imp-val">$1.5B</div></div>
+      <div class="alert alert-gold" style="margin-top:0.5rem"><div class="alert-title" style="color:#FFDF80">Section 232</div><div class="alert-text">ALL steel and aluminum imports face 25% tariff regardless of origin. USMCA (Canada/Mexico) products are exempt only if they meet rules of origin — verify with your broker.</div></div>
+      <div class="src">Source: US ITC DataWeb, Census Bureau FT900</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major US Steel & Metals Suppliers</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Supplier</span><span>Parent Company</span><span style="text-align:center">Type</span><span style="text-align:center">Health</span><span style="text-align:center">232 Impact</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Nucor Corporation</div><div style="color:var(--t2);font-size:0.65rem">Nucor Corp (NYSE: NUE)</div><div style="text-align:center;color:var(--t1);font-weight:500">EAF Mill</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">BENEFITS</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">U.S. Steel</div><div style="color:var(--t2);font-size:0.65rem">United States Steel (NYSE: X)</div><div style="text-align:center;color:var(--t1);font-weight:500">Integrated</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">BENEFITS</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Steel Dynamics</div><div style="color:var(--t2);font-size:0.65rem">Steel Dynamics Inc (NASDAQ: STLD)</div><div style="text-align:center;color:var(--t1);font-weight:500">EAF Mill</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">BENEFITS</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Cleveland-Cliffs</div><div style="color:var(--t2);font-size:0.65rem">Cleveland-Cliffs Inc (NYSE: CLF)</div><div style="text-align:center;color:var(--t1);font-weight:500">Integrated</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">BENEFITS</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Alcoa Corporation</div><div style="color:var(--t2);font-size:0.65rem">Alcoa Corp (NYSE: AA)</div><div style="text-align:center;color:var(--t1);font-weight:500">Aluminum</div><div style="text-align:center"><span class="badge-sm b-watch">WATCH</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">BENEFITS</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Freeport-McMoRan</div><div style="color:var(--t2);font-size:0.65rem">Freeport-McMoRan Inc (NYSE: FCX)</div><div style="text-align:center;color:var(--t1);font-weight:500">Copper</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:var(--t3)">NEUTRAL</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Commercial Metals Co</div><div style="color:var(--t2);font-size:0.65rem">CMC (NYSE: CMC)</div><div style="text-align:center;color:var(--t1);font-weight:500">Rebar/Merchant</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">BENEFITS</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">ArcelorMittal USA</div><div style="color:var(--t2);font-size:0.65rem">ArcelorMittal SA (AMS: MT)</div><div style="text-align:center;color:var(--t1);font-weight:500">Integrated</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MIXED</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees — SEC EDGAR Exhibit 21</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Nucor Corporation <span class="tree-p-tag">NYSE: NUE</span></div>
+    <div class="tree-p-meta">CIK: 0000073309 · Revenue: $36.4B · 31,400 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Nucor Steel — multiple mills</div><div class="tree-sub-detail">20+ steel mills across US — HRC, plate, bar, beam</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Steel Technologies Inc</div><div class="tree-sub-detail">Acquired · Flat-rolled steel processing & distribution</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Harris Steel Group</div><div class="tree-sub-detail">Acquired · Rebar fabrication & distribution</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Skyline Steel</div><div class="tree-sub-detail">Acquired · Steel piling, foundation products</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Nucor Tubular Products</div><div class="tree-sub-detail">HSS, mechanical tubing, steel pipe</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Cleveland-Cliffs Inc <span class="tree-p-tag">NYSE: CLF</span></div>
+    <div class="tree-p-meta">CIK: 0000764065 · Revenue: $22.0B · 28,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">AK Steel (formerly AK Steel Holding)</div><div class="tree-sub-detail">Acquired 2020 · Flat-rolled carbon, stainless, electrical steel</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">ArcelorMittal USA (select assets)</div><div class="tree-sub-detail">Acquired 2020 · Integrated steel mills, iron ore</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Ferrous Processing & Trading</div><div class="tree-sub-detail">Acquired · Scrap metal processing & brokerage</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">SunCoke Energy</div><div class="tree-sub-detail">Acquired · Metallurgical coke production</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Alcoa Corporation <span class="tree-p-tag">NYSE: AA</span></div>
+    <div class="tree-p-meta">CIK: 0001675149 · Revenue: $10.5B · 13,200 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Alcoa Alumina & Chemicals</div><div class="tree-sub-detail">Bauxite mining, alumina refining</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Alcoa Primary Metals</div><div class="tree-sub-detail">Aluminum smelting operations — US, Canada, Iceland, Norway</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Alcoa Warrick Operations</div><div class="tree-sub-detail">Smelting + rolling — Warrick County, Indiana</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Alumina Limited (JV)</div><div class="tree-sub-detail">40% interest in AWAC joint venture — global bauxite/alumina</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-title" style="color:#FF8FA0">⚠ Concentration Risk — Cleveland-Cliffs</div>
+    <div class="alert-text">Cleveland-Cliffs acquired AK Steel AND select ArcelorMittal USA assets in 2020. If you source from any combination of these three brands, you have one supplier on one balance sheet. A strike, financial event, or iron ore disruption at Cliffs affects all three supply lines simultaneously.</div>
+  </div>
+  <div class="alert alert-gold">
+    <div class="alert-title" style="color:#FFDF80">⚠ Hidden Exposure — Nucor</div>
+    <div class="alert-text">Nucor owns Steel Technologies (processing), Harris Steel (rebar), Skyline Steel (piling), and Nucor Tubular. If you source from multiple Nucor subsidiaries thinking you have supplier diversity — you don't. Map your Exhibit 21 exposure.</div>
+  </div>
+  <div class="src">Source: SEC EDGAR Exhibit 21 — List of Subsidiaries (10-K Annual Reports)</div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="tab-content" id="tab-financials">
+  <div class="pnl-hdr"><span class="pnl-title">Supplier Financial Health</span><span class="pnl-badge">SEC 10-K / 10-Q · EDGAR</span></div>
+  <div class="tbl-row hdr fin-cols"><span>Company</span><span style="text-align:right">Revenue</span><span style="text-align:right">Gross Margin</span><span style="text-align:right">Debt/EBITDA</span><span style="text-align:right">Current Ratio</span><span style="text-align:right">Signal</span></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Nucor</div><div class="c-val">$36.4B</div><div class="c-val" style="color:#6FFFB0">22.8%</div><div class="c-val" style="color:#6FFFB0">0.8x</div><div class="c-val" style="color:#6FFFB0">2.14</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Steel Dynamics</div><div class="c-val">$18.8B</div><div class="c-val" style="color:#6FFFB0">24.1%</div><div class="c-val" style="color:#6FFFB0">0.9x</div><div class="c-val" style="color:#6FFFB0">2.42</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Cleveland-Cliffs</div><div class="c-val">$22.0B</div><div class="c-val" style="color:#FFDF80">14.2%</div><div class="c-val" style="color:#FF8FA0">3.8x</div><div class="c-val" style="color:#FFDF80">1.04</div><div style="text-align:right"><span class="badge-sm b-watch">WATCH</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">U.S. Steel</div><div class="c-val">$16.1B</div><div class="c-val" style="color:#FFDF80">12.8%</div><div class="c-val" style="color:#FFDF80">2.4x</div><div class="c-val" style="color:#FFDF80">1.18</div><div style="text-align:right"><span class="badge-sm b-watch">WATCH</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Alcoa</div><div class="c-val">$10.5B</div><div class="c-val" style="color:#FFDF80">16.3%</div><div class="c-val" style="color:#FFDF80">2.1x</div><div class="c-val" style="color:#6FFFB0">1.38</div><div style="text-align:right"><span class="badge-sm b-watch">WATCH</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Freeport-McMoRan</div><div class="c-val">$22.8B</div><div class="c-val" style="color:#6FFFB0">38.4%</div><div class="c-val" style="color:#6FFFB0">0.6x</div><div class="c-val" style="color:#6FFFB0">2.56</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">Commercial Metals</div><div class="c-val">$8.8B</div><div class="c-val" style="color:#6FFFB0">19.7%</div><div class="c-val" style="color:#6FFFB0">1.2x</div><div class="c-val" style="color:#6FFFB0">2.18</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row fin-cols"><div class="c-name">ArcelorMittal</div><div class="c-val">$68.3B</div><div class="c-val" style="color:#FFDF80">15.6%</div><div class="c-val" style="color:#6FFFB0">1.1x</div><div class="c-val" style="color:#6FFFB0">1.42</div><div style="text-align:right"><span class="badge-sm b-strong">STRONG</span></div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">⚠ Cleveland-Cliffs</div><div class="alert-text">Debt/EBITDA at 3.8x — highest in the group. They acquired aggressively (AK Steel + ArcelorMittal USA assets) and carry the debt. Margins at 14.2% are thin for a downturn. Monitor Q2 earnings closely. If steel prices correct 10%, their leverage becomes uncomfortable.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ U.S. Steel — Nippon Steel Acquisition</div><div class="alert-text">The pending Nippon Steel acquisition creates uncertainty. If it closes, supply continuity is likely fine. If it fails, U.S. Steel faces capital investment decisions as a standalone. Either way, have a contingency plan for your U.S. Steel-sourced categories.</div></div>
+  <div class="src">Source: SEC EDGAR 10-K/10-Q filings, latest available</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Trade Exposure — Steel & Metals</span><span class="pnl-badge">USTR · SECTION 232 · CBP</span></div>
+  <div class="tbl-row hdr hs-cols"><span>HS Chapter</span><span>Description</span><span style="text-align:center">Key Origins</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">Ch. 72</div><div style="color:var(--t1)">Iron & steel — flat-rolled, bar, wire, tube</div><div style="text-align:center;color:var(--t1)">All</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25% (232)</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">Ch. 73</div><div style="color:var(--t1)">Articles of iron or steel — fasteners, structures, pipe</div><div style="text-align:center;color:var(--t1)">All</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25% (232)</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">Ch. 76</div><div style="color:var(--t1)">Aluminum & articles thereof</div><div style="text-align:center;color:var(--t1)">All</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25% (232)</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7208-7212</div><div style="color:var(--t1)">Hot-rolled & cold-rolled flat steel</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+25% AD</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7304-7306</div><div style="color:var(--t1)">Steel pipe & tube (OCTG, structural)</div><div style="text-align:center;color:var(--t1)">Various</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+AD/CVD</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7318</div><div style="color:var(--t1)">Fasteners — bolts, nuts, screws, washers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+301</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7604-7608</div><div style="color:var(--t1)">Aluminum bars, rod, profiles, wire, tube</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+301+AD</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7403-7408</div><div style="color:var(--t1)">Copper — refined, alloys, wire, tube</div><div style="text-align:center;color:var(--t1)">Chile/Peru</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0-3%</div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">Section 232 — Universal 25% Steel & Aluminum Tariff</div><div class="alert-text">Unlike Section 301 (China-specific), Section 232 applies to ALL countries. There are no tariff-free origins for steel and aluminum. USMCA-qualifying goods from Canada/Mexico were exempt, but recent policy changes have tightened enforcement. Verify USMCA qualification with your customs broker on every shipment.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Copper Advantage</div><div class="alert-text">Copper is NOT subject to Section 232. Chilean and Peruvian copper enters at 0-3% MFN duty. If you can substitute copper for aluminum in any application, you eliminate the 25% tariff. Run the total cost comparison — copper's premium is narrowing fast.</div></div>
+  <div class="src">Source: USTR, Section 232 Proclamations, CBP ACE Portal, ITC Antidumping/CVD Orders</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Metals & Alloys</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Steel HRC up 18% YTD and still climbing. Lock Q2 pricing with your primary steel distributors immediately. Every day you wait, spot prices move against you. If you're on quarterly contracts, push to extend terms at current rates before the next adjustment.</div><div class="act-cat">STEEL · PRICING · CONTRACTS</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">LME copper inventories at 15-year low. Chilean mine output down 12%. If you buy copper wire, tube, fittings, or electrical components — secure Q2 commitments now. The supply squeeze is real and the price hasn't finished moving.</div><div class="act-cat">COPPER · SUPPLY · PRICING</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your Cleveland-Cliffs exposure. If you source from AK Steel, ArcelorMittal USA, or Cliffs directly — you have one supplier at 3.8x leverage. Qualify at least one alternative (Nucor or SDI) for your top steel categories before Q3.</div><div class="act-cat">CONCENTRATION RISK · EXHIBIT 21</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Copper is not subject to Section 232 tariff. Aluminum is. For every application where copper and aluminum are interchangeable, run a total landed cost comparison including the 25% tariff on aluminum. The math may have flipped.</div><div class="act-cat">TARIFF ARBITRAGE · MATERIAL SUBSTITUTION</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">U.S. Steel's Nippon acquisition is still pending. Regardless of outcome, have a contingency plan for your U.S. Steel categories. If it closes — Nippon brings capital and stability. If it fails — U.S. Steel faces an investment gap. Plan for both scenarios.</div><div class="act-cat">SUPPLIER RISK · M&A</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Energy is 20% of steel production cost and rising. EAF mills (Nucor, SDI, CMC) use electricity + scrap. Integrated mills (Cliffs, U.S. Steel) use coke + iron ore. The cost structure divergence is widening — EAF mills will be more competitive in a high-energy-cost environment. Shift volume toward EAF producers.</div><div class="act-cat">COST STRUCTURE · EAF vs INTEGRATED</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Aluminum prices stable but Section 232 keeps domestic 15-20% above global LME. Canadian smelters (Rio Tinto Alcan, Alouette) are the closest tariff-competitive source if USMCA qualification holds. Monitor policy changes monthly.</div><div class="act-cat">ALUMINUM · TARIFF · CANADA</div></div>
+  <div class="src">Source: FSA analyst assessment based on FRED, EIA, SEC EDGAR, USTR, ITC, BLS data</div>
+</div>
+
+<div class="ftr">
+  <span>FSA Procurement Intelligence Terminal v2.1 · Metals & Alloys · All data from public sources</span>
+  <span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}
+}
+document.getElementById('tab-bar').addEventListener('click',function(e){
+  var tab=e.target.closest('.tab');
+  if(!tab)return;
+  var id=tab.getAttribute('data-tab');
+  if(id)showTab(id);
+});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}
+setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

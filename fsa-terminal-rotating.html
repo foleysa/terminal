@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Rotating Machinery</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-copper{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-steel{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-cast{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-labor{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-rare{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-logistics{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}.fin-cols{grid-template-columns:1.3fr 0.7fr 0.7fr 0.7fr 0.7fr 0.8fr}.hs-cols{grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr}
+.c-name{color:var(--t1);font-weight:600}.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Rotating Machinery</div>
+  <div class="cat-title">Motors, Pumps, Compressors & Generators</div>
+  <div class="cat-desc">Electric motors (AC/DC, variable speed), centrifugal and positive displacement pumps, reciprocating and screw compressors, diesel and gas generators, turbines, gearboxes, and associated drive systems. Capital-intensive category with long lead times, OEM lock-in risk, copper/steel commodity exposure, and critical rebuild-vs-replace economics.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$185B</div><div class="cs-lbl">Global Market</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">+8.6%</div><div class="cs-lbl">Copper YTD</div></div>
+    <div><div class="cs-val">16-24wk</div><div class="cs-lbl">Avg Lead Time</div></div>
+    <div><div class="cs-val" style="color:#FFDF80">HIGH</div><div class="cs-lbl">OEM Lock-In Risk</div></div>
+    <div><div class="cs-val">IE4/IE5</div><div class="cs-lbl">Efficiency Mandates</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">OEMs & Ownership<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="rebuild">Rebuild vs Replace</div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">Copper Price<br>$4.52/lb +8.6%</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Lead Times<br>16-24 Weeks</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">OEM Lock-In<br>Proprietary Parts</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#B0CCFF">ACTIVE</div><div class="risk-lbl">Efficiency Rules<br>DOE IE4+ Mandates</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Material Costs</span><span class="pnl-badge">FRED · LME · EIA</span></div>
+      <div class="driver"><div class="driver-name">Copper (windings)</div><div class="driver-bar-bg"><div class="driver-bar db-copper" style="width:60%"></div></div><div class="driver-trend up">+8.6%</div></div>
+      <div class="driver"><div class="driver-name">Steel (housings)</div><div class="driver-bar-bg"><div class="driver-bar db-steel" style="width:50%"></div></div><div class="driver-trend up">+18.2%</div></div>
+      <div class="driver"><div class="driver-name">Cast Iron/Alloy</div><div class="driver-bar-bg"><div class="driver-bar db-cast" style="width:40%"></div></div><div class="driver-trend up">+6.4%</div></div>
+      <div class="driver"><div class="driver-name">Rare Earth Magnets</div><div class="driver-bar-bg"><div class="driver-bar db-rare" style="width:35%"></div></div><div class="driver-trend up">+12.8%</div></div>
+      <div class="src">Source: FRED, LME, USGS Mineral Commodity Summaries</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Lead times for large motors (500HP+) and custom pumps stretching to 24+ weeks. If you have Q3/Q4 capital projects, place POs now or slip your schedule.</div><div class="act-cat">LEAD TIME · CAPITAL PLANNING</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Copper at $4.52/lb. Every motor, generator, and transformer is copper-intensive. OEMs will pass through material escalation on new quotes within 30 days. Lock pricing before the surcharge letters arrive.</div><div class="act-cat">COPPER · MOTOR PRICING</div></div>
+    </div>
+  </div>
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">⚠ OEM Concentration — ABB / Baldor / Dodge</div><div class="alert-text">ABB acquired Baldor Electric (motors) and Dodge (power transmission/bearings). If you buy ABB drives, Baldor motors, AND Dodge bearings — that's one supplier across three critical rotating equipment categories. See the OEMs tab for full ownership mapping.</div></div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Cost Breakdown — Electric Motors</span><span class="pnl-badge">FRED · BLS</span></div>
+      <div class="driver"><div class="driver-name">Copper (windings)</div><div class="driver-bar-bg"><div class="driver-bar db-copper" style="width:25%">25%</div></div><div class="driver-pct">25%</div><div class="driver-trend up">+8.6%</div></div>
+      <div class="driver"><div class="driver-name">Steel (laminations)</div><div class="driver-bar-bg"><div class="driver-bar db-steel" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+18.2%</div></div>
+      <div class="driver"><div class="driver-name">Cast Iron (frame)</div><div class="driver-bar-bg"><div class="driver-bar db-cast" style="width:14%">14%</div></div><div class="driver-pct">14%</div><div class="driver-trend up">+6.4%</div></div>
+      <div class="driver"><div class="driver-name">Rare Earth Magnets</div><div class="driver-bar-bg"><div class="driver-bar db-rare" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+12.8%</div></div>
+      <div class="driver"><div class="driver-name">Labor (assembly)</div><div class="driver-bar-bg"><div class="driver-bar db-labor" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+5.1%</div></div>
+      <div class="driver"><div class="driver-name">Bearings/Seals</div><div class="driver-bar-bg"><div class="driver-bar db-logistics" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+3.2%</div></div>
+      <div class="driver"><div class="driver-name">Logistics</div><div class="driver-bar-bg"><div class="driver-bar db-logistics" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend up">+22.6%</div></div>
+      <div class="src">Sources: FRED copper/steel, USGS rare earths, BLS Mfg wages</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Dependencies</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Copper — 25% of Motor Cost</div><div class="alert-text">Every motor, generator, and transformer uses copper windings. LME inventories at 15-year low. Premium motors (IE4/IE5) use MORE copper than standard efficiency motors for better thermal performance. The efficiency mandate is increasing your copper exposure.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Rare Earth Magnets — China Dominance</div><div class="alert-text">Permanent magnet motors (PM/BLDC) use neodymium magnets. China controls 60%+ of rare earth production and 90% of processing. Section 301 tariff applies. Any escalation in US-China tensions directly threatens PM motor supply. Induction motors (no rare earths) are the hedge.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Lead Times — Structural, Not Temporary</div><div class="alert-text">16-24 week lead times for standard motors. Custom engineered pumps and compressors: 26-40 weeks. This isn't a post-COVID backlog — it's structural. Skilled machinist and winder labor is the bottleneck, and it's not getting better. Plan 6-9 months ahead for any critical rotating equipment.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- OEMs & OWNERSHIP -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major OEMs — Rotating Machinery</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>OEM</span><span>Parent Company</span><span style="text-align:center">Primary</span><span style="text-align:center">Health</span><span style="text-align:center">301 Risk</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">ABB Motors & Drives</div><div style="color:var(--t2);font-size:0.65rem">ABB Ltd (NYSE: ABB)</div><div style="text-align:center;color:var(--t1)">Motors/VFD</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Siemens Motors</div><div style="color:var(--t2);font-size:0.65rem">Siemens AG (XETRA: SIE)</div><div style="text-align:center;color:var(--t1)">Motors/Drives</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">WEG</div><div style="color:var(--t2);font-size:0.65rem">WEG SA (BVMF: WEGE3)</div><div style="text-align:center;color:var(--t1)">Motors</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Nidec</div><div style="color:var(--t2);font-size:0.65rem">Nidec Corp (TSE: 6594)</div><div style="text-align:center;color:var(--t1)">Motors</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">MEDIUM</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Flowserve</div><div style="color:var(--t2);font-size:0.65rem">Flowserve Corp (NYSE: FLS)</div><div style="text-align:center;color:var(--t1)">Pumps</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Sulzer</div><div style="color:var(--t2);font-size:0.65rem">Sulzer Ltd (SIX: SUN)</div><div style="text-align:center;color:var(--t1)">Pumps/Service</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Atlas Copco</div><div style="color:var(--t2);font-size:0.65rem">Atlas Copco AB (STO: ATCO-A)</div><div style="text-align:center;color:var(--t1)">Compressors</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Caterpillar</div><div style="color:var(--t2);font-size:0.65rem">Caterpillar Inc (NYSE: CAT)</div><div style="text-align:center;color:var(--t1)">Generators</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">LOW</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">ABB Ltd <span class="tree-p-tag">NYSE: ABB</span></div>
+    <div class="tree-p-meta">Revenue: $32.8B · 105,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Baldor Electric Company</div><div class="tree-sub-detail">Acquired 2011 · NEMA motors, generators, drives</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Dodge (ABB Mechanical Power Transmission)</div><div class="tree-sub-detail">Bearings, gearing, mounted bearings, couplings</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">ABB Drives</div><div class="tree-sub-detail">Variable frequency drives, soft starters</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">ABB Turbocharging</div><div class="tree-sub-detail">Turbochargers for diesel/gas engines</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Atlas Copco AB <span class="tree-p-tag">STO: ATCO-A</span></div>
+    <div class="tree-p-meta">Revenue: SEK 186B (~$18B) · 53,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Ingersoll Rand Industrial (select assets)</div><div class="tree-sub-detail">Acquired · Compressor brands and service network</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Edwards Vacuum</div><div class="tree-sub-detail">Acquired 2014 · Vacuum pumps, abatement systems</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Leybold (vacuum)</div><div class="tree-sub-detail">Acquired · High vacuum technology</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Chicago Pneumatic</div><div class="tree-sub-detail">Compressors, generators, construction tools</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Caterpillar Inc <span class="tree-p-tag">NYSE: CAT</span></div>
+    <div class="tree-p-meta">CIK: 0000018230 · Revenue: $67.1B · 113,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Solar Turbines</div><div class="tree-sub-detail">Industrial gas turbines, compressor sets, gen-sets</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">MaK (Caterpillar Marine)</div><div class="tree-sub-detail">Marine diesel engines, propulsion</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Cat Electric Power</div><div class="tree-sub-detail">Diesel and gas generator sets, power systems</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Perkins Engines</div><div class="tree-sub-detail">Diesel/gas engines for industrial, agricultural, construction</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ ABB Triple Concentration</div><div class="alert-text">ABB owns Baldor (motors), Dodge (bearings/power transmission), and ABB Drives (VFDs). If you spec Baldor motors, Dodge bearings, and ABB drives on the same equipment train — you have one supplier for the entire rotating assembly. A single ABB supply disruption takes out motors, drives, AND bearings simultaneously.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Atlas Copco / Chicago Pneumatic / Edwards</div><div class="alert-text">Atlas Copco owns Chicago Pneumatic (compressors) and Edwards Vacuum (vacuum pumps). These brands are often sourced by different plant teams who don't realize they share a parent. One balance sheet, one supply chain.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, annual reports, M&A records</div>
+</div>
+
+<!-- REBUILD vs REPLACE -->
+<div class="tab-content" id="tab-rebuild">
+  <div class="pnl-hdr"><span class="pnl-title">Rebuild vs Replace Economics</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+
+  <div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">Why This Matters</div><div class="alert-text">With motor lead times at 16-24 weeks and copper driving new equipment prices up 8-15%, the rebuild-vs-replace decision has fundamentally changed. Rebuilding a motor at 40-60% of replacement cost with a 4-6 week turnaround is often the better business decision — especially for critical path equipment.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">When to Rebuild</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">REBUILD</div><div class="act-text">Motor is less than 20 years old and frame/core are intact</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">REBUILD</div><div class="act-text">Failure is winding-only (rewind at 30-40% of replacement cost)</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">REBUILD</div><div class="act-text">Equipment is critical path and 24-week lead time for new is unacceptable</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">REBUILD</div><div class="act-text">Original motor is oversized and a rewind + right-sizing improves efficiency</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">REBUILD</div><div class="act-text">Specialty frame/voltage not readily available as new (medium voltage, explosion-proof)</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">When to Replace</span></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">REPLACE</div><div class="act-text">Motor has been rewound 2+ times already (diminishing efficiency returns)</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">REPLACE</div><div class="act-text">DOE efficiency mandate requires IE4+ and rebuild can't meet the standard</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">REPLACE</div><div class="act-text">Energy cost savings from IE4/IE5 motor pay back the premium in under 2 years</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">REPLACE</div><div class="act-text">Frame/core damage (bearing journal wear, cracked frame, core degradation)</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">REPLACE</div><div class="act-text">Planned replacement with spare — keep rebuilt motor as emergency backup</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-gold" style="margin-top:0.5rem"><div class="alert-title" style="color:#FFDF80">TCO Calculation</div><div class="alert-text">For a 200HP motor running 8,000 hours/year at $0.08/kWh: the energy cost is ~$95,000/year. Replacing a standard efficiency motor with IE4 saves 3-5% = $2,850-4,750/year. New IE4 200HP motor costs ~$8,000. Payback: 2-3 years. But if the existing motor is only 5 years old and needs a $3,200 rewind — rebuild it, run it for 5 more years, then replace with IE5 when the next generation is available.</div></div>
+  <div class="src">Source: DOE Motor Systems Tip Sheets, EASA rewind guidelines, FSA TCO analysis</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Trade Exposure — Rotating Machinery</span><span class="pnl-badge">USTR · ITC</span></div>
+  <div class="tbl-row hdr hs-cols"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8501</div><div style="color:var(--t1)">Electric motors & generators</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.4%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8501</div><div style="color:var(--t1)">Electric motors & generators</div><div style="text-align:center;color:var(--t1)">EU/Japan</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2.4%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8413</div><div style="color:var(--t1)">Pumps — centrifugal, reciprocating, rotary</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.5%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8414</div><div style="color:var(--t1)">Compressors — air, gas, refrigeration</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.5%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8502</div><div style="color:var(--t1)">Generator sets — diesel, gas, turbine</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.5%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8483</div><div style="color:var(--t1)">Bearings, gears, transmission shafts</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.8%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8501</div><div style="color:var(--t1)">Electric motors</div><div style="text-align:center;color:var(--t1)">Brazil (WEG)</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2.4%</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Tariff Arbitrage — Motors</div><div class="alert-text">Chinese-origin motors face 27.4% combined duty. EU (Siemens), Swiss (ABB), Brazilian (WEG), and Japanese (Nidec) motors enter at 2.4% MFN. WEG (Brazil) is the fastest-growing motor supplier in North America with a US factory in Minneapolis and aggressive pricing. For NEMA-frame commodity motors, WEG is often 15-20% cheaper than ABB/Siemens before you even factor in the tariff differential on the China alternatives.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Rare Earth Dependency</div><div class="alert-text">Permanent magnet motors use neodymium magnets — China controls 60% of rare earth mining and 90% of processing. Section 301 adds 25% tariff on rare earth magnets. If you spec PM motors, your magnet supply runs through China regardless of where the motor is assembled. Induction motors avoid this dependency entirely.</div></div>
+  <div class="src">Source: USTR HTS, Section 301, ITC DataWeb, USGS Mineral Commodity Summaries</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Rotating Machinery</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Lead times for large motors (500HP+), custom pumps, and engineered compressors are 16-24+ weeks. If you have Q3/Q4 capital projects or planned turnaround work, release POs this week. Every week of delay is a week added to your project timeline. The constraint is skilled labor and copper availability — neither is improving soon.</div><div class="act-cat">LEAD TIME · CAPITAL PROJECTS · PLANNING</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Copper at $4.52/lb drives motor pricing directly. OEMs will issue surcharge letters within 30 days. Get quotes now at current prices. If you can commit to Q2 volume, negotiate a copper price cap or index-ceiling in your PO terms.</div><div class="act-cat">COPPER · PRICING · MOTOR SURCHARGES</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your ABB/Baldor/Dodge exposure. If you spec all three on the same equipment train, one ABB supply disruption takes out motors, drives, AND bearings. Qualify WEG (motors), Schneider/Danfoss (drives), and SKF/Timken (bearings) as alternatives for at least one critical system.</div><div class="act-cat">CONCENTRATION · OEM LOCK-IN · EXHIBIT 21</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Establish a relationship with a qualified motor rewind shop. When a critical motor fails, the choice between a 4-week rebuild and a 24-week new motor is the difference between a brief outage and a quarter-long production loss. Pre-qualify the shop before you need them.</div><div class="act-cat">REBUILD · EMERGENCY RESPONSE · MRO</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Run a motor census on your top 20 energy-consuming motors. Identify units running at less than 60% load (oversized) and units older than 15 years (efficiency degradation). These are your replacement candidates. IE4 motors on high-runtime equipment pay back in 2-3 years at current energy prices.</div><div class="act-cat">EFFICIENCY · DOE · MOTOR CENSUS</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">If you spec permanent magnet motors, evaluate whether induction alternatives can meet the application requirements. PM motors have superior efficiency but create a rare earth dependency on China. Induction motors avoid this entirely. The efficiency gap is narrowing — IE4 induction motors are close to PM performance in many applications.</div><div class="act-cat">RARE EARTH · PM vs INDUCTION · RISK</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">DOE efficiency mandates are tightening. IE3 is the current US minimum. IE4 will likely become mandatory within 2-3 years. Start transitioning your standard motor specifications to IE4 now — the price premium is 10-15% but the energy payback is real, and you'll avoid a compliance scramble when the mandate takes effect.</div><div class="act-cat">REGULATORY · DOE · EFFICIENCY STANDARDS</div></div>
+  <div class="src">Source: FSA analyst assessment based on FRED, USGS, DOE, SEC EDGAR, EASA data</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v2.1 · Rotating Machinery · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

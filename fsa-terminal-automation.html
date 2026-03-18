@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Industrial Automation & Controls</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-1{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-2{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-3{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-4{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-5{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-6{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}
+.c-name{color:var(--t1);font-weight:600}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Industrial Automation & Controls</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">PLCs, SCADA/HMI systems, industrial robots, sensors, variable frequency drives, motion control, machine vision, and industrial IoT/edge computing. The most ecosystem-locked category in industrial procurement — once you commit to an OEM's platform, switching costs are enormous. Semiconductor supply, tariff exposure on Chinese components, and skilled labor shortages driving automation CAPEX.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$395B</div><div class="cs-lbl">Global Market</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">OEM Lock-In</div></div>
+    <div><div class="cs-val">12-20wk</div><div class="cs-lbl">Lead Time</div></div>
+    <div><div class="cs-val" style="color:#FFB898">25-50%</div><div class="cs-lbl">301 Tariff</div></div>
+    <div><div class="cs-val">5 OEMs</div><div class="cs-lbl">Control 70%</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">OEMs & Ecosystems<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="lockin">Platform Lock-In Analysis</div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">OEM Ecosystem<br>Lock-In</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">HIGH</div><div class="risk-lbl">Semiconductor<br>Supply Chain</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Lead Times<br>12-20 Weeks</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">STRONG</div><div class="risk-lbl">Demand<br>Labor Shortage Driven</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Sub-Category Breakdown</span><span class="pnl-badge">CENSUS · BLS</span></div>
+      <div class="driver"><div class="driver-name">PLCs & PACs</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:22%">22%</div></div><div class="driver-pct">22%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="driver"><div class="driver-name">VFDs & Drives</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+6.2%</div></div>
+      <div class="driver"><div class="driver-name">Robotics</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:16%">16%</div></div><div class="driver-pct">16%</div><div class="driver-trend up">+12.4%</div></div>
+      <div class="driver"><div class="driver-name">Sensors & Vision</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:14%">14%</div></div><div class="driver-pct">14%</div><div class="driver-trend up">+8.6%</div></div>
+      <div class="driver"><div class="driver-name">SCADA / HMI</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+5.1%</div></div>
+      <div class="driver"><div class="driver-name">Motion Control</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+4.3%</div></div>
+      <div class="driver"><div class="driver-name">Industrial IoT/Edge</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+22.5%</div></div>
+      <div class="src">Source: Census Bureau, BLS PPI, IFR World Robotics</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">VFD lead times stretching to 16-20 weeks on popular frame sizes. Semiconductor allocation still constrained for power electronics. If you have capital projects requiring drives in Q3/Q4, release POs now or risk project delays.</div><div class="act-cat">VFD · LEAD TIME · SEMICONDUCTOR</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Robotics CAPEX decisions being made now for labor shortage mitigation. Cobot (collaborative robot) prices have dropped 30% in 3 years. If you have repetitive manual tasks with labor retention issues, the ROI math has shifted — payback periods are now 12-18 months on many applications.</div><div class="act-cat">ROBOTICS · LABOR · CAPEX</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Industrial IoT growing at 22.5% — fastest sub-category. Edge computing and predictive maintenance are transitioning from pilot to production. If your facilities are still doing time-based maintenance, you're leaving money on the table.</div><div class="act-cat">IIoT · PREDICTIVE · EDGE</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Automation Cost Breakdown</span><span class="pnl-badge">BLS · ANALYSIS</span></div>
+      <div class="driver"><div class="driver-name">Semiconductors/ICs</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:28%">28%</div></div><div class="driver-pct">28%</div><div class="driver-trend up">+3.8%</div></div>
+      <div class="driver"><div class="driver-name">Software/License</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:22%">22%</div></div><div class="driver-pct">22%</div><div class="driver-trend up">+6.5%</div></div>
+      <div class="driver"><div class="driver-name">Engineering Labor</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+7.2%</div></div>
+      <div class="driver"><div class="driver-name">Metals/Housing</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+5.4%</div></div>
+      <div class="driver"><div class="driver-name">Copper/Wiring</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+8.6%</div></div>
+      <div class="driver"><div class="driver-name">Integration/Config</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+8.1%</div></div>
+      <div class="src">Sources: BLS PPI, semiconductor industry data, BLS OES wages</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Dependencies</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Software Licensing — The Recurring Cost Trap</div><div class="alert-text">Automation OEMs are shifting from perpetual licenses to annual subscriptions. Rockwell's FactoryTalk, Siemens TIA Portal, and Schneider's EcoStruxure all moving to subscription models. What was a one-time capital expense is becoming an escalating annual operating expense. Factor licensing into TCO over the equipment lifecycle — not just the purchase year.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Integration Labor — The Hidden 30-50%</div><div class="alert-text">The hardware is 40-50% of total automation project cost. Integration, programming, commissioning, and validation are the other 50-60%. Controls engineers are in critical shortage — BLS shows 7.2% wage growth. System integrators are booked 3-6 months out. The labor constraint, not the hardware, is what delays most automation projects.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Semiconductor Allocation — Improved But Not Normal</div><div class="alert-text">Chip supply has improved from the 2021-2023 crisis but power semiconductors (IGBTs, MOSFETs) used in VFDs and drives remain constrained. Lead times have come down from 52+ weeks to 12-20 weeks — better, but still well above the pre-COVID 4-6 week norm. Budget for extended lead times through 2027.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- OEMs & ECOSYSTEMS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Automation OEMs & Ecosystems</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>OEM</span><span>Parent / Ticker</span><span style="text-align:center">Ecosystem</span><span style="text-align:center">Health</span><span style="text-align:center">Lock-In</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Rockwell Automation</div><div style="color:var(--t2);font-size:0.65rem">NYSE: ROK</div><div style="text-align:center;color:var(--t1)">Allen-Bradley</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center"><span class="badge-sm b-risk">CRITICAL</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Siemens Digital Industries</div><div style="color:var(--t2);font-size:0.65rem">XETRA: SIE</div><div style="text-align:center;color:var(--t1)">TIA Portal</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center"><span class="badge-sm b-risk">CRITICAL</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Schneider Electric</div><div style="color:var(--t2);font-size:0.65rem">EPA: SU</div><div style="text-align:center;color:var(--t1)">Modicon/EcoStruxure</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center"><span class="badge-sm b-watch">HIGH</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">ABB Robotics & Automation</div><div style="color:var(--t2);font-size:0.65rem">NYSE: ABB</div><div style="text-align:center;color:var(--t1)">ABB Ability</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center"><span class="badge-sm b-watch">HIGH</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Emerson (PACSystems)</div><div style="color:var(--t2);font-size:0.65rem">NYSE: EMR</div><div style="text-align:center;color:var(--t1)">DeltaV/PAC</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center"><span class="badge-sm b-risk">CRITICAL</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">FANUC</div><div style="color:var(--t2);font-size:0.65rem">TSE: 6954</div><div style="text-align:center;color:var(--t1)">CNC/Robotics</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center"><span class="badge-sm b-watch">HIGH</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Omron</div><div style="color:var(--t2);font-size:0.65rem">TSE: 6645</div><div style="text-align:center;color:var(--t1)">Sysmac</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center"><span class="badge-sm b-watch">MEDIUM</span></div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Rockwell Automation <span class="tree-p-tag">NYSE: ROK</span></div>
+    <div class="tree-p-meta">Revenue: $8.4B · 28,000 employees · Highest lock-in in automation</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Allen-Bradley (PLCs, I/O, drives)</div><div class="tree-sub-detail">ControlLogix, CompactLogix, PowerFlex drives — the US industrial standard</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">FactoryTalk (Software)</div><div class="tree-sub-detail">SCADA, HMI, MES, analytics — moving to subscription model</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Plex Systems</div><div class="tree-sub-detail">Acquired 2021 · Cloud MES/ERP for manufacturing</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Fiix (CMMS)</div><div class="tree-sub-detail">Acquired 2021 · AI-driven maintenance management</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Clearpath Robotics / OTTO Motors</div><div class="tree-sub-detail">Acquired 2023 · Autonomous mobile robots (AMR)</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Emerson Electric Co <span class="tree-p-tag">NYSE: EMR</span></div>
+    <div class="tree-p-meta">Revenue: $16.8B · 67,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">DeltaV DCS</div><div class="tree-sub-detail">Distributed control system — process industries dominant</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">PACSystems (ex-GE)</div><div class="tree-sub-detail">Acquired from GE · PLCs, PACs, controllers for discrete/hybrid</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Fisher Controls (Valves)</div><div class="tree-sub-detail">Control valves — already in PVF category as well</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Rosemount (Instruments)</div><div class="tree-sub-detail">Pressure, temperature, flow, level instrumentation</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">AspenTech (55% owned)</div><div class="tree-sub-detail">Process optimization, simulation, supply chain software</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Schneider Electric SE <span class="tree-p-tag">EPA: SU</span></div>
+    <div class="tree-p-meta">Revenue: €36B (~$39B) · 150,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Modicon PLCs</div><div class="tree-sub-detail">M340, M580, M251 — industrial control platforms</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">AVEVA (60% owned)</div><div class="tree-sub-detail">Industrial software — SCADA, HMI, MES, digital twin</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Square D (Electrical)</div><div class="tree-sub-detail">Already in Electrical category — same parent</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">APC (UPS/Power)</div><div class="tree-sub-detail">Already in Electrical category — same parent</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Foxboro (legacy DCS)</div><div class="tree-sub-detail">Acquired via Invensys · Process control, DCS</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Emerson Cross-Category Dominance</div><div class="alert-text">Emerson owns DeltaV (DCS), PACSystems (PLC), Fisher (valves), Rosemount (instruments), AND AspenTech (software). If your process plant runs DeltaV, uses Fisher valves, Rosemount transmitters, and AspenTech for optimization — that's one company controlling your entire automation and process control stack. Five product categories, one balance sheet.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Schneider Cross-Category</div><div class="alert-text">Schneider owns Modicon (PLCs), AVEVA (SCADA/MES), Square D (electrical), APC (power), and Foxboro (DCS). If you buy electrical from Square D, PLCs from Modicon, UPS from APC, and software from AVEVA — all Schneider. Same concentration risk as Emerson.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, annual reports, M&A records</div>
+</div>
+
+<!-- PLATFORM LOCK-IN -->
+<div class="tab-content" id="tab-lockin">
+  <div class="pnl-hdr"><span class="pnl-title">Platform Lock-In Analysis — The Most Expensive Decision in Automation</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">The Problem</div><div class="alert-text">Choosing an automation platform is a 15-20 year commitment. PLCs, programming software, I/O, drives, HMIs, and SCADA are all designed to work within one ecosystem. Rockwell's Allen-Bradley PLCs use Studio 5000 for programming, FactoryTalk for SCADA, PowerFlex for drives — all proprietary, all interoperable within the ecosystem, all incompatible with competitors. Switching from Rockwell to Siemens means replacing hardware, rewriting every program, retraining every technician, and revalidating every process. Cost: $500K-5M+ per facility depending on size.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Lock-In Dimensions</span></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">PROGRAMMING LANGUAGE</div><div class="act-text">Each OEM uses proprietary extensions to IEC 61131-3 standard. Rockwell's Studio 5000 code won't run on Siemens TIA Portal. Programs must be completely rewritten to switch platforms. This is the single biggest switching cost.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">I/O & NETWORKING</div><div class="act-text">Rockwell uses EtherNet/IP, Siemens uses PROFINET, Mitsubishi uses CC-Link. Different industrial networks, different I/O modules, different wiring. The physical infrastructure is platform-specific.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">TECHNICIAN TRAINING</div><div class="act-text">Your maintenance electricians and controls engineers know ONE platform deeply. A Rockwell shop can troubleshoot Allen-Bradley in their sleep. Switch to Siemens and your entire team needs retraining — 6-12 months to proficiency.</div></div>
+      <div class="act" style="border-left-color:#FFB898"><div class="act-pri pri-act">SPARE PARTS INVENTORY</div><div class="act-text">Your MRO storeroom stocks PLCs, I/O cards, drives, and HMIs for your installed platform. Switching means a complete spare parts refresh — or maintaining two parallel inventories during transition.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">How to Manage Lock-In</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 1 — STANDARDIZE BUT NEGOTIATE HARD</div><div class="act-text">Accept the lock-in but use it as leverage. "We're committing our entire automation standard to your platform. In return, we need enterprise pricing, annual price caps, priority allocation, and a dedicated support engineer." Volume commitment = negotiating power.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 2 — DUAL STANDARD</div><div class="act-text">Run two platforms (e.g., Rockwell for discrete, Siemens for process). Higher complexity but creates competitive tension. Each OEM knows the other is in your plants. Pricing stays competitive because neither has a monopoly.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 3 — OPEN STANDARDS WHERE POSSIBLE</div><div class="act-text">OPC-UA, MQTT, and open industrial Ethernet are reducing lock-in at the communication layer. For new projects, spec OPC-UA compatibility for all SCADA/HMI and data collection. This doesn't eliminate PLC lock-in but prevents the software layer from being locked too.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 4 — COBOT EXCEPTION</div><div class="act-text">Collaborative robots (Universal Robots, FANUC CRX, ABB GoFa) are ecosystem-agnostic. They integrate with any PLC platform via standard I/O. Use cobots to add automation capability without deepening your PLC ecosystem lock-in.</div></div>
+    </div>
+  </div>
+  <div class="src">Source: FSA analysis, IEC 61131-3 standard, OEM platform documentation</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff Exposure — Automation Components</span><span class="pnl-badge">USTR · ITC</span></div>
+  <div class="tbl-row hdr" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8537</div><div style="color:var(--t1)">PLCs, programmable controllers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.7%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8537</div><div style="color:var(--t1)">PLCs, programmable controllers</div><div style="text-align:center;color:var(--t1)">Japan/Germany</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2.7%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8504</div><div style="color:var(--t1)">VFDs, power converters</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.4%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8479</div><div style="color:var(--t1)">Industrial robots</div><div style="text-align:center;color:var(--t1)">Japan</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2.5%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">9031-9032</div><div style="color:var(--t1)">Sensors, measuring instruments</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+1.7%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8471</div><div style="color:var(--t1)">Industrial PCs, HMI panels</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+0%</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">Japan & Germany Advantage</div><div class="alert-text">The major automation OEMs (Siemens/Germany, FANUC/Omron/Mitsubishi/Japan, ABB/Switzerland, Rockwell/US) all manufacture outside China. Section 301 tariffs primarily affect Chinese-brand PLCs (Inovance, Delta Electronics) and Chinese-origin components inside global OEM products. For major-brand automation, the tariff exposure is in the component supply chain — not the finished product.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Chinese Automation — Price vs. Tariff</div><div class="alert-text">Chinese automation brands (Inovance, Delta, Kinco) offer PLCs and VFDs at 40-60% below Rockwell/Siemens list price. Even with 25% Section 301 tariff, they're still cheaper. But the ecosystem lock-in works in reverse — Chinese PLCs use Chinese programming software, Chinese I/O, and Chinese support. The total cost of ownership including integration, support, and spare parts may not justify the savings for critical applications.</div></div>
+  <div class="src">Source: USTR HTS, Section 301 List, ITC DataWeb</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Automation & Controls</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">VFD and servo drive lead times at 12-20 weeks. If you have Q3/Q4 capital projects or turnaround work requiring drives, release POs now. Power semiconductor allocation is the bottleneck — once your OEM's allocation is spoken for, you wait.</div><div class="act-cat">VFD · DRIVES · LEAD TIME</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">If you haven't negotiated an enterprise automation agreement with your primary OEM, you're paying distributor markup on every PLC, I/O module, and drive. Rockwell, Siemens, and ABB all offer enterprise pricing programs for committed customers. The discount can be 15-30% off list — on a $2M/year automation spend, that's $300K-600K.</div><div class="act-cat">ENTERPRISE PRICING · OEM AGREEMENT</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your Emerson and Schneider cross-category exposure. Emerson owns DeltaV + PACSystems + Fisher + Rosemount + AspenTech. Schneider owns Modicon + AVEVA + Square D + APC + Foxboro. If you buy from multiple brands within either family, consolidate the negotiation for volume leverage.</div><div class="act-cat">CONCENTRATION · CROSS-CATEGORY · EXHIBIT 21</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Evaluate cobot ROI for your top 5 repetitive manual tasks with labor retention challenges. Universal Robots UR10e ($50K), FANUC CRX-10iA ($55K), ABB GoFa ($65K). Payback at $25/hr fully-loaded labor: 12-18 months for single-shift, 6-9 months for multi-shift. The math has changed — run the numbers.</div><div class="act-cat">ROBOTICS · LABOR · ROI</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Spec OPC-UA for all new SCADA, HMI, and data collection projects. This doesn't eliminate PLC platform lock-in but prevents the software/data layer from being locked to the same OEM. OPC-UA is supported by all major OEMs and is the path to platform-agnostic data architecture.</div><div class="act-cat">OPEN STANDARDS · OPC-UA · DATA</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Review your automation OEM's software licensing migration. If they're moving from perpetual to subscription, negotiate the transition terms NOW — before the perpetual option disappears. Lock in perpetual licenses for installed base and negotiate subscription caps for new projects.</div><div class="act-cat">SOFTWARE · LICENSING · SUBSCRIPTION</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Watch CHIPS Act funding and its impact on power semiconductor capacity. New fabs coming online 2026-2028 should ease VFD/drive allocation. But until capacity arrives, maintain safety stock on critical drive spare parts — a failed VFD with a 16-week replacement lead time is a production shutdown.</div><div class="act-cat">SEMICONDUCTOR · CHIPS ACT · SPARE PARTS</div></div>
+  <div class="src">Source: FSA analyst assessment based on BLS, Census, SEC EDGAR, IFR World Robotics</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · Industrial Automation & Controls · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

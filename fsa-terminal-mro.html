@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — MRO & Safety Supplies</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-1{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-2{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-3{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-4{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-5{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-6{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}
+.c-name{color:var(--t1);font-weight:600}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">MRO & Safety Supplies</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Personal protective equipment, hand/power tools, abrasives, fasteners, adhesives, tapes, safety equipment, janitorial, lighting, and general maintenance supplies. The broadest industrial procurement category — high SKU count, high distributor concentration, and massive tail spend opportunity. Three distributors control 60%+ of the market.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$185B</div><div class="cs-lbl">US MRO Market</div></div>
+    <div><div class="cs-val">3 Distributors</div><div class="cs-lbl">Control 60%+</div></div>
+    <div><div class="cs-val">50,000+</div><div class="cs-lbl">Avg SKU Count</div></div>
+    <div><div class="cs-val" style="color:#FFDF80">HIGH</div><div class="cs-lbl">Tail Spend Risk</div></div>
+    <div><div class="cs-val" style="color:#FFB898">+4-8%</div><div class="cs-lbl">Annual Increases</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">Distributors & Ownership<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="tail">Tail Spend & GPO Strategy</div>
+  <div class="tab" data-tab="tariffs">Tariff Exposure</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">HIGH</div><div class="risk-lbl">Distributor<br>Concentration</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">ELEVATED</div><div class="risk-lbl">Tail Spend<br>50%+ Unmanaged</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">+4-8%</div><div class="risk-lbl">Annual Price<br>Increase Trend</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">STABLE</div><div class="risk-lbl">Supply<br>Availability</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">MRO Sub-Categories</span><span class="pnl-badge">BLS · CENSUS</span></div>
+      <div class="driver"><div class="driver-name">PPE & Safety</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:22%">22%</div></div><div class="driver-pct">22%</div><div class="driver-trend up">+6.8%</div></div>
+      <div class="driver"><div class="driver-name">Hand/Power Tools</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+3.2%</div></div>
+      <div class="driver"><div class="driver-name">Fasteners/Hardware</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:16%">16%</div></div><div class="driver-pct">16%</div><div class="driver-trend up">+8.4%</div></div>
+      <div class="driver"><div class="driver-name">Abrasives/Cutting</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+4.1%</div></div>
+      <div class="driver"><div class="driver-name">Adhesives/Tapes</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+5.2%</div></div>
+      <div class="driver"><div class="driver-name">Lighting</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend dn">-2.1%</div></div>
+      <div class="driver"><div class="driver-name">Janitorial/Sanitation</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+3.8%</div></div>
+      <div class="driver"><div class="driver-name">Other MRO</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:6%">6%</div></div><div class="driver-pct">6%</div><div class="driver-trend up">+4.5%</div></div>
+      <div class="src">Source: Census Bureau, BLS PPI, industry estimates</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Fastener prices up 8.4% — steel Section 232 tariff driving raw material costs. If your MRO distributor contract doesn't have a price cap, you're absorbing the full pass-through on every bolt, nut, and screw in your storeroom.</div><div class="act-cat">FASTENERS · STEEL · SEC 232</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">If you're spending $1M+ with a single MRO distributor (Grainger, MSC, Fastenal) without a negotiated contract, you're overpaying 15-25% on list pricing. Run a spend analysis and negotiate a master agreement. Even a basic discount structure saves 10-15% immediately.</div><div class="act-cat">DISTRIBUTOR · PRICING · CONTRACT</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">PPE prices up 6.8% driven by nitrile glove imports (Section 301) and OSHA enforcement activity. Evaluate domestic PPE alternatives for highest-volume items.</div><div class="act-cat">PPE · TARIFF · OSHA</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">MRO Cost Structure</span><span class="pnl-badge">BLS · ANALYSIS</span></div>
+      <div class="driver"><div class="driver-name">Product Cost</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:45%">45%</div></div><div class="driver-pct">45%</div><div class="driver-trend up">+5.2%</div></div>
+      <div class="driver"><div class="driver-name">Distributor Margin</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:25%">25%</div></div><div class="driver-pct">25%</div><div class="driver-trend up">+2.8%</div></div>
+      <div class="driver"><div class="driver-name">Freight/Delivery</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+18.3%</div></div>
+      <div class="driver"><div class="driver-name">Inventory Carry</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+5.5%</div></div>
+      <div class="driver"><div class="driver-name">Transaction Cost</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend flat">+1.2%</div></div>
+      <div class="src">Sources: BLS PPI, distributor 10-K filings, Census wholesale trade</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">The Real Cost of MRO</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Transaction Costs Dwarf Product Costs</div><div class="alert-text">The average MRO purchase order costs $75-150 to process (requisition, approval, PO, receipt, invoice, payment). On a $50 box of gloves, the transaction cost is 2-3x the product cost. The number one cost reduction opportunity in MRO isn't price negotiation — it's reducing PO volume through blanket orders, p-cards, and VMI programs.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Distributor Margin — 25% Average</div><div class="alert-text">Major MRO distributors operate on 25-35% gross margins. Grainger's reported gross margin is ~39%. That's the negotiation space. A contract customer typically gets 15-25% off list. A non-contract buyer pays full list — which means 25-35% more than they should. Volume leverage changes this equation dramatically.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Freight — The Hidden Multiplier</div><div class="alert-text">Free shipping thresholds (Grainger: $50+, MSC: $75+) drive PO consolidation behavior. But many plants still place 10-20 small orders per week to hit rush requirements. Each order below threshold costs $8-15 in freight. Weekly PO consolidation or will-call pickup eliminates this.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DISTRIBUTORS & OWNERSHIP -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major MRO Distributors</span><span class="pnl-badge">SEC EDGAR · 10-K</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Distributor</span><span>Parent / Ticker</span><span style="text-align:center">Revenue</span><span style="text-align:center">Margin</span><span style="text-align:center">Health</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">W.W. Grainger</div><div style="color:var(--t2);font-size:0.65rem">NYSE: GWW</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$16.5B</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">39.2%</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Fastenal</div><div style="color:var(--t2);font-size:0.65rem">NASDAQ: FAST</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$7.3B</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">45.3%</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">MSC Industrial</div><div style="color:var(--t2);font-size:0.65rem">NYSE: MSM</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$3.8B</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">41.1%</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">HD Supply (now Home Depot)</div><div style="color:var(--t2);font-size:0.65rem">NYSE: HD</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$4.2B (est)</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">~35%</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Wesco International</div><div style="color:var(--t2);font-size:0.65rem">NYSE: WCC</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$22.4B</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">21.8%</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Motion Industries</div><div style="color:var(--t2);font-size:0.65rem">Genuine Parts (NYSE: GPC)</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$7.1B</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">~30%</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Applied Industrial</div><div style="color:var(--t2);font-size:0.65rem">NYSE: AIT</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$4.2B</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">29.5%</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Amazon Business</div><div style="color:var(--t2);font-size:0.65rem">Amazon (NASDAQ: AMZN)</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">$35B+ (est)</div><div style="text-align:center;color:var(--t1);font-family:'JetBrains Mono',monospace">N/A</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">W.W. Grainger Inc <span class="tree-p-tag">NYSE: GWW</span></div>
+    <div class="tree-p-meta">CIK: 0000076282 · Revenue: $16.5B · 26,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Grainger (US)</div><div class="tree-sub-detail">Core MRO distribution — 300+ branches, 1.5M+ products</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Zoro (MonotaRO model)</div><div class="tree-sub-detail">Online-only, no-frills MRO. Lower prices, no branch network. Targets small/mid-market.</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">MonotaRO (Japan)</div><div class="tree-sub-detail">51% owned by Grainger. Japan's largest online MRO distributor.</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Cromwell (UK)</div><div class="tree-sub-detail">UK-based MRO tools and industrial supplies distributor.</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Wesco International <span class="tree-p-tag">NYSE: WCC</span></div>
+    <div class="tree-p-meta">Revenue: $22.4B · 20,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Wesco (legacy electrical/industrial)</div><div class="tree-sub-detail">Electrical, industrial, communications distribution</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Anixter International</div><div class="tree-sub-detail">Acquired 2020 · Network infrastructure, security, electrical</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Genuine Parts Company <span class="tree-p-tag">NYSE: GPC</span></div>
+    <div class="tree-p-meta">Revenue: $23.1B · 58,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Motion Industries</div><div class="tree-sub-detail">Industrial MRO — bearings, power transmission, fluid power, automation</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">NAPA Auto Parts</div><div class="tree-sub-detail">Automotive parts — same parent company as Motion Industries</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Grainger / Zoro — Same Company, Different Pricing</div><div class="alert-text">Zoro is a wholly-owned Grainger subsidiary. Same warehouse, same products, different website, lower prices (typically 10-20% below Grainger list). If you're paying Grainger branch pricing for commodity MRO items that don't require technical support, you should be buying them on Zoro. Grainger won't tell you this.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Wesco / Anixter</div><div class="alert-text">Wesco acquired Anixter in 2020 for $4.5B. If you buy electrical supplies from Wesco AND network/security infrastructure from Anixter — same company. Consolidate for leverage or diversify intentionally.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Amazon Business Disruption</div><div class="alert-text">Amazon Business is now the fastest-growing MRO channel, estimated at $35B+ in B2B sales. Pricing is often 20-40% below traditional distributor list prices on commodity items. Every traditional distributor is losing share on the tail. Use Amazon Business pricing as your benchmark in distributor negotiations.</div></div>
+  <div class="src">Source: SEC EDGAR 10-K filings, Exhibit 21, annual reports</div>
+</div>
+
+<!-- TAIL SPEND & GPO -->
+<div class="tab-content" id="tab-tail">
+  <div class="pnl-hdr"><span class="pnl-title">Tail Spend Strategy & GPO Leverage</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+
+  <div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">The MRO Tail Spend Problem</div><div class="alert-text">In most organizations, 80% of MRO purchase orders account for less than 20% of spend. These are the $50-500 orders for gloves, tape, drill bits, and fasteners that nobody manages strategically. Each one costs $75-150 to process. The tail is where the money hides — not in unit price, but in transaction volume and unmanaged procurement.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Tail Spend Reduction Strategies</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 1 — CONSOLIDATE DISTRIBUTORS</div><div class="act-text">Most plants buy MRO from 15-30 suppliers. Consolidate to 2-3 (one primary, one specialty, one online/tail). Volume concentration = better pricing + fewer POs + lower transaction cost. Target: 80% of spend through 2 distributors.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 2 — BLANKET ORDERS + P-CARDS</div><div class="act-text">Set up blanket POs with your primary distributor for recurring items. Use procurement cards (p-cards) for everything under $500. This eliminates the PO process entirely for small purchases. Savings: $75-150 per transaction in process cost.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 3 — VMI (VENDOR MANAGED INVENTORY)</div><div class="act-text">Let your distributor manage storeroom inventory for high-turn items (gloves, rags, fasteners, tape). They own the inventory until you use it. You pay on consumption. Eliminates stockouts, reduces inventory carrying cost, eliminates POs for replenishment.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STRATEGY 4 — VENDING / POINT-OF-USE</div><div class="act-text">Industrial vending machines (Fastenal, MSC, Grainger all offer this) for PPE, gloves, safety glasses, ear plugs, cutting tools. Reduces consumption 20-40% through accountability. User scans badge → gets one pair of gloves instead of grabbing a handful.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">GPO (Group Purchasing Organization)</span></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">What Is a GPO?</div><div class="alert-text">A Group Purchasing Organization aggregates purchasing volume from multiple companies to negotiate better pricing than any single member could get alone. In MRO, GPOs typically deliver 10-20% savings on top of whatever discount you've already negotiated, because they bring $500M-2B+ in collective volume to the table.</div></div>
+      <div class="act"><div class="act-pri pri-act">KEY GPOs FOR MRO</div><div class="act-text"><strong>Vizient/Provista</strong> — Originally healthcare, now expanded to industrial. Major Grainger, Fastenal, MSC contracts.<br><strong>OMNIA Partners</strong> — Largest US cooperative purchasing org. MRO contracts with Grainger, HD Supply, Staples.<br><strong>E&I Cooperative</strong> — Education/institutional focused but MRO contracts open to commercial members.<br><strong>Premier (PREMIERINC)</strong> — Healthcare + industrial MRO programs.</div></div>
+      <div class="act"><div class="act-pri pri-str">GPO SAVINGS MATH</div><div class="act-text">On $2M annual MRO spend: your negotiated discount might be 15% off list. A GPO contract typically adds another 5-10 points. That's $100K-200K in additional annual savings — for filling out a membership application. Most GPOs charge no membership fee; they earn rebates from distributors.</div></div>
+    </div>
+  </div>
+  <div class="src">Source: FSA analysis, GPO program documentation, industry benchmarks</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff Exposure — MRO Supplies</span><span class="pnl-badge">USTR · ITC</span></div>
+  <div class="tbl-row hdr" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7318</div><div style="color:var(--t1)">Fasteners — screws, bolts, nuts, washers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.4%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8203-8205</div><div style="color:var(--t1)">Hand tools — pliers, wrenches, screwdrivers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+5-8%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">6116</div><div style="color:var(--t1)">Work gloves — nitrile, latex, leather</div><div style="text-align:center;color:var(--t1)">China/Malaysia</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+8-14%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">6307</div><div style="color:var(--t1)">Safety harnesses, fall protection</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+7%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">6810</div><div style="color:var(--t1)">Abrasive wheels, discs, papers</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2.6%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">3506</div><div style="color:var(--t1)">Adhesives, tapes, sealants</div><div style="text-align:center;color:var(--t1)">EU/Japan</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">2-4%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8467</div><div style="color:var(--t1)">Power tools — drills, grinders, saws</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2-4%</div></div>
+
+  <div class="alert alert-gold" style="margin-top:0.75rem"><div class="alert-title" style="color:#FFDF80">MRO Is Heavily China-Exposed</div><div class="alert-text">An estimated 40-60% of commodity MRO products (gloves, hand tools, fasteners, abrasives) are manufactured in China. Section 301 adds 25% to every item. Your distributor has already absorbed some of this into their pricing — but not all. Ask for a tariff pass-through disclosure: which line items have tariff surcharges and which don't. Then compare those items to non-China alternatives or Amazon Business pricing.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Fastener AD/CVD — Active Orders</div><div class="alert-text">Antidumping and countervailing duty orders are active on certain fasteners from China, Taiwan, and India. Rates range from 5% to 200%+ depending on the specific product and manufacturer. Your distributor should be certifying country of origin on fastener purchases. If they're not — you may have customs liability exposure.</div></div>
+  <div class="src">Source: USTR HTS, Section 301 List, ITC DataWeb, CBP AD/CVD orders</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — MRO & Safety</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Run a complete MRO spend analysis: pull 12 months of AP data, categorize by distributor, sub-category, and order size. Identify: how many distributors you're using, what percentage is on contract vs. spot, and how many POs are under $500. This is the foundation for every other action on this list. If you don't know your spend, you can't negotiate.</div><div class="act-cat">SPEND ANALYSIS · FOUNDATION</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Benchmark your top distributor's pricing against Amazon Business, Zoro (Grainger's online arm), and one GPO contract. Take your top 100 SKUs by spend and compare line-by-line. The gap will shock you — typically 15-30% on commodity items. This becomes your leverage document for the next distributor negotiation.</div><div class="act-cat">BENCHMARKING · LEVERAGE · PRICING</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Join a GPO. Vizient/Provista or OMNIA Partners for MRO. No membership cost. Their pre-negotiated Grainger/Fastenal/MSC contracts typically deliver 5-10 points of additional discount on top of whatever you've already negotiated. On $2M MRO spend, that's $100K-200K/year in savings for filling out a membership application.</div><div class="act-cat">GPO · SAVINGS · IMMEDIATE</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Consolidate from 15-30 MRO suppliers to 2-3. One primary distributor (Grainger, MSC, or Fastenal) for 80% of spend, one specialty distributor for technical items, and Amazon Business or Zoro for the commodity tail. Volume concentration gives you leverage. Fewer suppliers means fewer POs, fewer invoices, lower transaction cost.</div><div class="act-cat">CONSOLIDATION · TRANSACTION COST</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Implement industrial vending for PPE and high-consumption items. Fastenal and MSC provide the machines free — you pay for product at contract pricing. Reduces PPE consumption 20-40% through individual accountability. Every plant that installs vending sees immediate reduction in glove, ear plug, and safety glasses spend.</div><div class="act-cat">VENDING · PPE · CONSUMPTION</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Implement p-cards for all MRO purchases under $500. Eliminates the PO process for small purchases. Average PO processing cost of $75-150 drops to $5-10 per p-card transaction. On 500 small MRO POs per month, that's $35K-70K/year in process savings. Your AP team will thank you.</div><div class="act-cat">P-CARD · PROCESS · SAVINGS</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Amazon Business is aggressively expanding B2B MRO with business-only pricing, quantity discounts, tax exemption, and punchout integration with procurement systems. Traditional distributors (Grainger, MSC) are responding with digital investments and price matching. Monitor Amazon Business pricing quarterly — it's your best external benchmark for commodity MRO.</div><div class="act-cat">AMAZON · DISRUPTION · BENCHMARK</div></div>
+  <div class="src">Source: FSA analyst assessment based on BLS, Census, SEC EDGAR, distributor 10-K filings</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · MRO & Safety Supplies · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

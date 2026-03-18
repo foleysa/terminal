@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Procurement Intelligence Terminal</title>
+<link rel="icon" type="image/png" href="fsalogo300x300.png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:var(--bg)}
+body{background:var(--bg);color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+
+/* ===== LOGIN ===== */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#login-screen.hidden{display:none}
+.login-box{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:2.5rem 2rem;width:380px;max-width:90vw;text-align:center}
+.login-logo{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.5rem;color:var(--bg);margin-bottom:1rem}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--t1);margin-bottom:0.2rem}
+.login-sub{font-size:0.72rem;color:var(--t3);margin-bottom:1.5rem}
+.login-input{width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.65rem 0.85rem;font-size:0.82rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.75rem;text-align:center;letter-spacing:2px}
+.login-input:focus{border-color:rgba(255,223,128,0.4)}
+.login-input::placeholder{color:var(--t3);letter-spacing:0}
+.login-btn{width:100%;padding:0.6rem;font-size:0.82rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);border:none;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 2px 12px rgba(255,223,128,0.2);transition:all 0.15s}
+.login-btn:hover{box-shadow:0 4px 20px rgba(255,223,128,0.35);transform:translateY(-1px)}
+.login-error{font-size:0.7rem;color:var(--red);margin-top:0.5rem;min-height:1rem}
+.login-footer{font-size:0.55rem;color:var(--t3);margin-top:1.5rem}
+.login-footer a{color:var(--gold);text-decoration:none}
+
+/* ===== HEADER ===== */
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.95rem;color:var(--bg)}
+.hdr-title{font-size:0.8rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.5rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.user-badge{font-size:0.6rem;color:var(--t2);background:var(--bg3);padding:0.2rem 0.55rem;border-radius:4px;border:1px solid var(--bdr);cursor:pointer}
+.user-badge:hover{border-color:rgba(255,223,128,0.3)}
+
+/* ===== NAV ===== */
+.nav{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.nav-btn{padding:0.55rem 1rem;font-size:0.7rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap;user-select:none}
+.nav-btn:hover{color:var(--t1);background:rgba(255,255,255,0.02)}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(255,223,128,0.06)}
+.nav-sep{width:1px;background:var(--bdr);margin:0.4rem 0}
+
+/* ===== SHARED ===== */
+.view{display:none;flex:1}.view.active{display:block}
+.sec{padding:1.25rem}.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem}
+.sec-title{font-size:0.58rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:0.4rem}
+.sec-title::before{content:'';width:14px;height:1px;background:var(--gold)}
+.sec-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t3);background:var(--bg3);padding:0.12rem 0.45rem;border-radius:3px;border:1px solid var(--bdr)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,223,128,0.2),transparent);margin:0.75rem 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.alert{border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.45rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-grn{background:rgba(111,255,176,0.08);border:1px solid rgba(111,255,176,0.2);border-left:3px solid #6FFFB0}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}
+.alert-title{font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.15rem}.alert-text{font-size:0.72rem;color:var(--t1);line-height:1.45}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.55rem 0.65rem;margin-bottom:0.4rem}
+.act-pri{font-size:0.5rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.15rem}.act-text{font-size:0.72rem;color:var(--t1);line-height:1.45}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.gold-btn{padding:0.5rem 1.4rem;font-size:0.78rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);border:none;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 2px 12px rgba(255,223,128,0.2);transition:all 0.15s}
+.gold-btn:hover{box-shadow:0 4px 20px rgba(255,223,128,0.35);transform:translateY(-1px)}
+.gold-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+.gold-btn.loading{pointer-events:none;color:transparent;position:relative}
+.gold-btn.loading::after{content:'Generating...';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--bg);font-size:0.72rem;animation:pulse 1s infinite}
+.tool-btn{padding:0.3rem 0.65rem;font-size:0.62rem;font-weight:600;background:var(--bg3);border:1px solid var(--bdr);border-radius:4px;color:var(--t2);cursor:pointer;font-family:'DM Sans',sans-serif}
+.tool-btn:hover{color:var(--t1);border-color:rgba(255,255,255,0.2)}
+.tool-btn.primary{background:rgba(255,223,128,0.1);border-color:rgba(255,223,128,0.3);color:var(--gold)}
+
+/* ===== DASHBOARD CARDS ===== */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.6rem}
+.cat-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:7px;padding:0.85rem 1rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.cat-card:hover{border-color:rgba(255,223,128,0.3);background:var(--bg4);transform:translateY(-1px)}
+.cat-card.selected{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.cat-card.selected::after{content:'✓';position:absolute;top:0.55rem;right:0.55rem;width:20px;height:20px;background:var(--gold);color:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700}
+.cat-name{font-size:0.82rem;font-weight:600;color:var(--t1);margin-bottom:0.15rem}
+.cat-desc{font-size:0.65rem;color:var(--t2);line-height:1.35;margin-bottom:0.45rem}
+.cat-tags{display:flex;gap:0.3rem;flex-wrap:wrap}
+.tag{font-size:0.5rem;font-weight:600;padding:0.1rem 0.35rem;border-radius:3px;letter-spacing:0.3px}
+.tag-crit{background:rgba(255,143,160,0.15);color:var(--red)}.tag-high{background:rgba(255,184,152,0.15);color:var(--org)}.tag-med{background:rgba(255,223,128,0.15);color:var(--gold)}.tag-low{background:rgba(111,255,176,0.15);color:var(--grn)}.tag-reg{background:rgba(176,204,255,0.15);color:var(--blu)}
+
+/* ===== DASH CARDS ===== */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.6rem}
+.dash-card{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 7px 7px 0;padding:0.85rem 1rem;cursor:pointer;transition:all 0.15s}
+.dash-card:hover{border-color:rgba(255,223,128,0.3);background:var(--bg4)}
+.dash-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem}
+.dash-card-name{font-size:0.85rem;font-weight:600;color:var(--t1)}
+.dash-alert{font-size:0.68rem;color:var(--t2);line-height:1.35;padding:0.25rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.dash-alert:last-child{border-bottom:none}
+
+/* ===== REPORT ===== */
+.report{display:none;background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;margin-bottom:1.5rem}
+.report.visible{display:block;animation:fadeIn 0.4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.report-toolbar{background:var(--bg3);padding:0.4rem 0.85rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr)}
+.report-toolbar-left{font-size:0.6rem;color:var(--t3);font-family:'JetBrains Mono',monospace}
+.rpt-body{padding:1.25rem}
+.rpt-hdr{text-align:center;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:2px solid rgba(255,223,128,0.2)}
+.rpt-logo-text{font-family:'DM Sans',sans-serif;font-size:0.55rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem}
+.rpt-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:var(--t1);line-height:1.2;margin-bottom:0.15rem}
+.rpt-sub{font-size:0.7rem;color:var(--t2)}.rpt-date{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--t3);margin-top:0.2rem}
+.rpt-class{font-size:0.5rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:rgba(255,223,128,0.08);padding:0.15rem 0.5rem;border-radius:3px;display:inline-block;margin-top:0.25rem}
+.rpt-sec{margin-bottom:1rem}
+.rpt-sec-title{font-size:0.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;padding-bottom:0.25rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:0.35rem}
+.rpt-sec-title::before{content:'';width:12px;height:1px;background:var(--gold)}
+.rpt-risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.4rem;margin-bottom:0.4rem}
+.rpt-risk{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.45rem;text-align:center}
+.rpt-risk-val{font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:700;line-height:1}
+.rpt-risk-lbl{font-size:0.5rem;color:var(--t2);margin-top:0.1rem;line-height:1.2}
+.rpt-driver{display:flex;align-items:center;gap:0.4rem;padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.rpt-driver-name{font-size:0.7rem;color:var(--t1);font-weight:500;width:130px;flex-shrink:0}
+.rpt-driver-bar-bg{flex:1;height:16px;background:rgba(255,255,255,0.04);border-radius:3px;overflow:hidden}
+.rpt-driver-bar{height:100%;border-radius:3px}
+.rpt-driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--t1);width:30px;text-align:right;flex-shrink:0;font-weight:600}
+.rpt-driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;width:50px;text-align:right;flex-shrink:0}
+.rpt-ftr{text-align:center;margin-top:0.75rem;padding-top:0.6rem;border-top:2px solid rgba(255,223,128,0.2)}
+.rpt-ftr-name{font-size:0.65rem;font-weight:600;color:var(--t1)}.rpt-ftr-url{font-size:0.55rem;color:var(--gold)}
+.rpt-ftr-disc{font-size:0.48rem;color:var(--t3);margin-top:0.2rem;line-height:1.3;max-width:480px;margin-left:auto;margin-right:auto}
+
+/* ===== MAPPER ===== */
+.chip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.35rem;margin-bottom:0.6rem}
+.chip{background:var(--bg3);border:1px solid var(--bdr);border-radius:4px;padding:0.35rem 0.5rem;font-size:0.68rem;color:var(--t2);cursor:pointer;transition:all 0.12s;text-align:center;user-select:none}
+.chip:hover{border-color:rgba(255,223,128,0.3);color:var(--t1)}.chip.active{border-color:var(--gold);color:var(--gold);background:rgba(255,223,128,0.06)}
+.sel-chips{display:flex;flex-wrap:wrap;gap:0.25rem;min-height:24px;margin-top:0.4rem}
+.sel-chip{background:rgba(255,223,128,0.08);border:1px solid rgba(255,223,128,0.25);border-radius:3px;padding:0.2rem 0.4rem;font-size:0.62rem;color:var(--gold);display:flex;align-items:center;gap:0.25rem}
+.sel-chip .x{cursor:pointer;font-weight:700;opacity:0.6;font-size:0.75rem}.sel-chip .x:hover{opacity:1}
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-bottom:0.6rem}
+.score-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.6rem;text-align:center}
+.score-val{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;line-height:1}
+.score-lbl{font-size:0.52rem;color:var(--t2);margin-top:0.1rem;line-height:1.2}
+.map-group{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.6rem 0.7rem;margin-bottom:0.5rem}
+.map-parent{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.35rem}
+.map-parent-name{font-size:0.78rem;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}
+.map-parent-tag{font-size:0.45rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.06rem 0.25rem;border-radius:2px}
+.map-count{font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px}
+.count-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.map-subs{padding-left:1.1rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.5rem;margin-top:0.25rem}
+.map-sub{padding:0.2rem 0 0.2rem 0.6rem;font-size:0.7rem;color:var(--t1);font-weight:500;position:relative;border-bottom:1px solid rgba(255,255,255,0.02)}
+.map-sub::before{content:'';position:absolute;left:-1.1rem;top:50%;width:1.1rem;border-top:1px dashed rgba(255,223,128,0.2)}
+.map-ind{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid #6FFFB0;border-radius:0 5px 5px 0;padding:0.4rem 0.6rem;margin-bottom:0.3rem;display:flex;justify-content:space-between;align-items:center}
+.map-ind-name{font-size:0.72rem;font-weight:500;color:var(--t1)}.map-ind-status{font-size:0.55rem;color:#6FFFB0;font-weight:600}
+
+/* ===== CUSTOM INPUT ===== */
+.custom-row{display:flex;gap:0.35rem;margin-top:0.4rem}
+.custom-row input{flex:1;background:var(--bg3);border:1px solid var(--bdr);border-radius:4px;padding:0.4rem 0.6rem;font-size:0.7rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none}
+.custom-row input:focus{border-color:rgba(255,223,128,0.4)}
+.custom-row input::placeholder{color:var(--t3)}
+.add-btn{padding:0.4rem 0.7rem;font-size:0.65rem;font-weight:600;background:var(--bg4);border:1px solid var(--bdr);border-radius:4px;color:var(--t2);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.add-btn:hover{color:var(--t1);border-color:rgba(255,255,255,0.2)}
+
+/* ===== SELECT BTNS (Reports) ===== */
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.4rem;margin-bottom:1rem}
+.sel-btn{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;cursor:pointer;transition:all 0.12s;text-align:left}
+.sel-btn:hover{border-color:rgba(255,223,128,0.3);background:var(--bg4)}
+.sel-btn.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.sel-btn-name{font-size:0.72rem;font-weight:600;color:var(--t1)}
+.sel-btn-risk{font-size:0.52rem;font-weight:700;margin-top:0.1rem}
+
+/* ===== FOOTER ===== */
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.48rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+
+/* ===== ACTION BAR ===== */
+.action-bar{padding:0.75rem 1.25rem;background:var(--bg2);border-top:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;position:sticky;bottom:0;z-index:50}
+.action-count{font-size:0.7rem;color:var(--t2)}.action-count strong{color:var(--t1)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:700px){.nav{-webkit-overflow-scrolling:touch}.hdr{flex-wrap:wrap;gap:0.3rem}.rpt-risk-grid,.score-grid{grid-template-columns:1fr 1fr}.cat-grid,.dash-grid{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#333}.top-bar,.hdr,.nav,.ftr,.action-bar,#view-setup,#view-dashboard,#view-mapper,.report-toolbar,.gen-controls{display:none!important}.report{display:block!important;border:none;border-radius:0}.rpt-body{padding:0}:root{--bg:#fff;--bg2:#fff;--bg3:#f5f5f5;--bg4:#eee;--bdr:rgba(0,0,0,0.1);--gold:#B08830;--t1:#111;--t2:#444;--t3:#888}}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">F</div>
+    <div class="login-title">Procurement Intelligence Terminal</div>
+    <div class="login-sub">Foley Strategic Advisory · Authorized Access Only</div>
+    <input type="password" class="login-input" id="pwd" placeholder="Enter access code" autocomplete="off">
+    <button class="login-btn" onclick="tryLogin()">Access Terminal →</button>
+    <div class="login-error" id="login-err"></div>
+  </div>
+  <div class="login-footer"><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</div>
+</div>
+
+<!-- ===== APP SHELL ===== -->
+<div id="app" style="display:none;flex-direction:column;min-height:100vh">
+<div class="top-bar"></div>
+<div class="hdr">
+  <div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Foley Strategic Advisory</div></div></div>
+  <div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div><div class="user-badge" onclick="logout()">⏻ Logout</div></div>
+</div>
+<div class="nav" id="main-nav">
+  <div class="nav-btn active" data-view="dashboard" onclick="showView('dashboard')">My Dashboard</div>
+  <div class="nav-btn" data-view="reports" onclick="showView('reports')">Reports</div>
+  <div class="nav-btn" data-view="mapper" onclick="showView('mapper')">Supplier Mapper</div>
+  <div class="nav-sep"></div>
+  <div class="nav-btn" data-view="negprep" onclick="showView('negprep')">Negotiation Prep</div>
+  <div class="nav-btn" data-view="blsvalidator" onclick="showView('blsvalidator')">Price Validator</div>
+  <div class="nav-sep"></div>
+  <div class="nav-btn" data-view="setup" onclick="showView('setup')">⚙ Categories</div>
+</div>
+
+<!-- ===== VIEW: SETUP ===== -->
+<div class="view" id="view-setup">
+  <div class="sec" style="text-align:center;padding-top:2rem">
+    <div style="font-size:0.5rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem">Procurement Intelligence Platform</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--t1);margin-bottom:0.3rem">Select Your Categories</div>
+    <div style="font-size:0.78rem;color:var(--t2);max-width:560px;margin:0 auto;line-height:1.45">Choose the categories relevant to your organization. Your terminal will show real-time intelligence, supplier ownership data, tariff exposure, and actionable recommendations.</div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><div class="sec-title">Direct Materials & Commodities</div></div>
+    <div class="cat-grid" id="grid1"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><div class="sec-title">MRO & Capital Equipment</div></div>
+    <div class="cat-grid" id="grid2"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><div class="sec-title">Logistics & Energy</div></div>
+    <div class="cat-grid" id="grid3"></div>
+  </div>
+  <div class="action-bar"><div class="action-count"><strong id="sel-count">0</strong> categories selected</div><button class="gold-btn" id="launch-btn" disabled onclick="launchDash()">Launch My Terminal →</button></div>
+</div>
+
+<!-- ===== VIEW: DASHBOARD ===== -->
+<div class="view" id="view-dashboard">
+  <div class="sec">
+    <div class="sec-hdr"><div class="sec-title">My Procurement Intelligence</div><div class="sec-badge" id="dash-date"></div></div>
+    <div class="dash-grid" id="dash-grid"></div>
+  </div>
+  <div class="sec"><div class="sec-hdr"><div class="sec-title">Cross-Category Alerts</div><div class="sec-badge">PORTFOLIO VIEW</div></div><div id="cross-alerts"></div></div>
+</div>
+
+<!-- ===== VIEW: REPORTS ===== -->
+<div class="view" id="view-reports">
+  <div class="sec">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--t1);margin-bottom:0.2rem">Category Intelligence Report</div>
+    <div style="font-size:0.75rem;color:var(--t2);line-height:1.45;margin-bottom:1rem;max-width:650px">Generate an executive-ready briefing for any category. Synthesizes market data, supplier risks, tariff exposure, and prioritized actions into a format ready for your leadership team.</div>
+    <div class="sec-title" style="margin-bottom:0.4rem">Select Category</div>
+    <div class="sel-grid" id="rpt-select"></div>
+    <div class="gen-controls" style="display:flex;align-items:center;justify-content:space-between;padding:0.65rem 0.85rem;background:var(--bg2);border:1px solid var(--bdr);border-radius:7px;margin-bottom:1.25rem">
+      <div style="font-size:0.7rem;color:var(--t2)" id="rpt-info">Select a category to generate</div>
+      <button class="gold-btn" id="rpt-btn" disabled onclick="genReport()">Generate Report →</button>
+    </div>
+    <div class="report" id="report"><div class="report-toolbar"><div class="report-toolbar-left">Generated <span id="rpt-ts"></span></div><div style="display:flex;gap:0.4rem"><button class="tool-btn" onclick="window.print()">🖨️ Print</button><button class="tool-btn primary" onclick="copyEl('rpt-body')">📋 Copy</button></div></div><div class="rpt-body" id="rpt-body"></div></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: MAPPER ===== -->
+<div class="view" id="view-mapper">
+  <div class="sec">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--t1);margin-bottom:0.2rem">Supplier Portfolio Mapper</div>
+    <div style="font-size:0.75rem;color:var(--t2);line-height:1.45;margin-bottom:1rem;max-width:650px">Enter your suppliers. The terminal cross-references SEC EDGAR Exhibit 21 ownership data to map parent-subsidiary relationships, calculate your true diversification score, and flag hidden concentration risks.</div>
+    <div class="sec-title" style="margin-bottom:0.4rem">Select Your Suppliers</div>
+    <div id="mapper-chips"></div>
+    <div class="custom-row"><input type="text" id="custom-sup" placeholder="Add a supplier not listed..."><button class="add-btn" onclick="addCustomSup()">+ Add</button></div>
+    <div class="sel-chips" id="sel-sups"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.75rem;padding-top:0.6rem;border-top:1px solid var(--bdr)">
+      <div style="font-size:0.7rem;color:var(--t2)"><strong id="sup-count" style="color:var(--t1)">0</strong> suppliers selected</div>
+      <button class="gold-btn" id="map-btn" disabled onclick="runMapper()">Map Ownership & Analyze →</button>
+    </div>
+    <div id="mapper-results" style="display:none;margin-top:1.25rem">
+      <div style="display:flex;gap:0.4rem;margin-bottom:0.75rem"><button class="tool-btn primary" onclick="window.print()">🖨️ Print</button><button class="tool-btn" onclick="copyEl('mapper-results')">📋 Copy</button></div>
+      <div class="sec-title" style="margin-bottom:0.4rem">Diversification Score</div>
+      <div class="score-grid" id="score-grid"></div>
+      <div class="sec-title" style="margin-bottom:0.4rem;margin-top:0.75rem">Ownership Map</div>
+      <div id="ownership-map"></div>
+      <div id="map-alerts" style="margin-top:0.75rem"></div>
+      <div id="map-actions" style="margin-top:0.75rem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW: NEGOTIATION PREP ===== -->
+<div class="view" id="view-negprep">
+  <div class="sec">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--t1);margin-bottom:0.2rem">Negotiation Prep Generator</div>
+    <div style="font-size:0.75rem;color:var(--t2);line-height:1.45;margin-bottom:1rem;max-width:650px">Input a supplier name, annual spend, contract terms, and a price increase request. The terminal generates a full negotiation package: SWOT analysis, risk matrix, pricing scenarios, counter-offer strategy, and talking points. What took 3 hours of manual work, done in 3 minutes.</div>
+
+    <div style="background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+      <div class="sec-title" style="margin-bottom:0.6rem">Supplier & Contract Details</div>
+      <div class="grid-2">
+        <div>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Supplier Name</div>
+          <input type="text" id="neg-supplier" placeholder="e.g. RMS Industrial Services" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Category</div>
+          <select id="neg-category" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem;-webkit-appearance:auto">
+            <option value="">Select category...</option>
+            <option value="metals">Metals & Alloys</option>
+            <option value="chemicals">Chemicals & Solvents</option>
+            <option value="coatings">Industrial Coatings</option>
+            <option value="electrical">Electrical Components</option>
+            <option value="pvf">PVF — Pipes, Valves, Fittings</option>
+            <option value="rotating">Rotating Machinery</option>
+            <option value="hvac">HVAC, Chillers & Cooling</option>
+            <option value="lubricants">Oils, Lubricants & Fluids</option>
+            <option value="ocean">Ocean Freight & Logistics</option>
+            <option value="energy">Energy & Utilities</option>
+            <option value="mro">MRO / Industrial Services</option>
+            <option value="other">Other</option>
+          </select>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Annual Spend ($)</div>
+          <input type="text" id="neg-spend" placeholder="e.g. 2,400,000" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+        </div>
+        <div>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Contract Type</div>
+          <select id="neg-contract" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem;-webkit-appearance:auto">
+            <option value="renewal">Contract Renewal</option>
+            <option value="increase">Price Increase Request</option>
+            <option value="sole">Sole Source</option>
+            <option value="competitive">Competitive Bid</option>
+            <option value="ma">Post-M&A Integration</option>
+            <option value="new">New Supplier</option>
+          </select>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Supplier's Ask</div>
+          <input type="text" id="neg-ask" placeholder="e.g. 10% price increase" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Your Leverage / Notes</div>
+          <textarea id="neg-notes" placeholder="e.g. Contract has BLS index clause, 2 alternative suppliers qualified, incumbent for 5 years..." rows="2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;resize:vertical"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:0.75rem">
+        <button class="gold-btn" id="neg-btn" onclick="genNegPrep()">Generate Negotiation Package →</button>
+      </div>
+    </div>
+
+    <div id="neg-output" style="display:none">
+      <div style="display:flex;gap:0.4rem;margin-bottom:0.75rem"><button class="tool-btn primary" onclick="window.print()">🖨️ Print</button><button class="tool-btn" onclick="copyEl('neg-output')">📋 Copy</button></div>
+      <div id="neg-results"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW: BLS VALIDATOR ===== -->
+<div class="view" id="view-blsvalidator">
+  <div class="sec">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--t1);margin-bottom:0.2rem">BLS Index Price Validator</div>
+    <div style="font-size:0.75rem;color:var(--t2);line-height:1.45;margin-bottom:1rem;max-width:650px">Your supplier says costs are up 10%. Your contract has a price adjustment formula. This tool pulls live BLS index data via FRED API and tells you what the formula actually says — not what the supplier claims. Put the math on the table and end the argument.</div>
+
+    <div style="background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+      <div class="sec-title" style="margin-bottom:0.6rem">Contract Price Adjustment Formula</div>
+      <div class="grid-2">
+        <div>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Primary Index</div>
+          <select id="bls-index1" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem;-webkit-appearance:auto">
+            <option value="">Select BLS/FRED index...</option>
+            <option value="PCU332710332710">PPI — Steel Mill Products (PCU332710)</option>
+            <option value="WPU101">PPI — Copper Wire & Cable (WPU101)</option>
+            <option value="PCU325199325199">PPI — Chemical Manufacturing (PCU325199)</option>
+            <option value="WPU0561">PPI — Industrial Chemicals (WPU0561)</option>
+            <option value="PCU3241203241201">PPI — Petroleum Lubricants (PCU324120)</option>
+            <option value="WPU0573">PPI — Paints & Coatings (WPU0573)</option>
+            <option value="PCU333415333415">PPI — HVAC Equipment (PCU333415)</option>
+            <option value="PCU332911332911">PPI — Valves & Fittings (PCU332911)</option>
+            <option value="PCU335312335312">PPI — Motors & Generators (PCU335312)</option>
+            <option value="WPU141">PPI — Metal Cutting Tools (WPU141)</option>
+            <option value="CUUR0000SA0">CPI — All Items (CPI-U)</option>
+            <option value="CES3000000008">Avg Hourly Earnings — Manufacturing</option>
+            <option value="DCOILWTICO">WTI Crude Oil (FRED)</option>
+            <option value="CUSR0000SEHE01">CPI — Electricity (CUSR0000SEHE01)</option>
+            <option value="GASDESW">Diesel Fuel — US Average (FRED)</option>
+          </select>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Weight (%)</div>
+          <input type="number" id="bls-weight1" value="60" min="0" max="100" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Second Index (optional)</div>
+          <select id="bls-index2" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem;-webkit-appearance:auto">
+            <option value="">None</option>
+            <option value="CES3000000008">Avg Hourly Earnings — Manufacturing</option>
+            <option value="CUUR0000SA0">CPI — All Items (CPI-U)</option>
+            <option value="DCOILWTICO">WTI Crude Oil</option>
+            <option value="GASDESW">Diesel Fuel — US Average</option>
+            <option value="PCU332710332710">PPI — Steel Mill Products</option>
+            <option value="WPU101">PPI — Copper Wire & Cable</option>
+            <option value="PCU325199325199">PPI — Chemical Manufacturing</option>
+            <option value="WPU0561">PPI — Industrial Chemicals</option>
+            <option value="CUSR0000SEHE01">CPI — Electricity</option>
+          </select>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Weight (%)</div>
+          <input type="number" id="bls-weight2" value="40" min="0" max="100" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+        </div>
+        <div>
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Base Period</div>
+          <input type="month" id="bls-base" value="2025-01" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Current Period</div>
+          <input type="month" id="bls-current" value="2026-01" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Annual Cap (%)</div>
+          <input type="number" id="bls-cap" placeholder="e.g. 5 (leave blank if none)" min="0" max="100" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Supplier's Claimed Increase (%)</div>
+          <input type="number" id="bls-claimed" placeholder="e.g. 10" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+          <div style="font-size:0.65rem;font-weight:600;color:var(--t1);margin-bottom:0.2rem">Annual Spend ($)</div>
+          <input type="text" id="bls-spend" placeholder="e.g. 2,400,000" style="width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;font-size:0.75rem;color:var(--t1);font-family:'DM Sans',sans-serif;outline:none;margin-bottom:0.6rem">
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:0.75rem">
+        <button class="gold-btn" id="bls-btn" onclick="runBLSValidation()">Validate Price Adjustment →</button>
+      </div>
+    </div>
+
+    <div id="bls-output" style="display:none">
+      <div style="display:flex;gap:0.4rem;margin-bottom:0.75rem"><button class="tool-btn primary" onclick="window.print()">🖨️ Print</button><button class="tool-btn" onclick="copyEl('bls-output')">📋 Copy</button></div>
+      <div id="bls-results"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · All data from public sources: EIA, FRED, EDGAR, USTR, BLS, ITC, EPA, FERC</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+</div>
+
+<script>
+// ===== AUTH =====
+var ACCESS_CODE='fsa2026';
+function tryLogin(){var p=document.getElementById('pwd').value;if(p===ACCESS_CODE){document.getElementById('login-screen').classList.add('hidden');document.getElementById('app').style.display='flex';sessionStorage.setItem('fsa_auth','1');initApp()}else{document.getElementById('login-err').textContent='Invalid access code';document.getElementById('pwd').value=''}}
+function logout(){sessionStorage.removeItem('fsa_auth');location.reload()}
+document.getElementById('pwd').addEventListener('keypress',function(e){if(e.key==='Enter')tryLogin()});
+if(sessionStorage.getItem('fsa_auth')==='1'){document.getElementById('login-screen').classList.add('hidden');document.getElementById('app').style.display='flex';window.addEventListener('DOMContentLoaded',initApp)}
+
+// ===== CLOCK =====
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}
+setInterval(uc,1000);uc();
+
+// ===== DATA =====
+var cats=[
+{id:'metals',grp:1,icon:'⚙️',name:'Metals & Alloys',desc:'Carbon steel, stainless, aluminum, copper. Section 232 on all imports.',tags:[['STEEL +18%','crit'],['SEC 232','high'],['COPPER SQUEEZE','med']]},
+{id:'chemicals',grp:1,icon:'🧪',name:'Chemicals & Solvents',desc:'Industrial chemicals, solvents, adhesives. 65% petrochemical-derived.',tags:[['HORMUZ','crit'],['PFAS BAN','reg'],['FEEDSTOCK +14%','high']]},
+{id:'coatings',grp:1,icon:'🎨',name:'Industrial Coatings',desc:'Epoxies, polyurethanes, powder coatings. TiO₂ and resin exposure.',tags:[['RESIN +8%','high'],['TiO₂ TARIFF','med'],['72% TOP 3','med']]},
+{id:'electrical',grp:1,icon:'⚡',name:'Electrical Components',desc:'Wire, breakers, PLCs, controls. 42% China import. Heaviest 301.',tags:[['301: 25-50%','crit'],['COPPER','high'],['BIS ENTITY','reg']]},
+{id:'pvf',grp:2,icon:'🔧',name:'PVF — Pipes, Valves, Fittings',desc:'Carbon/stainless pipe, valves, flanges. Triple tariff + BABA.',tags:[['165% MAX','crit'],['BABA','reg'],['AD/CVD','high']]},
+{id:'rotating',grp:2,icon:'🔄',name:'Rotating Machinery',desc:'Motors, pumps, compressors, generators. 16-24wk lead times.',tags:[['LEAD TIME','high'],['OEM LOCK-IN','med'],['COPPER','med']]},
+{id:'hvac',grp:2,icon:'❄️',name:'HVAC, Chillers & Cooling',desc:'Chillers, cooling towers, refrigerants. AIM Act HFC phase-down.',tags:[['R-410A +210%','crit'],['AIM ACT','reg'],['16-30WK','high']]},
+{id:'lubricants',grp:2,icon:'🛢️',name:'Oils, Lubricants & Fluids',desc:'Base oils, hydraulic fluid, greases. 85% petroleum-derived.',tags:[['CRUDE $98.71','crit'],['OEM LOCK-IN','med'],['BASE +12%','med']]},
+{id:'ocean',grp:3,icon:'🚢',name:'Ocean Freight & Logistics',desc:'Container shipping, Hormuz, Cape rerouting, Maersk surcharges.',tags:[['HORMUZ','crit'],['+45% RATES','crit'],['+14 DAYS','high']]},
+{id:'energy',grp:3,icon:'⚡',name:'Energy & Utilities',desc:'Natural gas, electricity, diesel. 15-25% of mfg cost.',tags:[['CRUDE $98.71','crit'],['NAT GAS +12%','high'],['IRA CREDITS','reg']]}
+];
+
+var catAlerts={
+metals:{risk:'CRITICAL',rc:'tag-crit',alerts:['Steel HRC up 18% YTD — lock Q2 pricing this week','LME copper at 15-year inventory low — secure commitments','Cleveland-Cliffs at 3.8x leverage — monitor Q2 earnings']},
+chemicals:{risk:'CRITICAL',rc:'tag-crit',alerts:['Petrochemical feedstock up 14% — pass-through in 30-60 days','PFAS restrictions expanding — audit all chemical inputs','Brenntag/Univar merger reduced distribution competition']},
+coatings:{risk:'HIGH',rc:'tag-high',alerts:['Resin feedstock +8.4% — negotiate price caps','TiO₂ from China: 30.5% combined duty — shift to Chemours/Tronox','Sherwin-Williams/Valspar and RPM/Rust-Oleum concentration']},
+electrical:{risk:'CRITICAL',rc:'tag-crit',alerts:['Section 301: 25-50% on Chinese — shift PLCs to Japan/Germany','Li-ion battery tariff escalating 25% → 100%','Eaton/Cooper and Schneider/Square D/APC concentration']},
+pvf:{risk:'HIGH',rc:'tag-high',alerts:['Chinese fittings at 165% combined duty — source Italy/domestic','BABA compliance required for all federal infrastructure','Emerson owns Fisher+Anderson Greenwood+Bettis+ASCO+Keystone']},
+rotating:{risk:'ELEVATED',rc:'tag-med',alerts:['Lead times 16-24 weeks — place Q3/Q4 POs now','ABB owns Baldor AND Dodge — triple concentration risk','Rare earth magnet dependency — evaluate induction alternatives']},
+hvac:{risk:'CRITICAL',rc:'tag-crit',alerts:['R-410A up 210% — stockpile for maintenance','AIM Act: 85% HFC reduction by 2036 — specify low-GWP','Daikin owns Goodman AND manufactures refrigerants']},
+lubricants:{risk:'HIGH',rc:'tag-high',alerts:['Base oil up 11-15% tracking crude — negotiate ceilings','OEM spec lock-in costs 25-40% premium — audit specs','Shell owns Pennzoil AND Quaker State — map exposure']},
+ocean:{risk:'CRITICAL',rc:'tag-crit',alerts:['Container rates up 45% YTD — renegotiate annual contracts','Safety stock based on pre-Hormuz lead times is wrong','ILWU contract expires July 2026 — plan contingency']},
+energy:{risk:'CRITICAL',rc:'tag-crit',alerts:['Crude $98.71/bbl — review energy-linked contract clauses','Hedge nat gas Q2-Q3 before window closes','ERCOT and ISO-NE highest risk for electricity spikes']}
+};
+
+// Report data (abbreviated for unified file — full data in each key)
+var rptData={};
+cats.forEach(function(c){var a=catAlerts[c.id];rptData[c.id]={title:c.name,risk:a.risk,alerts:a.alerts}});
+
+// Ownership DB
+var ownership={'Nucor':{p:'Nucor Corporation',t:'NUE'},'Steel Technologies':{p:'Nucor Corporation',t:'NUE'},'Cleveland-Cliffs':{p:'Cleveland-Cliffs Inc',t:'CLF'},'AK Steel':{p:'Cleveland-Cliffs Inc',t:'CLF'},'U.S. Steel':{p:'United States Steel Corp',t:'X'},'Steel Dynamics':{p:'Steel Dynamics Inc',t:'STLD'},'Alcoa':{p:'Alcoa Corporation',t:'AA'},'Freeport-McMoRan':{p:'Freeport-McMoRan Inc',t:'FCX'},'Commercial Metals':{p:'Commercial Metals Co',t:'CMC'},'Eaton':{p:'Eaton Corporation plc',t:'ETN'},'Cooper Industries':{p:'Eaton Corporation plc',t:'ETN'},'Schneider Electric':{p:'Schneider Electric SE',t:'SU'},'Square D':{p:'Schneider Electric SE',t:'SU'},'APC':{p:'Schneider Electric SE',t:'SU'},'Siemens':{p:'Siemens AG',t:'SIE'},'ABB':{p:'ABB Ltd',t:'ABB'},'Rockwell Automation':{p:'Rockwell Automation Inc',t:'ROK'},'Hubbell':{p:'Hubbell Inc',t:'HUBB'},'Baldor Electric':{p:'ABB Ltd',t:'ABB'},'Dodge (bearings)':{p:'ABB Ltd',t:'ABB'},'WEG Motors':{p:'WEG SA',t:'WEGE3'},'Flowserve':{p:'Flowserve Corp',t:'FLS'},'Atlas Copco':{p:'Atlas Copco AB',t:'ATCO-A'},'Chicago Pneumatic':{p:'Atlas Copco AB',t:'ATCO-A'},'Caterpillar':{p:'Caterpillar Inc',t:'CAT'},'Solar Turbines':{p:'Caterpillar Inc',t:'CAT'},'Fisher Controls':{p:'Emerson Electric Co',t:'EMR'},'Anderson Greenwood':{p:'Emerson Electric Co',t:'EMR'},'ASCO Valve':{p:'Emerson Electric Co',t:'EMR'},'Cameron Valves':{p:'SLB Ltd',t:'SLB'},'MRC Global':{p:'MRC Global Inc',t:'MRC'},'Ferguson':{p:'Ferguson plc',t:'FERG'},'Sherwin-Williams':{p:'Sherwin-Williams Co',t:'SHW'},'Valspar':{p:'Sherwin-Williams Co',t:'SHW'},'Rust-Oleum':{p:'RPM International Inc',t:'RPM'},'Carboline':{p:'RPM International Inc',t:'RPM'},'PPG Industries':{p:'PPG Industries Inc',t:'PPG'},'Shell Lubricants':{p:'Shell plc',t:'SHEL'},'Pennzoil':{p:'Shell plc',t:'SHEL'},'Mobil':{p:'Exxon Mobil Corp',t:'XOM'},'Nalco Water':{p:'Ecolab Inc',t:'ECL'},'Univar Solutions':{p:'Brenntag SE',t:'BNR'},'Brenntag':{p:'Brenntag SE',t:'BNR'},'Dow':{p:'Dow Inc',t:'DOW'},'Trane':{p:'Trane Technologies plc',t:'TT'},'Carrier':{p:'Carrier Global Corp',t:'CARR'},'York / JCI':{p:'Johnson Controls Intl',t:'JCI'},'Daikin':{p:'Daikin Industries',t:'6367'},'Goodman':{p:'Daikin Industries',t:'6367'},'Kidde':{p:'Carrier Global Corp',t:'CARR'}};
+
+var mapperSuppliers=[
+{grp:'Metals & Steel',items:['Nucor','Steel Technologies','Cleveland-Cliffs','AK Steel','U.S. Steel','Steel Dynamics','Alcoa','Freeport-McMoRan','Commercial Metals']},
+{grp:'Electrical & Controls',items:['Eaton','Cooper Industries','Schneider Electric','Square D','APC','Siemens','ABB','Rockwell Automation','Hubbell']},
+{grp:'Rotating Machinery',items:['Baldor Electric','Dodge (bearings)','WEG Motors','Flowserve','Atlas Copco','Chicago Pneumatic','Caterpillar','Solar Turbines']},
+{grp:'Valves & PVF',items:['Fisher Controls','Anderson Greenwood','ASCO Valve','Cameron Valves','MRC Global','Ferguson']},
+{grp:'Coatings, Chemicals & Lubricants',items:['Sherwin-Williams','Valspar','Rust-Oleum','Carboline','PPG Industries','Shell Lubricants','Pennzoil','Mobil','Nalco Water','Univar Solutions','Brenntag','Dow']},
+{grp:'HVAC & Cooling',items:['Trane','Carrier','York / JCI','Daikin','Goodman','Kidde']}
+];
+
+// ===== STATE =====
+var selectedCats=new Set();
+var selectedSups=new Set();
+var selectedRptCat=null;
+
+// ===== INIT =====
+function initApp(){buildSetupGrid();buildRptSelect();buildMapperChips();
+var saved=localStorage.getItem('fsa_cats');
+if(saved){try{var arr=JSON.parse(saved);arr.forEach(function(c){selectedCats.add(c)});updateCatUI();if(selectedCats.size>0){buildDash();showView('dashboard')}else{showView('setup')}}catch(e){showView('setup')}}else{showView('setup')}}
+
+// ===== VIEWS =====
+function showView(id){document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');if(b.getAttribute('data-view')===id)b.classList.add('active')})}
+
+// ===== SETUP =====
+function buildSetupGrid(){var g1='',g2='',g3='';cats.forEach(function(c){var tags='';c.tags.forEach(function(t){tags+='<span class="tag tag-'+t[1]+'">'+t[0]+'</span>'});var html='<div class="cat-card" data-cat="'+c.id+'" onclick="toggleCat(this)"><div class="cat-name">'+c.name+'</div><div class="cat-desc">'+c.desc+'</div><div class="cat-tags">'+tags+'</div></div>';if(c.grp===1)g1+=html;else if(c.grp===2)g2+=html;else g3+=html});document.getElementById('grid1').innerHTML=g1;document.getElementById('grid2').innerHTML=g2;document.getElementById('grid3').innerHTML=g3}
+
+function toggleCat(el){var c=el.getAttribute('data-cat');if(selectedCats.has(c)){selectedCats.delete(c);el.classList.remove('selected')}else{selectedCats.add(c);el.classList.add('selected')}updateCatUI()}
+
+function updateCatUI(){var n=selectedCats.size;document.getElementById('sel-count').textContent=n;document.getElementById('launch-btn').disabled=n===0;document.querySelectorAll('.cat-card').forEach(function(el){if(selectedCats.has(el.getAttribute('data-cat')))el.classList.add('selected');else el.classList.remove('selected')})}
+
+function launchDash(){if(selectedCats.size===0)return;localStorage.setItem('fsa_cats',JSON.stringify(Array.from(selectedCats)));buildDash();showView('dashboard')}
+
+// ===== DASHBOARD =====
+function buildDash(){var grid=document.getElementById('dash-grid');var cross=document.getElementById('cross-alerts');var html='';document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+selectedCats.forEach(function(c){var d=catAlerts[c];html+='<div class="dash-card"><div class="dash-card-top"><div class="dash-card-name">'+cats.find(function(x){return x.id===c}).name+'</div><span class="tag '+d.rc+'">'+d.risk+'</span></div>';d.alerts.forEach(function(a){html+='<div class="dash-alert">⚡ '+a+'</div>'});html+='</div>'});
+grid.innerHTML=html;
+var ch='';var hormuz=[],copper=[];selectedCats.forEach(function(c){if(['chemicals','coatings','energy','ocean','lubricants'].indexOf(c)>=0)hormuz.push(cats.find(function(x){return x.id===c}).name);if(['metals','electrical','rotating'].indexOf(c)>=0)copper.push(cats.find(function(x){return x.id===c}).name)});
+if(hormuz.length>=2)ch+='<div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ CROSS-CATEGORY: HORMUZ EXPOSURE</div><div class="alert-text">'+hormuz.length+' of your categories are directly exposed to Hormuz: '+hormuz.join(', ')+'. Crude at $98.71/bbl is a common cost driver. A coordinated hedging strategy across all energy-linked contracts is more effective than category-by-category negotiations.</div></div>';
+if(copper.length>=2)ch+='<div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ CROSS-CATEGORY: COPPER EXPOSURE</div><div class="alert-text">'+copper.length+' categories affected by copper squeeze (LME 15-year low): '+copper.join(', ')+'. Consolidate copper-linked procurement for volume leverage.</div></div>';
+if(selectedCats.has('ocean')&&(selectedCats.has('chemicals')||selectedCats.has('electrical')||selectedCats.has('metals')))ch+='<div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">⚠ CROSS-CATEGORY: NEARSHORE OPPORTUNITY</div><div class="alert-text">Ocean freight repricing (+45% YTD) shifts total landed cost. Run nearshore comparisons for every Asia-sourced category simultaneously.</div></div>';
+if(!ch)ch='<div style="font-size:0.7rem;color:var(--t3);padding:0.4rem 0">Select 2+ categories to see cross-category risk analysis.</div>';
+cross.innerHTML=ch}
+
+// ===== REPORTS =====
+function buildRptSelect(){var html='';cats.forEach(function(c){var a=catAlerts[c.id];html+='<div class="sel-btn" data-cat="'+c.id+'" onclick="selectRptCat(this)"><div class="sel-btn-name">'+c.name+'</div><div class="sel-btn-risk" style="color:'+(a.risk==='CRITICAL'?'#FF8FA0':a.risk==='HIGH'?'#FFB898':'#FFDF80')+'">'+a.risk+'</div></div>'});document.getElementById('rpt-select').innerHTML=html}
+
+function selectRptCat(el){document.querySelectorAll('#rpt-select .sel-btn').forEach(function(b){b.classList.remove('active')});el.classList.add('active');selectedRptCat=el.getAttribute('data-cat');document.getElementById('rpt-info').textContent='Ready: '+cats.find(function(x){return x.id===selectedRptCat}).name;document.getElementById('rpt-btn').disabled=false}
+
+function genReport(){if(!selectedRptCat)return;var btn=document.getElementById('rpt-btn');btn.classList.add('loading');btn.disabled=true;
+setTimeout(function(){var c=cats.find(function(x){return x.id===selectedRptCat});var a=catAlerts[selectedRptCat];var now=new Date();var ds=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});var ts=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});document.getElementById('rpt-ts').textContent=ds+' at '+ts;
+var h='<div class="rpt-hdr"><div class="rpt-logo-text">Foley Strategic Advisory</div><div class="rpt-title">'+c.name+'</div><div class="rpt-sub">Category Intelligence Briefing</div><div class="rpt-date">'+ds+'</div><div class="rpt-class">CONFIDENTIAL — CLIENT USE ONLY</div></div>';
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Risk Assessment — '+a.risk+'</div></div>';
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Key Alerts</div>';a.alerts.forEach(function(al){h+='<div class="alert alert-red" style="margin-bottom:0.35rem"><div class="alert-text" style="font-size:0.7rem">⚠ '+al+'</div></div>'});h+='</div>';
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Recommended Actions</div>';
+h+='<div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Review and lock pricing on all '+c.name+' contracts before supplier surcharge letters arrive. Material costs are rising across this category.</div></div>';
+h+='<div class="act"><div class="act-pri pri-act">STRATEGIC</div><div class="act-text">Map supplier ownership using EDGAR Exhibit 21 data. Identify where perceived diversification masks hidden concentration. Qualify independent alternatives for any parent company controlling 2+ of your suppliers.</div></div>';
+h+='<div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Set quarterly review cadence for this category. Monitor commodity indices, tariff actions, and supplier financial health using the FSA Terminal.</div></div>';
+h+='</div>';
+h+='<div class="rpt-ftr"><div class="rpt-ftr-name">Foley Strategic Advisory</div><div class="rpt-ftr-url">foleystrategicadvisory.com</div><div class="rpt-ftr-disc">Generated from public data: EIA, FRED, SEC EDGAR, USTR, BLS, ITC, EPA, FERC. Analysis represents FSA\'s professional assessment. Data as of '+ds+'.</div></div>';
+document.getElementById('rpt-body').innerHTML=h;document.getElementById('report').classList.add('visible');btn.classList.remove('loading');btn.disabled=false;document.getElementById('report').scrollIntoView({behavior:'smooth'})},1200)}
+
+// ===== MAPPER =====
+function buildMapperChips(){var html='';mapperSuppliers.forEach(function(grp){html+='<div class="sec-title" style="margin-top:0.5rem;margin-bottom:0.3rem;font-size:0.5rem">'+grp.grp+'</div><div class="chip-grid">';grp.items.forEach(function(s){html+='<div class="chip" onclick="toggleSup(this,\''+s.replace(/'/g,"\\'")+'\')">'+s+'</div>'});html+='</div>'});document.getElementById('mapper-chips').innerHTML=html}
+
+function toggleSup(el,name){if(selectedSups.has(name)){selectedSups.delete(name);el.classList.remove('active')}else{selectedSups.add(name);el.classList.add('active')}updateSupUI()}
+
+function addCustomSup(){var input=document.getElementById('custom-sup');var name=input.value.trim();if(name&&!selectedSups.has(name)){selectedSups.add(name);input.value='';updateSupUI()}}
+document.getElementById('custom-sup').addEventListener('keypress',function(e){if(e.key==='Enter')addCustomSup()});
+
+function removeSup(name){selectedSups.delete(name);document.querySelectorAll('#mapper-chips .chip').forEach(function(c){if(c.textContent===name)c.classList.remove('active')});updateSupUI()}
+
+function updateSupUI(){var list=document.getElementById('sel-sups');var html='';selectedSups.forEach(function(s){html+='<div class="sel-chip">'+s+'<span class="x" onclick="removeSup(\''+s.replace(/'/g,"\\'")+'\')">&times;</span></div>'});list.innerHTML=html;var n=selectedSups.size;document.getElementById('sup-count').textContent=n;document.getElementById('map-btn').disabled=n<2}
+
+function runMapper(){var btn=document.getElementById('map-btn');btn.classList.add('loading');btn.disabled=true;
+setTimeout(function(){var pMap={};var indep=[];selectedSups.forEach(function(s){var info=ownership[s];if(info){if(!pMap[info.p])pMap[info.p]={t:info.t,subs:[]};pMap[info.p].subs.push(s)}else{indep.push(s)}});
+var total=selectedSups.size;var unique=Object.keys(pMap).length+indep.length;var riskGroups=[];Object.keys(pMap).forEach(function(p){if(pMap[p].subs.length>1)riskGroups.push({parent:p,count:pMap[p].subs.length,subs:pMap[p].subs,ticker:pMap[p].t})});
+var reduction=Math.round((1-unique/total)*100);var grade=reduction===0?'A':reduction<=15?'B':reduction<=30?'C':reduction<=50?'D':'F';var gc=grade==='A'||grade==='B'?'#6FFFB0':grade==='C'?'#FFDF80':grade==='D'?'#FFB898':'#FF8FA0';
+document.getElementById('score-grid').innerHTML='<div class="score-card"><div class="score-val" style="color:var(--t1)">'+total+'</div><div class="score-lbl">Suppliers You<br>Think You Have</div></div><div class="score-card"><div class="score-val" style="color:'+(unique<total?'#FF8FA0':'#6FFFB0')+'">'+unique+'</div><div class="score-lbl">Unique Parents<br>(Actual)</div></div><div class="score-card"><div class="score-val" style="color:'+(reduction>0?'#FF8FA0':'#6FFFB0')+'">-'+reduction+'%</div><div class="score-lbl">Diversification<br>Reduction</div></div><div class="score-card"><div class="score-val" style="color:'+gc+'">'+grade+'</div><div class="score-lbl">Portfolio<br>Health Grade</div></div>';
+var mh='';riskGroups.forEach(function(g){mh+='<div class="map-group"><div class="map-parent"><div class="map-parent-name">'+g.parent+' <span class="map-parent-tag">'+g.ticker+'</span></div><div class="map-count count-risk">'+g.count+' of your suppliers</div></div><div class="map-subs">';g.subs.forEach(function(s){mh+='<div class="map-sub">'+s+'</div>'});mh+='</div></div>'});
+Object.keys(pMap).forEach(function(p){if(pMap[p].subs.length===1)mh+='<div class="map-ind"><div class="map-ind-name">'+pMap[p].subs[0]+' <span style="font-size:0.55rem;color:var(--t3);margin-left:0.25rem">('+p+')</span></div><div class="map-ind-status">✓ Independent</div></div>'});
+indep.forEach(function(s){mh+='<div class="map-ind"><div class="map-ind-name">'+s+' <span style="font-size:0.55rem;color:var(--t3)">(not in EDGAR)</span></div><div class="map-ind-status">⚠ Unverified</div></div>'});
+document.getElementById('ownership-map').innerHTML=mh;
+var ah='<div class="sec-title" style="margin-bottom:0.4rem">Concentration Alerts</div>';
+if(riskGroups.length===0){ah+='<div class="alert alert-grn"><div class="alert-title" style="color:#6FFFB0">✓ No Hidden Concentration</div><div class="alert-text">All selected suppliers map to independent parent companies.</div></div>'}else{riskGroups.forEach(function(g){ah+='<div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ CONCENTRATION — '+g.parent.toUpperCase()+'</div><div class="alert-text"><strong>'+g.count+' brands</strong> owned by '+g.parent+' ('+g.ticker+'): <strong>'+g.subs.join(', ')+'</strong>. One balance sheet, one supply chain. A disruption affects all '+g.count+' simultaneously.</div></div>'})}
+document.getElementById('map-alerts').innerHTML=ah;
+var ach='<div class="sec-title" style="margin-bottom:0.4rem">Recommended Actions</div>';
+riskGroups.forEach(function(g){ach+='<div class="act"><div class="act-pri pri-urg">REDUCE CONCENTRATION</div><div class="act-text">'+g.count+' suppliers under '+g.parent+' ('+g.subs.join(', ')+"). Qualify at least one independent alternative for the highest-spend category.</div></div>"});
+if(reduction>20)ach+='<div class="act"><div class="act-pri pri-act">PORTFOLIO REBALANCING</div><div class="act-text">Actual diversification is '+reduction+'% lower than perceived. Target: no more than 30% of category spend with any single parent company.</div></div>';
+ach+='<div class="act"><div class="act-pri pri-mon">QUARTERLY REVIEW</div><div class="act-text">M&A constantly changes ownership. Run this analysis quarterly. Set a calendar reminder for the first Monday of each quarter.</div></div>';
+document.getElementById('map-actions').innerHTML=ach;
+document.getElementById('mapper-results').style.display='block';btn.classList.remove('loading');btn.disabled=false;document.getElementById('mapper-results').scrollIntoView({behavior:'smooth'})},1800)}
+
+// ===== NEGOTIATION PREP =====
+function genNegPrep(){
+var supplier=document.getElementById('neg-supplier').value.trim();
+var category=document.getElementById('neg-category').value;
+var spend=document.getElementById('neg-spend').value.trim();
+var contract=document.getElementById('neg-contract').value;
+var ask=document.getElementById('neg-ask').value.trim();
+var notes=document.getElementById('neg-notes').value.trim();
+if(!supplier){alert('Enter a supplier name');return}
+if(!spend){alert('Enter annual spend');return}
+var btn=document.getElementById('neg-btn');btn.classList.add('loading');btn.disabled=true;
+setTimeout(function(){
+var catName=category?cats.find(function(c){return c.id===category})||{name:category}:{name:'General'};
+var catLabel=catName.name||category;
+var spendNum=parseFloat(spend.replace(/[,$]/g,''))||0;
+var spendFmt='$'+spendNum.toLocaleString();
+var contractTypes={renewal:'Contract Renewal',increase:'Price Increase Response',sole:'Sole Source Negotiation',competitive:'Competitive Bid',ma:'Post-M&A Integration',new:'New Supplier Qualification'};
+var cType=contractTypes[contract]||'Negotiation';
+var now=new Date();var ds=now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+var h='';
+h+='<div class="rpt-hdr"><div class="rpt-logo-text">Foley Strategic Advisory</div><div class="rpt-title">Negotiation Prep: '+supplier+'</div><div class="rpt-sub">'+cType+' · '+catLabel+'</div><div class="rpt-date">'+ds+'</div><div class="rpt-class">CONFIDENTIAL — INTERNAL USE ONLY</div></div>';
+
+// Key Facts
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Engagement Summary</div>';
+h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.5rem">';
+h+='<div class="score-card"><div class="score-val" style="color:var(--gold);font-size:1rem">'+spendFmt+'</div><div class="score-lbl">Annual Spend</div></div>';
+h+='<div class="score-card"><div class="score-val" style="color:var(--t1);font-size:1rem">'+cType+'</div><div class="score-lbl">Scenario</div></div>';
+h+='<div class="score-card"><div class="score-val" style="color:#FF8FA0;font-size:1rem">'+(ask||'TBD')+'</div><div class="score-lbl">Supplier\'s Ask</div></div>';
+h+='</div></div>';
+
+// SWOT
+h+='<div class="rpt-sec"><div class="rpt-sec-title">SWOT Analysis — Your Position</div>';
+h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">';
+h+='<div style="background:rgba(111,255,176,0.08);border:1px solid rgba(111,255,176,0.2);border-radius:6px;padding:0.6rem"><div style="font-size:0.55rem;font-weight:700;color:#6FFFB0;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.3rem">Strengths</div>';
+h+='<div style="font-size:0.7rem;color:var(--t1);line-height:1.4">• '+spendFmt+' annual spend = meaningful volume leverage<br>';
+h+='• Market intelligence on true cost drivers (BLS indices, commodity data)<br>';
+h+='• EDGAR ownership data reveals supplier\'s corporate structure<br>';
+if(notes.match(/alternative|competitor|qualified|second source/i))h+='• Alternative suppliers identified — competitive leverage exists<br>';
+h+='• Prepared with data-driven counter-position</div></div>';
+h+='<div style="background:rgba(255,143,160,0.08);border:1px solid rgba(255,143,160,0.2);border-radius:6px;padding:0.6rem"><div style="font-size:0.55rem;font-weight:700;color:#FF8FA0;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.3rem">Weaknesses</div>';
+h+='<div style="font-size:0.7rem;color:var(--t1);line-height:1.4">';
+if(contract==='sole')h+='• Sole source — limited near-term switching options<br>';
+h+='• Switching costs (qualification, transition, downtime risk)<br>';
+h+='• Incumbent relationship may create organizational inertia<br>';
+h+='• Internal stakeholders may resist change</div></div>';
+h+='<div style="background:rgba(176,204,255,0.08);border:1px solid rgba(176,204,255,0.2);border-radius:6px;padding:0.6rem"><div style="font-size:0.55rem;font-weight:700;color:#B0CCFF;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.3rem">Opportunities</div>';
+h+='<div style="font-size:0.7rem;color:var(--t1);line-height:1.4">• Negotiate multi-year deal for price stability<br>';
+h+='• Bundle additional scope for volume discount<br>';
+h+='• Index-link pricing to eliminate future disputes<br>';
+h+='• Use competitive bid to reset market pricing<br>';
+h+='• Negotiate payment terms improvement (Net 60→90)</div></div>';
+h+='<div style="background:rgba(255,223,128,0.08);border:1px solid rgba(255,223,128,0.2);border-radius:6px;padding:0.6rem"><div style="font-size:0.55rem;font-weight:700;color:#FFDF80;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.3rem">Threats</div>';
+h+='<div style="font-size:0.7rem;color:var(--t1);line-height:1.4">• Supplier may escalate to senior leadership<br>';
+h+='• Service degradation risk if negotiation gets adversarial<br>';
+if(category&&catAlerts[category])h+='• Market conditions: '+catAlerts[category].alerts[0]+'<br>';
+h+='• Supplier consolidation reducing competitive alternatives</div></div>';
+h+='</div></div>';
+
+// Pricing Scenarios
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Pricing Scenarios</div>';
+var askPct=parseFloat(ask)||10;
+h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem">';
+h+='<div style="background:rgba(255,143,160,0.1);border:1px solid rgba(255,143,160,0.25);border-radius:6px;padding:0.6rem;text-align:center"><div style="font-size:0.5rem;font-weight:700;color:#FF8FA0;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem">Supplier\'s Ask</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:1.1rem;font-weight:700;color:#FF8FA0">+'+askPct+'%</div><div style="font-size:0.65rem;color:var(--t2);margin-top:0.15rem">$'+(spendNum*askPct/100).toLocaleString()+'/yr increase</div><div style="font-size:0.6rem;color:var(--t3);margin-top:0.1rem">New total: $'+(spendNum*(1+askPct/100)).toLocaleString()+'</div></div>';
+var counter=Math.round(askPct*0.3*10)/10;
+h+='<div style="background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-radius:6px;padding:0.6rem;text-align:center"><div style="font-size:0.5rem;font-weight:700;color:#FFDF80;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem">Your Counter</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:1.1rem;font-weight:700;color:#FFDF80">+'+counter+'%</div><div style="font-size:0.65rem;color:var(--t2);margin-top:0.15rem">$'+(spendNum*counter/100).toLocaleString()+'/yr increase</div><div style="font-size:0.6rem;color:var(--t3);margin-top:0.1rem">Savings vs ask: $'+((spendNum*askPct/100)-(spendNum*counter/100)).toLocaleString()+'</div></div>';
+var target=Math.round(askPct*0.5*10)/10;
+h+='<div style="background:rgba(111,255,176,0.08);border:1px solid rgba(111,255,176,0.2);border-radius:6px;padding:0.6rem;text-align:center"><div style="font-size:0.5rem;font-weight:700;color:#6FFFB0;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem">Target Landing Zone</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:1.1rem;font-weight:700;color:#6FFFB0">+'+target+'%</div><div style="font-size:0.65rem;color:var(--t2);margin-top:0.15rem">$'+(spendNum*target/100).toLocaleString()+'/yr increase</div><div style="font-size:0.6rem;color:var(--t3);margin-top:0.1rem">Savings vs ask: $'+((spendNum*askPct/100)-(spendNum*target/100)).toLocaleString()+'</div></div>';
+h+='</div></div>';
+
+// Negotiation Strategy
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Negotiation Strategy & Talking Points</div>';
+h+='<div class="act"><div class="act-pri pri-urg">OPENING POSITION</div><div class="act-text">"We\'ve analyzed the actual market indices. The data does not support a '+askPct+'% increase. Here\'s what the BLS Producer Price Index shows for this category over the contract period." Lead with data — not opinions.</div></div>';
+h+='<div class="act"><div class="act-pri pri-act">MUST-HAVES</div><div class="act-text">• Price adjustment tied to verifiable BLS/FRED index — not supplier\'s internal cost claims<br>• Annual cap on increases (recommend 3-5% max)<br>• 90-day advance notice of any price change<br>• Right to audit supplier\'s cost basis if increase exceeds index</div></div>';
+h+='<div class="act"><div class="act-pri pri-str">TRADE-AWAYS</div><div class="act-text">• Longer contract term (2-3 years) in exchange for better pricing<br>• Volume commitment in exchange for price cap<br>• Faster payment terms (Net 30 vs 60) in exchange for discount<br>• Scope expansion to consolidate with this supplier for volume leverage</div></div>';
+h+='<div class="act"><div class="act-pri pri-mon">BATNA (Best Alternative)</div><div class="act-text">';
+if(contract==='sole')h+='Sole source limits near-term alternatives. Your BATNA is: (1) Qualify a second source over 6-12 months, (2) Reduce scope with this supplier, (3) Insource if feasible. Make clear you are beginning the qualification process regardless of negotiation outcome.';
+else h+='Competitive alternatives exist. Your BATNA is to run a competitive RFP with 2-3 qualified alternatives. Make the supplier aware — not as a threat, but as a fact. "We need to ensure we\'re getting market-competitive pricing. If we can\'t align, we\'ll need to test the market."';
+h+='</div></div>';
+h+='</div>';
+
+// Footer
+h+='<div class="rpt-ftr"><div class="rpt-ftr-name">Foley Strategic Advisory</div><div class="rpt-ftr-url">foleystrategicadvisory.com</div><div class="rpt-ftr-disc">Generated by FSA Procurement Intelligence Terminal. Analysis based on public market data and standard negotiation frameworks. Validate against your specific contract terms and organizational context.</div></div>';
+
+document.getElementById('neg-results').innerHTML=h;
+document.getElementById('neg-output').style.display='block';
+btn.classList.remove('loading');btn.disabled=false;
+document.getElementById('neg-output').scrollIntoView({behavior:'smooth'});
+},1500)}
+
+// ===== BLS PRICE VALIDATOR (LIVE FRED API) =====
+// FRED API Key — register free at https://fred.stlouisfed.org/docs/api/api_key.html
+var FRED_API_KEY='YOUR_FRED_API_KEY_HERE'; // Grace: replace this with the real key
+
+var indexNames={
+'PCU332710332710':'PPI — Steel Mill Products',
+'WPU101':'PPI — Copper Wire & Cable',
+'PCU325199325199':'PPI — Chemical Manufacturing',
+'WPU0561':'PPI — Industrial Chemicals',
+'PCU3241203241201':'PPI — Petroleum Lubricants',
+'WPU0573':'PPI — Paints & Coatings',
+'PCU333415333415':'PPI — HVAC Equipment',
+'PCU332911332911':'PPI — Valves & Fittings',
+'PCU335312335312':'PPI — Motors & Generators',
+'WPU141':'PPI — Metal Cutting Tools',
+'CUUR0000SA0':'CPI — All Items',
+'CES3000000008':'Avg Hourly Earnings — Mfg',
+'DCOILWTICO':'WTI Crude Oil',
+'CUSR0000SEHE01':'CPI — Electricity',
+'GASDESW':'Diesel Fuel — US Avg'
+};
+
+// Fallback data if FRED API is unavailable or key not set
+var fallbackData={
+'PCU332710332710':{base:298.4,current:312.6},'WPU101':{base:342.1,current:358.8},
+'PCU325199325199':{base:267.3,current:278.9},'WPU0561':{base:251.8,current:264.2},
+'PCU3241203241201':{base:189.6,current:215.3},'WPU0573':{base:312.4,current:325.8},
+'PCU333415333415':{base:276.2,current:284.1},'PCU332911332911':{base:305.7,current:318.4},
+'PCU335312335312':{base:241.3,current:251.8},'WPU141':{base:287.9,current:296.5},
+'CUUR0000SA0':{base:315.6,current:324.2},'CES3000000008':{base:30.42,current:31.68},
+'DCOILWTICO':{base:72.30,current:98.71},'CUSR0000SEHE01':{base:298.1,current:312.4},
+'GASDESW':{base:3.42,current:4.04}
+};
+
+async function fetchFREDValue(seriesId,date){
+  // date format: YYYY-MM → need to get the observation for that month
+  var startDate=date+'-01';
+  // Get end of month
+  var parts=date.split('-');var yr=parseInt(parts[0]);var mo=parseInt(parts[1]);
+  var endDate;
+  if(mo===12){endDate=(yr+1)+'-01-01'}else{endDate=yr+'-'+(''+(mo+1)).padStart(2,'0')+'-01'}
+  var url='https://api.stlouisfed.org/fred/series/observations?series_id='+seriesId
+    +'&api_key='+FRED_API_KEY
+    +'&observation_start='+startDate
+    +'&observation_end='+endDate
+    +'&sort_order=desc&limit=1&file_type=json';
+  try{
+    var resp=await fetch(url);
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    var data=await resp.json();
+    if(data.observations&&data.observations.length>0){
+      var val=parseFloat(data.observations[0].value);
+      if(!isNaN(val))return{value:val,date:data.observations[0].date,live:true};
+    }
+    // If no observation for that exact month, try getting the most recent before end date
+    var url2='https://api.stlouisfed.org/fred/series/observations?series_id='+seriesId
+      +'&api_key='+FRED_API_KEY
+      +'&observation_end='+endDate
+      +'&sort_order=desc&limit=1&file_type=json';
+    var resp2=await fetch(url2);
+    if(!resp2.ok)throw new Error('HTTP '+resp2.status);
+    var data2=await resp2.json();
+    if(data2.observations&&data2.observations.length>0){
+      var val2=parseFloat(data2.observations[0].value);
+      if(!isNaN(val2))return{value:val2,date:data2.observations[0].date,live:true};
+    }
+    throw new Error('No data');
+  }catch(e){
+    console.warn('FRED API failed for '+seriesId+': '+e.message);
+    return null;
+  }
+}
+
+async function runBLSValidation(){
+var idx1=document.getElementById('bls-index1').value;
+var w1=parseFloat(document.getElementById('bls-weight1').value)||0;
+var idx2=document.getElementById('bls-index2').value;
+var w2=parseFloat(document.getElementById('bls-weight2').value)||0;
+var basePeriod=document.getElementById('bls-base').value;
+var currentPeriod=document.getElementById('bls-current').value;
+var cap=document.getElementById('bls-cap').value;
+var claimed=parseFloat(document.getElementById('bls-claimed').value)||0;
+var spend=parseFloat(document.getElementById('bls-spend').value.replace(/[,$]/g,''))||0;
+
+if(!idx1){alert('Select a primary index');return}
+if(!claimed){alert('Enter the supplier\'s claimed increase');return}
+
+var btn=document.getElementById('bls-btn');btn.classList.add('loading');btn.disabled=true;
+
+var useLive=FRED_API_KEY&&FRED_API_KEY!=='YOUR_FRED_API_KEY_HERE';
+var d1,d2=null;
+var dataSource='SIMULATED';
+
+if(useLive){
+  // Fetch live data from FRED
+  var results=await Promise.all([
+    fetchFREDValue(idx1,basePeriod),
+    fetchFREDValue(idx1,currentPeriod),
+    idx2?fetchFREDValue(idx2,basePeriod):null,
+    idx2?fetchFREDValue(idx2,currentPeriod):null
+  ]);
+  if(results[0]&&results[1]){
+    var baseVal=results[0].value;
+    var currVal=results[1].value;
+    var chg=((currVal-baseVal)/baseVal)*100;
+    d1={name:indexNames[idx1]||idx1,base:baseVal,current:currVal,change:Math.round(chg*100)/100,baseDate:results[0].date,currentDate:results[1].date};
+    dataSource='LIVE FRED API';
+  }
+  if(idx2&&results[2]&&results[3]){
+    var baseVal2=results[2].value;
+    var currVal2=results[3].value;
+    var chg2=((currVal2-baseVal2)/baseVal2)*100;
+    d2={name:indexNames[idx2]||idx2,base:baseVal2,current:currVal2,change:Math.round(chg2*100)/100,baseDate:results[2].date,currentDate:results[3].date};
+  }
+}
+
+// Fallback to simulated data if live fetch failed
+if(!d1){
+  var fb=fallbackData[idx1];
+  if(!fb){btn.classList.remove('loading');btn.disabled=false;alert('Index data not available');return}
+  d1={name:indexNames[idx1]||idx1,base:fb.base,current:fb.current,change:Math.round(((fb.current-fb.base)/fb.base)*100*100)/100};
+  dataSource='SIMULATED (set FRED API key for live data)';
+}
+if(idx2&&!d2){
+  var fb2=fallbackData[idx2];
+  if(fb2)d2={name:indexNames[idx2]||idx2,base:fb2.base,current:fb2.current,change:Math.round(((fb2.current-fb2.base)/fb2.base)*100*100)/100};
+}
+
+var weightedChange;
+if(d2){
+  weightedChange=((d1.change*(w1/100))+(d2.change*(w2/100)));
+} else {
+  weightedChange=d1.change;
+}
+
+var cappedChange=weightedChange;
+var capApplied=false;
+if(cap&&parseFloat(cap)>0&&weightedChange>parseFloat(cap)){
+  cappedChange=parseFloat(cap);
+  capApplied=true;
+}
+
+var diff=claimed-cappedChange;
+var diffDollars=spend*(diff/100);
+var spendFmt='$'+spend.toLocaleString();
+
+var h='';
+h+='<div class="rpt-hdr"><div class="rpt-logo-text">Foley Strategic Advisory</div><div class="rpt-title">Price Adjustment Validation</div><div class="rpt-sub">BLS Index Analysis · '+basePeriod+' → '+currentPeriod+'</div><div class="rpt-date">'+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+'</div><div class="rpt-class">CONFIDENTIAL — NEGOTIATION SUPPORT</div></div>';
+
+// Data source badge
+h+='<div style="text-align:center;margin-bottom:0.75rem"><span style="font-family:\'JetBrains Mono\',monospace;font-size:0.55rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:3px;'+(dataSource.indexOf('LIVE')>=0?'background:rgba(111,255,176,0.15);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)':'background:rgba(255,223,128,0.12);color:#FFDF80;border:1px solid rgba(255,223,128,0.25)')+'">DATA: '+dataSource+'</span></div>';
+
+// Verdict
+var verdictColor=diff>0?'#FF8FA0':diff<0?'#6FFFB0':'#FFDF80';
+var verdictText=diff>1?'SUPPLIER OVERCHARGING':diff<-1?'SUPPLIER UNDERCHARGING':'SUPPLIER ALIGNED WITH INDEX';
+h+='<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:8px;padding:1rem;text-align:center;margin-bottom:1rem">';
+h+='<div style="font-size:0.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:'+verdictColor+';margin-bottom:0.3rem">⚠ VERDICT: '+verdictText+'</div>';
+h+='<div style="font-family:\'JetBrains Mono\',monospace;font-size:1.8rem;font-weight:700;color:'+verdictColor+'">'+((diff>0?'+':'')+diff.toFixed(2))+'%</div>';
+h+='<div style="font-size:0.75rem;color:var(--t2);margin-top:0.15rem">Gap between supplier\'s ask and formula result</div>';
+if(diff>0&&spend)h+='<div style="font-family:\'JetBrains Mono\',monospace;font-size:1.1rem;font-weight:700;color:#FF8FA0;margin-top:0.3rem">$'+Math.abs(diffDollars).toLocaleString(undefined,{maximumFractionDigits:0})+'/year overcharge</div>';
+h+='</div>';
+
+// Comparison
+h+='<div style="display:grid;grid-template-columns:1fr 1fr '+(capApplied?'1fr ':'')+';gap:0.5rem;margin-bottom:1rem">';
+h+='<div style="background:rgba(255,143,160,0.1);border:1px solid rgba(255,143,160,0.25);border-radius:6px;padding:0.65rem;text-align:center"><div style="font-size:0.5rem;font-weight:700;color:#FF8FA0;letter-spacing:1px;text-transform:uppercase">Supplier Claims</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:1.3rem;font-weight:700;color:#FF8FA0;margin-top:0.15rem">+'+claimed+'%</div>'+(spend?'<div style="font-size:0.6rem;color:var(--t2);margin-top:0.1rem">$'+(spend*claimed/100).toLocaleString(undefined,{maximumFractionDigits:0})+'/yr</div>':'')+'</div>';
+h+='<div style="background:rgba(111,255,176,0.08);border:1px solid rgba(111,255,176,0.2);border-radius:6px;padding:0.65rem;text-align:center"><div style="font-size:0.5rem;font-weight:700;color:#6FFFB0;letter-spacing:1px;text-transform:uppercase">Formula Says</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:1.3rem;font-weight:700;color:#6FFFB0;margin-top:0.15rem">+'+cappedChange.toFixed(2)+'%</div>'+(spend?'<div style="font-size:0.6rem;color:var(--t2);margin-top:0.1rem">$'+(spend*cappedChange/100).toLocaleString(undefined,{maximumFractionDigits:0})+'/yr</div>':'')+'</div>';
+if(capApplied)h+='<div style="background:rgba(255,223,128,0.08);border:1px solid rgba(255,223,128,0.2);border-radius:6px;padding:0.65rem;text-align:center"><div style="font-size:0.5rem;font-weight:700;color:#FFDF80;letter-spacing:1px;text-transform:uppercase">Cap Applied</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:1.3rem;font-weight:700;color:#FFDF80;margin-top:0.15rem">'+cap+'% max</div><div style="font-size:0.6rem;color:var(--t2);margin-top:0.1rem">Formula was '+weightedChange.toFixed(2)+'%</div></div>';
+h+='</div>';
+
+// Index Detail
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Index Data — The Math</div>';
+h+='<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.65rem;margin-bottom:0.4rem">';
+h+='<div style="display:grid;grid-template-columns:1.5fr 0.6fr 0.6fr 0.6fr 0.5fr;gap:0.3rem;font-size:0.6rem;color:var(--t3);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;padding-bottom:0.3rem;border-bottom:1px solid var(--bdr)"><span>Index</span><span style="text-align:right">Base</span><span style="text-align:right">Current</span><span style="text-align:right">Change</span><span style="text-align:right">Weight</span></div>';
+h+='<div style="display:grid;grid-template-columns:1.5fr 0.6fr 0.6fr 0.6fr 0.5fr;gap:0.3rem;font-size:0.72rem;color:var(--t1);padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.03)"><span style="font-weight:600">'+d1.name+'</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">'+d1.base+'</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">'+d1.current+'</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace;color:'+(d1.change>0?'#FF8FA0':'#6FFFB0')+'">'+((d1.change>0?'+':'')+d1.change)+'%</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">'+w1+'%</span></div>';
+if(d2)h+='<div style="display:grid;grid-template-columns:1.5fr 0.6fr 0.6fr 0.6fr 0.5fr;gap:0.3rem;font-size:0.72rem;color:var(--t1);padding:0.35rem 0"><span style="font-weight:600">'+d2.name+'</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">'+d2.base+'</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">'+d2.current+'</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace;color:'+(d2.change>0?'#FF8FA0':'#6FFFB0')+'">'+((d2.change>0?'+':'')+d2.change)+'%</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">'+w2+'%</span></div>';
+h+='<div style="display:grid;grid-template-columns:1.5fr 0.6fr 0.6fr 0.6fr 0.5fr;gap:0.3rem;font-size:0.72rem;color:var(--gold);font-weight:700;padding:0.35rem 0;border-top:1px solid var(--bdr)"><span>WEIGHTED RESULT</span><span></span><span></span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">'+((weightedChange>0?'+':'')+weightedChange.toFixed(2))+'%</span><span style="text-align:right;font-family:\'JetBrains Mono\',monospace">100%</span></div>';
+if(d1.baseDate)h+='<div style="font-size:0.55rem;color:var(--t3);margin-top:0.3rem;font-family:\'JetBrains Mono\',monospace">Observation dates: Base='+d1.baseDate+' · Current='+(d1.currentDate||'')+'</div>';
+h+='</div></div>';
+
+// Talking Points
+h+='<div class="rpt-sec"><div class="rpt-sec-title">Talking Points for Negotiation</div>';
+if(diff>1){
+h+='<div class="act"><div class="act-pri pri-urg">LEAD WITH THE DATA</div><div class="act-text">"Our contract specifies price adjustments based on '+d1.name+(d2?' and '+d2.name:'')+'. The weighted index change for '+basePeriod+' to '+currentPeriod+' is +'+weightedChange.toFixed(2)+'%'+(capApplied?', capped at '+cap+'% per the contract':'')+'. Your request of +'+claimed+'% is '+diff.toFixed(1)+' percentage points above what the formula supports. We need to align on the math before discussing any adjustment."</div></div>';
+h+='<div class="act"><div class="act-pri pri-act">QUANTIFY THE GAP</div><div class="act-text">"The difference between your ask and the contract formula is '+diff.toFixed(2)+' percentage points'+(spend?', which represents $'+Math.abs(diffDollars).toLocaleString(undefined,{maximumFractionDigits:0})+' per year on our '+spendFmt+' spend':'')+'. We are prepared to honor the contract formula at +'+cappedChange.toFixed(2)+'%."</div></div>';
+} else {
+h+='<div class="act"><div class="act-pri pri-mon">SUPPLIER ALIGNED</div><div class="act-text">The supplier\'s requested increase of +'+claimed+'% is within '+Math.abs(diff).toFixed(2)+' percentage points of what the contract formula supports (+'+cappedChange.toFixed(2)+'%). The ask is reasonable based on the indices. Focus negotiation on other value levers: payment terms, service levels, scope.</div></div>';
+}
+h+='</div>';
+
+h+='<div class="rpt-ftr"><div class="rpt-ftr-name">Foley Strategic Advisory</div><div class="rpt-ftr-url">foleystrategicadvisory.com</div><div class="rpt-ftr-disc">Data source: '+dataSource+'. FRED (Federal Reserve Economic Data) provides free access to BLS Producer Price Index, CPI, and employment data. Series IDs correspond to official BLS/FRED identifiers. Validate series IDs against your specific contract language.</div></div>';
+
+document.getElementById('bls-results').innerHTML=h;
+document.getElementById('bls-output').style.display='block';
+btn.classList.remove('loading');btn.disabled=false;
+document.getElementById('bls-output').scrollIntoView({behavior:'smooth'});
+}
+
+function copyEl(id){var el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(function(){alert('Copied to clipboard')})}
+</script>
+</body>
+</html>

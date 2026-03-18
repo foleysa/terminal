@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — PVF (Pipes, Valves, Fittings)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--grnd:rgba(111,255,176,0.18);--red:#FF8FA0;--redd:rgba(255,143,160,0.18);--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}
+body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}
+.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}
+.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}
+.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}
+.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}
+.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}
+.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}
+.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}
+.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}
+.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}
+.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}
+.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}
+.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}
+.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}
+.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}
+.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}
+.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}
+.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}
+.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}
+.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}
+.db-steel{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-copper{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}
+.db-energy{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-labor{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}
+.db-logistics{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-casting{background:linear-gradient(90deg,#99A8BE,#b0bccf)}
+.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}
+.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}
+.imp-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0}
+.imp-country{font-size:0.75rem;color:var(--t1);width:85px;flex-shrink:0;font-weight:600}
+.imp-bar-bg{flex:1;height:20px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+.imp-bar{height:100%;background:linear-gradient(90deg,rgba(255,223,128,0.5),rgba(255,223,128,0.25));border-radius:2px}
+.imp-val{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--t1);width:55px;text-align:right;flex-shrink:0;font-weight:500}
+.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}
+.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}
+.sup-cols{grid-template-columns:1.4fr 1fr 0.7fr 0.6fr 0.7fr}.fin-cols{grid-template-columns:1.3fr 0.7fr 0.7fr 0.7fr 0.7fr 0.8fr}.hs-cols{grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr}
+.c-name{color:var(--t1);font-weight:600}.c-val{text-align:right;color:var(--t1);font-family:'JetBrains Mono',monospace;font-weight:500}
+.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}
+.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}
+.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}
+.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}
+.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}
+.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
+.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}
+.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}
+.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}
+.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}
+.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}
+.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}
+.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}
+.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}
+.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}
+.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}
+.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}
+.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}
+.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}
+.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}
+.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}
+.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}
+.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}
+.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}
+.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}
+.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}
+@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}
+@media(max-width:700px){.tabs{-webkit-overflow-scrolling:touch}.cat-stats{gap:0.75rem}.hdr{flex-wrap:wrap;gap:0.3rem}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">PVF — Pipes, Valves & Fittings</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Carbon steel pipe, stainless steel tube, gate/globe/ball/butterfly valves, flanges, fittings, gaskets, and OCTG (Oil Country Tubular Goods). A steel-intensive category facing Section 232 tariffs, antidumping duties, and growing Buy American/BABA compliance requirements for infrastructure projects.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$92B</div><div class="cs-lbl">US PVF Market</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">25%</div><div class="cs-lbl">Section 232 Tariff</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">+18%</div><div class="cs-lbl">Steel HRC YTD</div></div>
+    <div><div class="cs-val">BABA</div><div class="cs-lbl">Buy America Active</div></div>
+    <div><div class="cs-val">AD/CVD</div><div class="cs-lbl">Active Orders</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">Suppliers & Ownership<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="tariffs">Tariff & Trade<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="compliance">Buy America / BABA</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">Steel Price<br>+18% YTD</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">Section 232<br>25% All Origins</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">AD/CVD Orders<br>12 Countries</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#B0CCFF">ACTIVE</div><div class="risk-lbl">Buy America<br>BABA Compliance</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Material Prices</span><span class="pnl-badge">FRED · LME</span></div>
+      <div class="driver"><div class="driver-name">Steel HRC</div><div class="driver-bar-bg"><div class="driver-bar db-steel" style="width:70%"></div></div><div class="driver-trend up">+18.2%</div></div>
+      <div class="driver"><div class="driver-name">Steel Plate</div><div class="driver-bar-bg"><div class="driver-bar db-steel" style="width:60%"></div></div><div class="driver-trend up">+14.8%</div></div>
+      <div class="driver"><div class="driver-name">Stainless 304</div><div class="driver-bar-bg"><div class="driver-bar db-copper" style="width:45%"></div></div><div class="driver-trend up">+8.4%</div></div>
+      <div class="driver"><div class="driver-name">LME Nickel</div><div class="driver-bar-bg"><div class="driver-bar db-copper" style="width:40%"></div></div><div class="driver-trend up">+6.2%</div></div>
+      <div class="driver"><div class="driver-name">Copper (valves)</div><div class="driver-bar-bg"><div class="driver-bar db-copper" style="width:35%"></div></div><div class="driver-trend up">+8.6%</div></div>
+      <div class="src">Source: FRED, LME, AMM, Metals Week</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Steel up 18% YTD. Lock Q2 pricing on carbon steel pipe, flanges, and fittings before the next mill price increase. Distributors are already quoting higher.</div><div class="act-cat">STEEL · PIPE · PRICING</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">If you're bidding infrastructure projects, verify BABA compliance for every PVF specification line item NOW. Non-compliant material will kill your bid or trigger costly change orders.</div><div class="act-cat">COMPLIANCE · BABA · BIDDING</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Antidumping duties on welded pipe from 12 countries. ITC sunset reviews in progress. If duties are lifted, import prices could drop 15-25% — a buying opportunity. If maintained, domestic pricing stays elevated.</div><div class="act-cat">AD/CVD · TRADE POLICY</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">PVF Cost Breakdown — Carbon Steel</span><span class="pnl-badge">FRED · EIA · BLS</span></div>
+      <div class="driver"><div class="driver-name">Steel (raw material)</div><div class="driver-bar-bg"><div class="driver-bar db-steel" style="width:42%">42%</div></div><div class="driver-pct">42%</div><div class="driver-trend up">+18.2%</div></div>
+      <div class="driver"><div class="driver-name">Energy (melt/forge)</div><div class="driver-bar-bg"><div class="driver-bar db-energy" style="width:18%">18%</div></div><div class="driver-pct">18%</div><div class="driver-trend up">+12.2%</div></div>
+      <div class="driver"><div class="driver-name">Labor (skilled)</div><div class="driver-bar-bg"><div class="driver-bar db-labor" style="width:15%">15%</div></div><div class="driver-pct">15%</div><div class="driver-trend up">+5.2%</div></div>
+      <div class="driver"><div class="driver-name">Casting / Forging</div><div class="driver-bar-bg"><div class="driver-bar db-casting" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="driver"><div class="driver-name">Logistics</div><div class="driver-bar-bg"><div class="driver-bar db-logistics" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+22.6%</div></div>
+      <div class="driver"><div class="driver-name">Coatings / Lining</div><div class="driver-bar-bg"><div class="driver-bar db-copper" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend up">+8.4%</div></div>
+      <div class="src">Sources: FRED PPI-Iron & Steel, EIA, BLS Manufacturing wages</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">US PVF Import Sources — HS Ch. 73</span><span class="pnl-badge">ITC · CENSUS</span></div>
+      <div class="imp-row"><div class="imp-country">S. Korea</div><div class="imp-bar-bg"><div class="imp-bar" style="width:18%"></div></div><div class="imp-val">$3.8B</div></div>
+      <div class="imp-row"><div class="imp-country">Canada</div><div class="imp-bar-bg"><div class="imp-bar" style="width:14%"></div></div><div class="imp-val">$2.9B</div></div>
+      <div class="imp-row"><div class="imp-country">China</div><div class="imp-bar-bg"><div class="imp-bar" style="width:12%"></div></div><div class="imp-val">$2.5B</div></div>
+      <div class="imp-row"><div class="imp-country">Japan</div><div class="imp-bar-bg"><div class="imp-bar" style="width:10%"></div></div><div class="imp-val">$2.1B</div></div>
+      <div class="imp-row"><div class="imp-country">India</div><div class="imp-bar-bg"><div class="imp-bar" style="width:8%"></div></div><div class="imp-val">$1.7B</div></div>
+      <div class="imp-row"><div class="imp-country">Mexico</div><div class="imp-bar-bg"><div class="imp-bar" style="width:7%"></div></div><div class="imp-val">$1.4B</div></div>
+      <div class="imp-row"><div class="imp-country">Italy</div><div class="imp-bar-bg"><div class="imp-bar" style="width:5%"></div></div><div class="imp-val">$1.1B</div></div>
+      <div class="alert alert-red" style="margin-top:0.5rem"><div class="alert-title" style="color:#FF8FA0">Triple Tariff Exposure</div><div class="alert-text">PVF imports face up to three layers of duty: Section 232 (25%) + Section 301 (25% on China) + Antidumping/CVD (varies 2-140%). Chinese welded pipe can face 70%+ combined duty. Know your total landed cost before sourcing.</div></div>
+      <div class="src">Source: US ITC DataWeb, Census Bureau</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Major PVF Suppliers & Distributors</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>Supplier</span><span>Parent Company</span><span style="text-align:center">Type</span><span style="text-align:center">Health</span><span style="text-align:center">BABA Ready</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">MRC Global</div><div style="color:var(--t2);font-size:0.65rem">MRC Global Inc (NYSE: MRC)</div><div style="text-align:center;color:var(--t1)">Distributor</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">YES</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Ferguson Enterprises</div><div style="color:var(--t2);font-size:0.65rem">Ferguson plc (NYSE: FERG)</div><div style="text-align:center;color:var(--t1)">Distributor</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">YES</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Emerson (Fisher/Anderson)</div><div style="color:var(--t2);font-size:0.65rem">Emerson Electric (NYSE: EMR)</div><div style="text-align:center;color:var(--t1)">Valves/Auto</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">PARTIAL</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Flowserve</div><div style="color:var(--t2);font-size:0.65rem">Flowserve Corp (NYSE: FLS)</div><div style="text-align:center;color:var(--t1)">Valves/Pumps</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">PARTIAL</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Cameron (Schlumberger)</div><div style="color:var(--t2);font-size:0.65rem">SLB Ltd (NYSE: SLB)</div><div style="text-align:center;color:var(--t1)">OCTG/Valves</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#FFDF80">PARTIAL</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Mueller Water</div><div style="color:var(--t2);font-size:0.65rem">Mueller Water Products (NYSE: MWA)</div><div style="text-align:center;color:var(--t1)">Water PVF</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">YES</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Nucor Tubular</div><div style="color:var(--t2);font-size:0.65rem">Nucor Corp (NYSE: NUE)</div><div style="text-align:center;color:var(--t1)">Pipe/Tube</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">YES</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Tenaris</div><div style="color:var(--t2);font-size:0.65rem">Tenaris SA (NYSE: TS)</div><div style="text-align:center;color:var(--t1)">OCTG/Line</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem;font-weight:600;color:#6FFFB0">YES (US mills)</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Corporate Ownership Trees</span></div></div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Emerson Electric Co <span class="tree-p-tag">NYSE: EMR</span></div>
+    <div class="tree-p-meta">CIK: 0000032604 · Revenue: $17.5B · 67,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Fisher Controls (Fisher Valves)</div><div class="tree-sub-detail">Control valves, regulators, actuators — industry standard</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Anderson Greenwood</div><div class="tree-sub-detail">Safety relief valves, pressure management</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Bettis (valve actuators)</div><div class="tree-sub-detail">Electric and pneumatic actuators</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">ASCO (solenoid valves)</div><div class="tree-sub-detail">Solenoid, pneumatic, process valves</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Keystone (butterfly valves)</div><div class="tree-sub-detail">Butterfly valves, quarter-turn applications</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">SLB Ltd (Schlumberger) <span class="tree-p-tag">NYSE: SLB</span></div>
+    <div class="tree-p-meta">Revenue: $36.8B · 99,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Cameron International</div><div class="tree-sub-detail">Acquired 2016 · Valves, chokes, wellheads, BOPs</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">OneSubsea</div><div class="tree-sub-detail">Subsea processing, production systems</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Cameron Valves & Measurement</div><div class="tree-sub-detail">Gate, globe, check, ball valves — upstream/midstream</div></div>
+    </div>
+  </div>
+
+  <div class="tree-parent">
+    <div class="tree-p-name">Ferguson plc <span class="tree-p-tag">NYSE: FERG</span></div>
+    <div class="tree-p-meta">Revenue: $29.6B · 36,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Ferguson Waterworks</div><div class="tree-sub-detail">Municipal water/sewer PVF, ductile iron, HDPE</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Ferguson Industrial</div><div class="tree-sub-detail">Industrial PVF, carbon/stainless, high-alloy</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Ferguson OPUS (MRO/Safety)</div><div class="tree-sub-detail">MRO distribution, safety, facilities supplies</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Ferguson Fire & Fabrication</div><div class="tree-sub-detail">Fire protection pipe, sprinkler fittings</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Concentration — Emerson Valve Portfolio</div><div class="alert-text">Emerson owns Fisher, Anderson Greenwood, Bettis, ASCO, and Keystone. If you buy control valves from Fisher, relief valves from Anderson Greenwood, and actuators from Bettis — you have one supplier. One Emerson supply chain disruption affects five brand names simultaneously.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Cameron / SLB</div><div class="alert-text">Cameron International is now a Schlumberger (SLB) subsidiary. Cameron valves, chokes, and measurement products are on SLB's balance sheet. If you source both Cameron valves and Schlumberger services, map the interconnection.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, M&A records, annual reports</div>
+</div>
+
+<!-- TARIFF & TRADE -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & Trade Exposure — PVF</span><span class="pnl-badge">USTR · ITC · 232 · AD/CVD</span></div>
+  <div class="tbl-row hdr hs-cols"><span>HS Code</span><span>Description</span><span style="text-align:center">Key Risk</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7304</div><div style="color:var(--t1)">Seamless pipe & tube (OCTG, mech, boiler)</div><div style="text-align:center;color:var(--t1)">232 + AD</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+AD</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7305</div><div style="color:var(--t1)">Welded pipe >406mm — large diameter line pipe</div><div style="text-align:center;color:var(--t1)">232 + AD</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+AD</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7306</div><div style="color:var(--t1)">Welded pipe/tube — structural, mechanical, fence</div><div style="text-align:center;color:var(--t1)">232 + 301</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+25%*</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7307</div><div style="color:var(--t1)">Fittings — elbows, tees, reducers, flanges</div><div style="text-align:center;color:var(--t1)">232 + 301</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+25%*</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8481</div><div style="color:var(--t1)">Valves — gate, globe, ball, butterfly, check</div><div style="text-align:center;color:var(--t1)">301 (China)</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+2%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7307</div><div style="color:var(--t1)">Butt-weld fittings — carbon steel</div><div style="text-align:center;color:var(--t1)">AD: China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+56-140%</div></div>
+  <div class="tbl-row hs-cols"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7304-06</div><div style="color:var(--t1)">Pipe/tube — USMCA qualifying</div><div style="text-align:center;color:var(--t1)">USMCA</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0%*</div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">Chinese Butt-Weld Fittings — Up to 165% Combined Duty</div><div class="alert-text">Chinese-origin butt-weld carbon steel fittings face 25% Section 232 + 25% Section 301 + 56-140% antidumping duty. Total combined duty can reach 165%. There is no scenario where Chinese fittings are cost-competitive. Source domestically, from Italy (no AD), or USMCA-qualifying Canadian/Mexican mills.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">AD/CVD Active Orders — PVF Category</div><div class="alert-text">Active antidumping and countervailing duty orders exist on welded pipe from: China, South Korea, India, Turkey, Vietnam, Oman, Pakistan, UAE, Thailand, and others. ITC sunset reviews ongoing. Check the current AD/CVD rate for your specific supplier and country of origin BEFORE placing orders — rates change with annual administrative reviews.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">USMCA Exemption — Verify Rules of Origin</div><div class="alert-text">USMCA-qualifying pipe and fittings from Canada and Mexico may be exempt from Section 232, but rules of origin requirements are strict. The steel must be melted AND poured in a USMCA country. Simply fabricating pipe from imported steel doesn't qualify. Verify with your customs broker on every shipment.</div></div>
+  <div class="src">Source: USTR, ITC AD/CVD Orders, Section 232 Proclamations, CBP ACE Portal</div>
+</div>
+
+<!-- BUY AMERICA / BABA -->
+<div class="tab-content" id="tab-compliance">
+  <div class="pnl-hdr"><span class="pnl-title">Buy America / Build America Buy America (BABA)</span><span class="pnl-badge">OMB · FEDERAL REGISTER</span></div>
+
+  <div class="alert alert-blu"><div class="alert-title" style="color:#B0CCFF">What Is BABA?</div><div class="alert-text">The Build America, Buy America Act (BABA) — part of the Infrastructure Investment and Jobs Act (IIJA) — requires that iron, steel, manufactured products, and construction materials used in federally funded infrastructure projects be produced in the United States. This is the most significant domestic sourcing mandate in decades and directly affects every PVF purchase on a federal project.</div></div>
+
+  <div style="margin-top:0.75rem">
+    <div class="pnl-hdr"><span class="pnl-title">BABA Requirements by Material Type</span></div>
+  </div>
+
+  <div class="tbl-row hdr" style="grid-template-columns:1fr 1fr 1fr"><span>Material</span><span style="text-align:center">BABA Requirement</span><span style="text-align:right">What It Means</span></div>
+  <div class="tbl-row" style="grid-template-columns:1fr 1fr 1fr"><div class="c-name">Iron & Steel (pipe, fittings, flanges)</div><div style="text-align:center;color:#FF8FA0;font-weight:600;font-size:0.7rem">ALL manufacturing processes in US</div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Melted, poured, AND fabricated domestically. Imported steel = non-compliant.</div></div>
+  <div class="tbl-row" style="grid-template-columns:1fr 1fr 1fr"><div class="c-name">Manufactured Products (valves, actuators)</div><div style="text-align:center;color:#FFDF80;font-weight:600;font-size:0.7rem">55%+ domestic content by cost</div><div style="text-align:right;color:var(--t1);font-size:0.68rem">Final assembly in US. >55% of component cost from domestic sources.</div></div>
+  <div class="tbl-row" style="grid-template-columns:1fr 1fr 1fr"><div class="c-name">Construction Materials (gaskets, sealants)</div><div style="text-align:center;color:#FFDF80;font-weight:600;font-size:0.7rem">ALL manufacturing in US</div><div style="text-align:right;color:var(--t1);font-size:0.68rem">All manufacturing steps performed domestically. Varies by material type.</div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">Common BABA Compliance Failures in PVF</div><div class="alert-text">The #1 failure: pipe that's fabricated in the US from imported steel. Under BABA, the steel must be melted AND poured in the US — not just rolled or welded here. The #2 failure: valves assembled in the US from imported castings. If the casting was done overseas, the 55% domestic content threshold gets very tight. Audit your supply chain before you submit a bid.</div></div>
+
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Waiver Process</div><div class="alert-text">BABA waivers exist for: (1) non-availability — the product isn't made in the US, (2) unreasonable cost — domestic product is 25%+ more expensive, (3) public interest. Waivers are granted by the funding agency and published in the Federal Register. The process takes 30-90 days. Don't count on a waiver for standard PVF products — domestic supply exists.</div></div>
+
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">BABA-Ready Suppliers</div><div class="alert-text">Nucor Tubular, Tenaris (Bay City, TX mill), Mueller Water, and IPSCO (now Evraz NA) all produce BABA-compliant pipe with US-melted, US-poured steel. For valves: Flowserve, Emerson (Fisher), and Cameron all have US manufacturing — but verify domestic content percentage on a per-product basis. MRC Global and Ferguson can document BABA compliance through their supply chain traceability programs.</div></div>
+  <div class="src">Source: OMB Guidance M-22-11, IIJA §70914, Federal Register waiver notices</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — PVF</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Steel HRC up 18% YTD. Carbon steel pipe, fittings, and flanges are repricing across every distributor. Lock Q2 commitments with MRC Global or Ferguson this week. Spot pricing is moving daily against you. If you're on quarterly contracts, push for price-hold or index-cap before the next adjustment.</div><div class="act-cat">STEEL · PIPE · PRICING · DISTRIBUTORS</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">If you're bidding any federally funded infrastructure project, verify BABA compliance for EVERY PVF line item before submitting. Non-compliant material in your bid means either losing the project or eating expensive domestic-sourcing change orders later. The time to check is now, not after award.</div><div class="act-cat">BABA · COMPLIANCE · BIDDING</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map your Emerson valve exposure across Fisher, Anderson Greenwood, Bettis, ASCO, and Keystone. If you source from multiple Emerson brands, you have one supplier — not five. Qualify Flowserve or Cameron as an alternative for at least one valve subcategory to reduce concentration.</div><div class="act-cat">CONCENTRATION · VALVES · EXHIBIT 21</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Chinese butt-weld fittings face up to 165% combined duty. If you're still sourcing ANY fittings from China, the math doesn't work. Shift to Italian (no AD), domestic, or USMCA-qualifying Canadian sources. Italy is the world's premium fitting producer — you get better quality AND lower duty.</div><div class="act-cat">FITTINGS · AD/CVD · SOURCING</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Build a BABA compliance matrix for your standard PVF specifications. For each line item: document the supplier, country of melt, country of pour, country of fabrication, and domestic content percentage. This matrix becomes a bidding asset — you can respond to federal projects faster than competitors who haven't done the homework.</div><div class="act-cat">BABA · MATRIX · COMPETITIVE ADVANTAGE</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Stainless steel PVF is driven by nickel pricing (+6.2% YTD). If you have high stainless volume, evaluate duplex grades (2205, 2507) which use less nickel than 316L but offer superior corrosion resistance. The nickel savings on duplex can offset the higher fabrication cost — and the trend is moving in duplex's favor as nickel rises.</div><div class="act-cat">STAINLESS · NICKEL · MATERIAL SUBSTITUTION</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">ITC sunset reviews on welded pipe antidumping orders from multiple countries are in progress. If duties are revoked for any country, import prices from that origin could drop 15-25%. If you have relationships with Korean or Japanese pipe mills, keep lines open for a potential cost reset. If duties are maintained, domestic pricing stays protected.</div><div class="act-cat">AD/CVD · SUNSET REVIEW · TRADE POLICY</div></div>
+  <div class="src">Source: FSA analyst assessment based on FRED, ITC, USTR, OMB, SEC EDGAR data</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v2.1 · PVF (Pipes, Valves, Fittings) · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

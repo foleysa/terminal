@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Bearings & Power Transmission</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--bdr2:rgba(255,255,255,0.2);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}.db-1{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-2{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-3{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-4{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-5{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-6{background:linear-gradient(90deg,#99A8BE,#b0bccf)}.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}.sup-cols{grid-template-columns:1.3fr 1fr 0.7fr 0.6fr 0.7fr}.tbl-row{display:grid;padding:0.5rem 0.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.72rem;align-items:center}.tbl-row:hover{background:var(--bg4)}.tbl-row.hdr{color:var(--t2);font-size:0.55rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bdr2)}.tbl-row.hdr:hover{background:transparent}.c-name{color:var(--t1);font-weight:600}.badge-sm{font-size:0.58rem;font-weight:700;padding:0.12rem 0.4rem;border-radius:3px;display:inline-block;text-align:center}.b-strong{background:rgba(111,255,176,0.2);color:#6FFFB0;border:1px solid rgba(111,255,176,0.3)}.b-watch{background:rgba(255,223,128,0.2);color:#FFDF80;border:1px solid rgba(255,223,128,0.3)}.b-risk{background:rgba(255,143,160,0.2);color:#FF8FA0;border:1px solid rgba(255,143,160,0.3)}.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">Bearings & Power Transmission</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Ball bearings, roller bearings, plain bearings, mounted bearings, V-belts, synchronous belts, roller chain, gears, couplings, sprockets, and linear motion systems. Steel is 60%+ of bearing cost. Counterfeit bearings are a $1B+ problem globally. ABB/Dodge overlap with Rotating Machinery creates cross-category concentration. Predictive maintenance (vibration analysis) is the procurement hedge — condition-based replacement cuts bearing spend 20-40% vs time-based schedules.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$42B</div><div class="cs-lbl">Global Bearings</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">60%+</div><div class="cs-lbl">Steel Content</div></div>
+    <div><div class="cs-val" style="color:#FFB898">$1B+</div><div class="cs-lbl">Counterfeit Risk</div></div>
+    <div><div class="cs-val" style="color:#FFDF80">AD/CVD</div><div class="cs-lbl">China/Japan Orders</div></div>
+    <div><div class="cs-val">4 OEMs</div><div class="cs-lbl">Control 65%</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="suppliers">OEMs & Ownership<span class="tab-count">7</span></div>
+  <div class="tab" data-tab="counterfeit">Counterfeit & Quality Risk</div>
+  <div class="tab" data-tab="tariffs">Tariff & AD/CVD</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">Steel Price<br>+18% YTD</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">HIGH</div><div class="risk-lbl">Counterfeit<br>$1B+ Problem</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ACTIVE</div><div class="risk-lbl">AD/CVD Orders<br>China, Japan+</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#6FFFB0">STRONG</div><div class="risk-lbl">Supply<br>Multi-Source</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Sub-Categories</span><span class="pnl-badge">ABMA · CENSUS</span></div>
+      <div class="driver"><div class="driver-name">Ball Bearings</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:30%">30%</div></div><div class="driver-pct">30%</div><div class="driver-trend up">+6.8%</div></div>
+      <div class="driver"><div class="driver-name">Roller Bearings</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+7.2%</div></div>
+      <div class="driver"><div class="driver-name">Mounted/Housed</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:14%">14%</div></div><div class="driver-pct">14%</div><div class="driver-trend up">+5.4%</div></div>
+      <div class="driver"><div class="driver-name">Belts (V/Timing)</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+4.8%</div></div>
+      <div class="driver"><div class="driver-name">Chain/Sprockets</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+8.2%</div></div>
+      <div class="driver"><div class="driver-name">Gears/Couplings</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:8%">8%</div></div><div class="driver-pct">8%</div><div class="driver-trend up">+4.1%</div></div>
+      <div class="driver"><div class="driver-name">Linear Motion</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:6%">6%</div></div><div class="driver-pct">6%</div><div class="driver-trend up">+5.6%</div></div>
+      <div class="src">Source: ABMA, Census Bureau, BLS PPI-Bearings</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">Steel is 60%+ of bearing cost. With HRC up 18% YTD, bearing OEMs will pass through material surcharges in the next 30-60 days. Lock pricing on your highest-volume bearing SKUs now — before the surcharge letters arrive.</div><div class="act-cat">STEEL · BEARINGS · PRICING</div></div>
+      <div class="act"><div class="act-pri pri-urg">CRITICAL</div><div class="act-text">Counterfeit bearings are a safety hazard and a $1B+ global problem. If you're buying bearings from unauthorized distributors, online marketplaces, or unfamiliar sources — stop. A counterfeit bearing failure can destroy equipment worth 100x the bearing cost and injure people. Buy only from authorized distributors or direct from OEMs.</div><div class="act-cat">COUNTERFEIT · SAFETY · QUALITY</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">If you're replacing bearings on a time-based schedule (e.g., every 12 months), you're almost certainly replacing bearings that still have useful life. Vibration analysis ($500-2,000 to set up) tells you the actual condition. Condition-based replacement reduces bearing spend 20-40% and catches failing bearings before they destroy equipment.</div><div class="act-cat">PREDICTIVE · VIBRATION · SAVINGS</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Bearing Cost Breakdown</span><span class="pnl-badge">BLS · ANALYSIS</span></div>
+      <div class="driver"><div class="driver-name">Bearing Steel</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:45%">45%</div></div><div class="driver-pct">45%</div><div class="driver-trend up">+18.2%</div></div>
+      <div class="driver"><div class="driver-name">Precision Grinding</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:20%">20%</div></div><div class="driver-pct">20%</div><div class="driver-trend up">+5.8%</div></div>
+      <div class="driver"><div class="driver-name">Heat Treatment</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+8.4%</div></div>
+      <div class="driver"><div class="driver-name">Labor</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+5.1%</div></div>
+      <div class="driver"><div class="driver-name">Seals/Shields</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend up">+3.2%</div></div>
+      <div class="driver"><div class="driver-name">Grease (pre-filled)</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:3%">3%</div></div><div class="driver-pct">3%</div><div class="driver-trend up">+6.4%</div></div>
+      <div class="driver"><div class="driver-name">Packaging/Dist</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend up">+4.2%</div></div>
+      <div class="src">Sources: BLS PPI-Bearings, FRED steel indices, ABMA</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Key Dependencies</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Chrome Bearing Steel (52100) — Specialty Alloy</div><div class="alert-text">Bearings use chrome alloy steel (AISI 52100 / 100Cr6) — not commodity carbon steel. This is precision-melted, vacuum-degassed steel with tight chemistry requirements. Limited number of global steelmakers produce it (Ovako/Sweden, TimkenSteel/US, Sanyo/Japan). Bearing steel pricing doesn't track HRC exactly but follows the same directional pressure with a 2-3 month lag.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Heat Treatment — Energy Intensive</div><div class="alert-text">Through-hardening and case-hardening of bearings is energy-intensive (natural gas furnaces). Energy cost is 8-12% of bearing production cost. Gas price increases directly impact bearing manufacturer costs and get passed through. If your bearing supplier cites "energy surcharge" — it's legitimate, but verify the magnitude against FRED natural gas data.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- OEMs -->
+<div class="tab-content" id="tab-suppliers">
+  <div class="pnl-hdr"><span class="pnl-title">Bearing & PT OEMs</span><span class="pnl-badge">SEC EDGAR · EXHIBIT 21</span></div>
+  <div class="tbl-row hdr sup-cols"><span>OEM</span><span>Parent / Ticker</span><span style="text-align:center">Primary</span><span style="text-align:center">Health</span><span style="text-align:center">Origin</span></div>
+  <div class="tbl-row sup-cols"><div class="c-name">SKF</div><div style="color:var(--t2);font-size:0.65rem">STO: SKF-B</div><div style="text-align:center;color:var(--t1)">Bearings</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem">Sweden</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Timken</div><div style="color:var(--t2);font-size:0.65rem">NYSE: TKR</div><div style="text-align:center;color:var(--t1)">Bearings/PT</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem">USA</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">NSK</div><div style="color:var(--t2);font-size:0.65rem">TSE: 6471</div><div style="text-align:center;color:var(--t1)">Bearings</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem">Japan</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">NTN</div><div style="color:var(--t2);font-size:0.65rem">TSE: 6472</div><div style="text-align:center;color:var(--t1)">Bearings</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem">Japan</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Schaeffler (FAG/INA)</div><div style="color:var(--t2);font-size:0.65rem">XETRA: SHA</div><div style="text-align:center;color:var(--t1)">Bearings</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem">Germany</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">ABB / Dodge</div><div style="color:var(--t2);font-size:0.65rem">NYSE: ABB</div><div style="text-align:center;color:var(--t1)">Mounted</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem">Intl</div></div>
+  <div class="tbl-row sup-cols"><div class="c-name">Gates Industrial</div><div style="color:var(--t2);font-size:0.65rem">NYSE: GTES</div><div style="text-align:center;color:var(--t1)">Belts/Hose</div><div style="text-align:center"><span class="badge-sm b-strong">STRONG</span></div><div style="text-align:center;font-size:0.65rem">USA</div></div>
+
+  <div style="margin-top:1rem"><div class="pnl-hdr"><span class="pnl-title">Ownership Trees</span></div></div>
+  <div class="tree-parent">
+    <div class="tree-p-name">Schaeffler AG <span class="tree-p-tag">XETRA: SHA</span></div>
+    <div class="tree-p-meta">Revenue: €16.3B · 83,000 employees</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">FAG Bearings</div><div class="tree-sub-detail">Ball bearings, roller bearings — heavy industry standard</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">INA Bearings</div><div class="tree-sub-detail">Needle bearings, linear motion, cam followers</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">LuK (automotive)</div><div class="tree-sub-detail">Clutch systems, torque converters — automotive PT</div></div>
+    </div>
+  </div>
+  <div class="tree-parent">
+    <div class="tree-p-name">Timken Company <span class="tree-p-tag">NYSE: TKR</span></div>
+    <div class="tree-p-meta">Revenue: $4.8B · 19,000 employees · Vertically integrated (makes own steel)</div>
+    <div class="tree-subs">
+      <div class="tree-sub"><div class="tree-sub-name">Timken Bearings</div><div class="tree-sub-detail">Tapered roller bearings — invented by Timken in 1898</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">TimkenSteel (spun off 2014)</div><div class="tree-sub-detail">Separate public company (NYSE: TMST) — bearing steel supplier</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Drives / Belts / Chain</div><div class="tree-sub-detail">Acquired multiple PT brands — Carlisle, Diamond Chain, Cone Drive</div></div>
+      <div class="tree-sub"><div class="tree-sub-name">Groeneveld-BEKA (lubrication)</div><div class="tree-sub-detail">Automatic lubrication systems for bearings</div></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Schaeffler / FAG / INA</div><div class="alert-text">Schaeffler owns both FAG and INA bearing brands. If you buy FAG deep groove ball bearings AND INA needle rollers — one company. They're often sourced by different plant teams without realizing it. Map your Schaeffler exposure across both brands.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ ABB / Dodge — Cross-Category</div><div class="alert-text">ABB owns Dodge (mounted bearings, power transmission). Dodge is also in the Rotating Machinery category (ABB/Baldor/Dodge). If you buy Dodge bearings, Baldor motors, AND ABB drives — that's the triple concentration risk flagged in the Rotating Machinery dashboard.</div></div>
+  <div class="src">Source: SEC EDGAR Exhibit 21, annual reports</div>
+</div>
+
+<!-- COUNTERFEIT RISK -->
+<div class="tab-content" id="tab-counterfeit">
+  <div class="pnl-hdr"><span class="pnl-title">Counterfeit Bearing Risk</span><span class="pnl-badge">ABMA · CBP · FBI</span></div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">The Scope of the Problem</div><div class="alert-text">The World Bearing Association estimates counterfeit bearings are a $1B+ annual problem globally. Chinese-origin counterfeits carry markings from SKF, NSK, NTN, Timken, and FAG — identical packaging, similar appearance, but inferior steel and manufacturing tolerances. A counterfeit bearing in a critical application (conveyor drive, pump, blower) can fail catastrophically — destroying the equipment, creating safety hazards, and costing 100-1,000x the bearing price in downtime and damage.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">How to Identify Counterfeits</span></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">RED FLAG 1 — PRICE TOO GOOD</div><div class="act-text">If a bearing is priced 40-60% below authorized distributor pricing — it's counterfeit until proven otherwise. Genuine bearing pricing is consistent across authorized channels. Deep discounts from unknown sources are the primary entry point for counterfeits.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">RED FLAG 2 — UNAUTHORIZED SOURCE</div><div class="act-text">eBay, Amazon third-party sellers, Alibaba, and unknown "surplus" dealers are primary counterfeit channels. Every bearing OEM publishes authorized distributor lists on their website. If the seller isn't on the list, the product can't be verified.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">RED FLAG 3 — PACKAGING QUALITY</div><div class="act-text">Counterfeits have improved packaging dramatically, but look for: slightly off-color printing, misspelled words (common in Chinese counterfeits), missing holograms or QR codes, and inconsistent box weight. When in doubt, contact the OEM with the bearing serial number — they can verify authenticity.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Protection Strategy</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">BUY AUTHORIZED ONLY</div><div class="act-text">Purchase exclusively from OEM-authorized distributors: Motion Industries (GPC), Applied Industrial (AIT), Kaman, MSC, and OEM-direct. These channels have authentication processes and OEM-backed warranties. The 10-15% premium over gray-market pricing is insurance against catastrophic failure.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">VERIFY AUTHENTICATION</div><div class="act-text">SKF (Authenticate app), NSK (barcode verification), Timken (hologram + laser marking), and FAG (DataMatrix code) all offer authentication tools. Train your receiving dock to check every bearing shipment. If the bearing can't be verified — reject it.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">INCOMING INSPECTION</div><div class="act-text">For critical applications, perform incoming inspection: weight check (counterfeits are often lighter), dimensional check (OD, ID, width), hardness check (Rockwell C — genuine bearings are HRC 58-64), and visual inspection under magnification (grinding marks, seal quality). A $500 inspection prevents a $50K failure.</div></div>
+    </div>
+  </div>
+  <div class="src">Source: ABMA anti-counterfeit program, CBP IPR seizure data, FBI counterfeit investigations</div>
+</div>
+
+<!-- TARIFFS -->
+<div class="tab-content" id="tab-tariffs">
+  <div class="pnl-hdr"><span class="pnl-title">Tariff & AD/CVD — Bearings</span><span class="pnl-badge">USTR · ITC · CBP</span></div>
+  <div class="tbl-row hdr" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><span>HS Code</span><span>Description</span><span style="text-align:center">Origin</span><span style="text-align:right">Duty Rate</span></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8482</div><div style="color:var(--t1)">Ball bearings — all sizes</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+9%+AD</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8482</div><div style="color:var(--t1)">Ball bearings</div><div style="text-align:center;color:var(--t1)">Japan</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FFDF80">9%+AD (2-45%)</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8482</div><div style="color:var(--t1)">Ball bearings</div><div style="text-align:center;color:var(--t1)">Sweden (SKF)</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">9%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">8482</div><div style="color:var(--t1)">Tapered roller bearings</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+5.8%+AD</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">4010</div><div style="color:var(--t1)">Conveyor/transmission belts — rubber</div><div style="text-align:center;color:var(--t1)">China</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8FA0">25%+3.3%</div></div>
+  <div class="tbl-row" style="grid-template-columns:0.8fr 1.4fr 0.6fr 0.7fr"><div style="font-family:'JetBrains Mono',monospace;color:#FFDF80;font-weight:600">7315</div><div style="color:var(--t1)">Roller chain — industrial</div><div style="text-align:center;color:var(--t1)">All</div><div style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:#6FFFB0">0-3.8%</div></div>
+
+  <div class="alert alert-red" style="margin-top:0.75rem"><div class="alert-title" style="color:#FF8FA0">Bearings Have the Most Complex AD/CVD History in Procurement</div><div class="alert-text">Antidumping duty orders on bearings have been in effect since the 1970s — among the longest-running trade cases in US history. Active AD orders cover ball bearings from: China, Japan, UK, France, Germany, Italy, Singapore, Romania, and more. Each exporter has a company-specific AD rate. Your bearing supplier should be certifying country of origin and applicable duty rate on every shipment. If they're not — you may have undisclosed customs liability.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Timken — Domestic Advantage</div><div class="alert-text">Timken manufactures bearings in the US (Canton, OH and multiple plants). No import duty, no AD/CVD, no tariff exposure. For tapered roller bearings (where Timken is the dominant supplier), domestic sourcing avoids the complex AD/CVD landscape entirely. SKF also has US manufacturing (Gothenburg via Kulpsville, PA).</div></div>
+  <div class="src">Source: USTR HTS, ITC AD/CVD bearing orders (A-570/A-588 series), CBP</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — Bearings & Power Transmission</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Lock bearing pricing on your top 50 SKUs by spend before OEM steel surcharges hit. Bearing steel (52100/100Cr6) tracks general steel pricing with a 2-3 month lag. Steel is up 18% YTD — the surcharge letters are coming in 30-60 days. Get quotes at current prices and commit before the increase.</div><div class="act-cat">STEEL · PRICING · SURCHARGE</div></div>
+  <div class="act"><div class="act-pri pri-urg">CRITICAL — SAFETY</div><div class="act-text">Verify every bearing source is an OEM-authorized distributor. If any bearings in your supply chain come from unauthorized channels (online marketplaces, surplus dealers, unknown brokers), quarantine that inventory and verify authenticity before installing. A counterfeit bearing failure is a safety incident and an equipment catastrophe.</div><div class="act-cat">COUNTERFEIT · SAFETY · AUTHORIZED</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Implement vibration analysis on your top 20 rotating equipment assets. Condition-based bearing replacement cuts bearing spend 20-40% vs time-based schedules, catches failures before they destroy equipment, and extends bearing life by eliminating premature replacements. SKF, Timken, and NSK all offer condition monitoring services.</div><div class="act-cat">PREDICTIVE · VIBRATION · CONDITION-BASED</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Map Schaeffler (FAG + INA) and ABB (Dodge) concentration across your bearing and power transmission spend. If you buy FAG, INA, AND Dodge — that's potentially two parent companies covering 80% of your bearing spend. Qualify SKF or Timken as alternatives for at least one major application.</div><div class="act-cat">CONCENTRATION · SCHAEFFLER · ABB</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Standardize your bearing specifications. Most plants have 200-500 unique bearing part numbers in the storeroom. Many are interchangeable. A bearing rationalization exercise (mapping part numbers to standard ISO designations) typically reduces unique SKUs by 30-40%, simplifies inventory, and increases purchase volume per SKU for better pricing.</div><div class="act-cat">STANDARDIZATION · INVENTORY · RATIONALIZATION</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Evaluate sealed/shielded bearings for applications currently using open bearings with manual regreasing. Sealed bearings are lubricated for life — no regreasing required, no grease contamination risk, lower maintenance labor. Premium price per bearing, but TCO is lower when you factor in eliminated maintenance visits.</div><div class="act-cat">SEALED · MAINTENANCE · TCO</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">ITC sunset reviews on bearing AD/CVD orders are periodic. Rate changes can significantly affect landed cost for specific bearing types from specific countries. Track ITC bearing case activity — a rate reduction on Japanese bearings (NSK, NTN) or a rate increase on Chinese bearings changes your sourcing economics.</div><div class="act-cat">AD/CVD · SUNSET · ITC</div></div>
+  <div class="src">Source: FSA analyst assessment based on BLS, FRED, ABMA, ITC, SEC EDGAR</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · Bearings & Power Transmission · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>

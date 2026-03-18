@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — IT & Telecom</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--org:#FFB898;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}html{font-size:14px;-webkit-font-smoothing:antialiased;background:#101824}body{background:#101824;color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}.hdr-left{display:flex;align-items:center;gap:0.75rem}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.9rem;color:var(--bg)}.hdr-title{font-size:0.75rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.52rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}.hdr-right{display:flex;align-items:center;gap:1rem}.hdr-time{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--t3)}.live{font-size:0.6rem;color:var(--grn);font-weight:500;display:flex;align-items:center;gap:0.3rem}.dot{width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px rgba(111,255,176,0.5);animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}.cat-hero{background:var(--bg2);padding:1rem 1.25rem 0}.cat-tag{font-size:0.5rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;display:flex;align-items:center;gap:0.4rem}.cat-tag::before{content:'';width:14px;height:1px;background:var(--gold)}.cat-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--t1);line-height:1.15;margin-bottom:0.2rem}.cat-desc{font-size:0.75rem;color:var(--t2);line-height:1.45;max-width:700px}.cat-stats{display:flex;gap:1.5rem;margin-top:0.6rem;padding-bottom:0.75rem;flex-wrap:wrap}.cs-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}.cs-lbl{font-size:0.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:1px}.tabs{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0 1.25rem;display:flex;gap:0;position:sticky;top:42px;z-index:99;overflow-x:auto}.tab{padding:0.6rem 1rem;font-size:0.72rem;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;user-select:none}.tab:hover{color:var(--t1);background:rgba(255,255,255,0.03)}.tab.active{color:#FFE9A8;border-bottom-color:#FFDF80;background:rgba(255,223,128,0.08);font-weight:700}.tab-count{font-family:'JetBrains Mono',monospace;font-size:0.5rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;margin-left:0.35rem;color:var(--t3)}.tab.active .tab-count{background:rgba(255,223,128,0.2);color:#FFDF80}.tab-content{display:none;padding:1rem 1.25rem;flex:1;overflow-y:auto;background:var(--bg)}.tab-content.active{display:block}.pnl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--bdr)}.pnl-title{font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}.pnl-badge{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:var(--t2);background:rgba(255,255,255,0.06);padding:0.12rem 0.4rem;border-radius:3px;border:1px solid rgba(255,255,255,0.1)}.src{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--t2);opacity:0.7;margin-top:0.5rem}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.grid-2{grid-template-columns:1fr}}.alert{border-radius:6px;padding:0.6rem 0.75rem;margin-top:0.6rem;margin-bottom:0.5rem}.alert-red{background:rgba(255,143,160,0.12);border:1px solid rgba(255,143,160,0.3);border-left:3px solid #FF8FA0}.alert-gold{background:rgba(255,223,128,0.1);border:1px solid rgba(255,223,128,0.25);border-left:3px solid #FFDF80}.alert-blu{background:rgba(176,204,255,0.1);border:1px solid rgba(176,204,255,0.25);border-left:3px solid #B0CCFF}.alert-title{font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.2rem}.alert-text{font-size:0.75rem;color:var(--t1);line-height:1.5}.act{background:var(--bg3);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:0.6rem 0.7rem;margin-bottom:0.5rem}.act-pri{font-size:0.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.2rem}.act-text{font-size:0.76rem;color:var(--t1);line-height:1.5}.act-cat{font-size:0.56rem;color:var(--t2);margin-top:0.2rem;font-family:'JetBrains Mono',monospace}.pri-urg{color:#FF8FA0}.pri-act{color:#FFDF80}.pri-str{color:#B0CCFF}.pri-mon{color:#6FFFB0}.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.75rem}.risk-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.55rem;text-align:center}.risk-val{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;line-height:1}.risk-lbl{font-size:0.58rem;color:var(--t2);margin-top:0.15rem;line-height:1.25}@media(max-width:600px){.risk-grid{grid-template-columns:1fr 1fr}}.tree-parent{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.6rem}.tree-p-name{font-size:0.78rem;color:var(--t1);font-weight:600;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}.tree-p-tag{font-size:0.48rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,223,128,0.12);padding:0.08rem 0.25rem;border-radius:2px}.tree-p-meta{font-size:0.62rem;color:var(--t2);margin-top:0.1rem;font-family:'JetBrains Mono',monospace}.tree-subs{padding-left:1.25rem;border-left:2px solid rgba(255,223,128,0.2);margin-left:0.65rem;margin-top:0.35rem}.tree-sub{padding:0.25rem 0 0.25rem 0.65rem;border-bottom:1px solid rgba(255,255,255,0.02);position:relative}.tree-sub::before{content:'';position:absolute;left:-1.25rem;top:50%;width:1.25rem;border-top:1px dashed rgba(255,223,128,0.2)}.tree-sub-name{font-size:0.75rem;color:var(--t1);font-weight:600}.tree-sub-detail{font-size:0.62rem;color:var(--t2)}.driver{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0;border-bottom:1px solid rgba(255,255,255,0.03)}.driver-name{font-size:0.78rem;color:var(--t1);font-weight:600;width:140px;flex-shrink:0}.driver-bar-bg{flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}.driver-bar{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--bg)}.db-1{background:linear-gradient(90deg,#FF8FA0,#ffb0bc)}.db-2{background:linear-gradient(90deg,#FFDF80,#FFE9A8)}.db-3{background:linear-gradient(90deg,#FFB898,#ffd0b8)}.db-4{background:linear-gradient(90deg,#6FFFB0,#99ffc8)}.db-5{background:linear-gradient(90deg,#B0CCFF,#c8daff)}.db-6{background:linear-gradient(90deg,#99A8BE,#b0bccf)}.driver-pct{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--t1);width:35px;text-align:right;flex-shrink:0;font-weight:600}.driver-trend{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:700;width:60px;text-align:right;flex-shrink:0}.up{color:#FF8FA0}.dn{color:#6FFFB0}.flat{color:var(--t3)}.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.5rem;color:var(--t3);margin-top:auto}.ftr a{color:var(--gold);text-decoration:none}</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="hdr"><div class="hdr-left"><div class="logo">F</div><div><div class="hdr-title">FSA Procurement Intelligence Terminal</div><div class="hdr-sub">Category Intelligence</div></div></div><div class="hdr-right"><div class="live"><div class="dot"></div>LIVE</div><div class="hdr-time" id="clk"></div></div></div>
+
+<div class="cat-hero">
+  <div class="cat-tag">IT & Telecom</div>
+  <div class="cat-title">Category Intelligence Dashboard</div>
+  <div class="cat-desc">Network infrastructure (switches, routers, firewalls, Wi-Fi), servers/cloud (on-prem, IaaS, PaaS), endpoints (PCs, laptops, mobile), software licensing (SaaS, on-prem, enterprise agreements), telecom (voice, data, WAN), cybersecurity, and managed IT services. The fastest-growing procurement category, the deepest vendor lock-in, and the one where most industrial companies overspend by 25-40% because they don't audit licenses, right-size cloud, or negotiate renewals.</div>
+  <div class="cat-stats">
+    <div><div class="cs-val">$1.8T</div><div class="cs-lbl">US IT Spend</div></div>
+    <div><div class="cs-val" style="color:#FF8FA0">CRITICAL</div><div class="cs-lbl">SaaS Sprawl</div></div>
+    <div><div class="cs-val" style="color:#FFB898">25-40%</div><div class="cs-lbl">Cloud Overspend</div></div>
+    <div><div class="cs-val" style="color:#FFDF80">HIGH</div><div class="cs-lbl">License True-Up</div></div>
+    <div><div class="cs-val" style="color:#6FFFB0">$$$</div><div class="cs-lbl">Renewal Leverage</div></div>
+  </div>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="cost">Cost Drivers</div>
+  <div class="tab" data-tab="vendors">Vendors & Ecosystems<span class="tab-count">8</span></div>
+  <div class="tab" data-tab="licensing">License & SaaS Optimization</div>
+  <div class="tab" data-tab="cloud">Cloud Cost Optimization</div>
+  <div class="tab" data-tab="actions">Actions<span class="tab-count">7</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="risk-grid">
+    <div class="risk-card"><div class="risk-val" style="color:#FF8FA0">CRITICAL</div><div class="risk-lbl">SaaS Sprawl<br>Avg 130 Apps</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFB898">25-40%</div><div class="risk-lbl">Cloud Overspend<br>Unoptimized</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">HIGH</div><div class="risk-lbl">Microsoft/Oracle<br>License Traps</div></div>
+    <div class="risk-card"><div class="risk-val" style="color:#FFDF80">ELEVATED</div><div class="risk-lbl">Cybersecurity<br>Spend +15%/yr</div></div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Sub-Categories</span><span class="pnl-badge">GARTNER · IDC</span></div>
+      <div class="driver"><div class="driver-name">Software/SaaS</div><div class="driver-bar-bg"><div class="driver-bar db-1" style="width:32%">32%</div></div><div class="driver-pct">32%</div><div class="driver-trend up">+12.4%</div></div>
+      <div class="driver"><div class="driver-name">Cloud (IaaS/PaaS)</div><div class="driver-bar-bg"><div class="driver-bar db-2" style="width:22%">22%</div></div><div class="driver-pct">22%</div><div class="driver-trend up">+18.6%</div></div>
+      <div class="driver"><div class="driver-name">Telecom/WAN</div><div class="driver-bar-bg"><div class="driver-bar db-4" style="width:15%">15%</div></div><div class="driver-pct">15%</div><div class="driver-trend dn">-3.2%</div></div>
+      <div class="driver"><div class="driver-name">Cybersecurity</div><div class="driver-bar-bg"><div class="driver-bar db-3" style="width:12%">12%</div></div><div class="driver-pct">12%</div><div class="driver-trend up">+15.1%</div></div>
+      <div class="driver"><div class="driver-name">Endpoints/Hardware</div><div class="driver-bar-bg"><div class="driver-bar db-5" style="width:10%">10%</div></div><div class="driver-pct">10%</div><div class="driver-trend up">+4.2%</div></div>
+      <div class="driver"><div class="driver-name">Network Infra</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:5%">5%</div></div><div class="driver-pct">5%</div><div class="driver-trend up">+6.8%</div></div>
+      <div class="driver"><div class="driver-name">Managed Services</div><div class="driver-bar-bg"><div class="driver-bar db-6" style="width:4%">4%</div></div><div class="driver-pct">4%</div><div class="driver-trend up">+8.4%</div></div>
+      <div class="src">Source: Gartner IT spending forecast, IDC, BLS</div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Urgent Actions</span><span class="pnl-badge">THIS WEEK</span></div>
+      <div class="act"><div class="act-pri pri-urg">URGENT</div><div class="act-text">If you have a Microsoft Enterprise Agreement (EA) or Oracle ULA renewal in the next 12 months, start preparing NOW. These negotiations take 6-9 months to do properly. Microsoft and Oracle sales teams are quota-driven — your leverage is highest in Q4 of their fiscal year (Microsoft: June, Oracle: May). Starting late means accepting their first offer.</div><div class="act-cat">MICROSOFT · ORACLE · EA RENEWAL</div></div>
+      <div class="act"><div class="act-pri pri-act">ACTION</div><div class="act-text">Run a SaaS audit. The average mid-market company has 130+ SaaS subscriptions. 25-30% are unused, redundant, or have more seats than active users. Tools like Zylo, Productiv, or even a manual AP analysis will identify $50K-500K in waste depending on company size.</div><div class="act-cat">SaaS · AUDIT · WASTE</div></div>
+      <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">Cybersecurity spend growing 15%+ annually — the fastest sub-category. Every ransomware headline drives budget increases. But spending more doesn't equal better security. Map your current security stack against NIST CSF before adding more tools. Most companies have tool overlap and coverage gaps simultaneously.</div><div class="act-cat">CYBERSECURITY · NIST · RATIONALIZATION</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COST DRIVERS -->
+<div class="tab-content" id="tab-cost">
+  <div class="grid-2">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Why IT Costs Keep Rising</span><span class="pnl-badge">ANALYSIS</span></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Perpetual → Subscription: The Industry-Wide Shift</div><div class="alert-text">Software vendors have systematically moved from perpetual licenses (buy once) to annual subscriptions (pay forever). Microsoft 365, Adobe Creative Cloud, Autodesk — all subscription now. What was a $500 one-time purchase is now $300/year forever. Over a 5-year lifecycle, the subscription costs 3x the perpetual license. And vendors raise subscription prices 5-10% annually because switching costs make customers sticky.</div></div>
+      <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">Cloud Spend — The New Unmanaged Category</div><div class="alert-text">Cloud (AWS, Azure, GCP) is the new "nobody manages it" spend category. Developers spin up resources, forget to shut them down, over-provision instances, and nobody optimizes. Gartner estimates 25-40% of cloud spend is wasted. A $500K annual cloud bill likely has $125K-200K in optimization opportunities — idle instances, oversized VMs, unused storage, and missing reserved instance commitments.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Telecom — The Declining Category</span><span class="pnl-badge">FCC · BLS</span></div>
+      <div class="alert alert-gold" style="border-left-color:#6FFFB0"><div class="alert-title" style="color:#6FFFB0">Voice & WAN Costs Are Declining</div><div class="alert-text">Traditional telecom (voice lines, MPLS, PRI trunks) is declining 3-5% annually. VoIP/UCaaS (Teams, Zoom, RingCentral) replaces PBX hardware and PSTN lines. SD-WAN replaces expensive MPLS at 40-60% lower cost with comparable or better performance. If you're still paying for MPLS circuits and PRI trunks, you're overpaying for technology that the market has moved past.</div></div>
+      <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">Endpoint Refresh Cycles — Extending</div><div class="alert-text">PC refresh cycles have extended from 3-4 years to 4-5 years as hardware quality improves. But Windows 10 end-of-support (October 2025) forces a hardware refresh for PCs that can't run Windows 11 (TPM 2.0 requirement). This is a one-time cost spike — budget for it but don't let Dell/HP/Lenovo use the urgency to overcharge. Get competitive bids from all three.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- VENDORS -->
+<div class="tab-content" id="tab-vendors">
+  <div class="pnl-hdr"><span class="pnl-title">IT Vendor Ecosystems</span><span class="pnl-badge">SEC EDGAR · ANALYSIS</span></div>
+  <div class="grid-2">
+    <div>
+      <div class="tree-parent">
+        <div class="tree-p-name">Microsoft <span class="tree-p-tag">NASDAQ: MSFT</span></div>
+        <div class="tree-p-meta">Revenue: $245B · Deepest enterprise lock-in</div>
+        <div class="tree-subs">
+          <div class="tree-sub"><div class="tree-sub-name">Microsoft 365 (Office)</div><div class="tree-sub-detail">Word, Excel, PowerPoint, Outlook, Teams — the productivity standard</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Azure (Cloud)</div><div class="tree-sub-detail">#2 cloud behind AWS — integrated with M365 and Windows Server</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Windows Server / SQL Server</div><div class="tree-sub-detail">On-prem infrastructure — license mobility to Azure creates lock-in</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Dynamics 365 (ERP/CRM)</div><div class="tree-sub-detail">ERP and CRM — competes with SAP and Salesforce</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Power Platform</div><div class="tree-sub-detail">Power BI, Power Automate, Power Apps — low-code automation</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">LinkedIn</div><div class="tree-sub-detail">$26.2B acquisition — Sales Navigator, Learning, Recruiter</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">GitHub / Copilot</div><div class="tree-sub-detail">Developer platform + AI coding assistant</div></div>
+        </div>
+      </div>
+      <div class="tree-parent">
+        <div class="tree-p-name">Cisco Systems <span class="tree-p-tag">NASDAQ: CSCO</span></div>
+        <div class="tree-p-meta">Revenue: $57B · Acquired Splunk ($28B)</div>
+        <div class="tree-subs">
+          <div class="tree-sub"><div class="tree-sub-name">Networking (switches, routers)</div><div class="tree-sub-detail">60%+ enterprise network market share — the de facto standard</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Meraki (cloud-managed)</div><div class="tree-sub-detail">Cloud-managed networking, Wi-Fi, security cameras</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Webex (collaboration)</div><div class="tree-sub-detail">Video conferencing, UCaaS — competes with Teams/Zoom</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Splunk (acquired 2024)</div><div class="tree-sub-detail">$28B acquisition — SIEM, observability, security analytics</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Duo Security (MFA)</div><div class="tree-sub-detail">Multi-factor authentication — acquired 2018</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="tree-parent">
+        <div class="tree-p-name">Oracle Corporation <span class="tree-p-tag">NYSE: ORCL</span></div>
+        <div class="tree-p-meta">Revenue: $53B · Most aggressive licensing audits</div>
+        <div class="tree-subs">
+          <div class="tree-sub"><div class="tree-sub-name">Oracle Database</div><div class="tree-sub-detail">Enterprise database — licensing complexity is a revenue strategy</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Oracle Cloud (OCI)</div><div class="tree-sub-detail">Distant #4 in cloud — aggressive pricing to migrate Oracle DB customers</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">NetSuite (ERP)</div><div class="tree-sub-detail">Cloud ERP for mid-market — acquired 2016</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Cerner (Healthcare IT)</div><div class="tree-sub-detail">$28B acquisition — electronic health records</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Java</div><div class="tree-sub-detail">Changed licensing in 2023 — per-employee pricing model, major cost increase for users</div></div>
+        </div>
+      </div>
+      <div class="tree-parent">
+        <div class="tree-p-name">Broadcom (VMware) <span class="tree-p-tag">NASDAQ: AVGO</span></div>
+        <div class="tree-p-meta">Revenue: $51B · VMware acquired Nov 2023</div>
+        <div class="tree-subs">
+          <div class="tree-sub"><div class="tree-sub-name">VMware vSphere</div><div class="tree-sub-detail">Server virtualization — 80%+ market share in enterprise</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">VMware NSX</div><div class="tree-sub-detail">Network virtualization / microsegmentation</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">Symantec (endpoint security)</div><div class="tree-sub-detail">Acquired 2019 — enterprise security division</div></div>
+          <div class="tree-sub"><div class="tree-sub-name">CA Technologies</div><div class="tree-sub-detail">Acquired 2018 — mainframe, infrastructure management</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">⚠ Broadcom / VMware — Price Shock</div><div class="alert-text">Broadcom acquired VMware in November 2023 and immediately restructured licensing: eliminated perpetual licenses, moved to subscription-only bundles, and raised prices 2-10x for many customers. If you run VMware vSphere, your renewal will be dramatically higher. Evaluate alternatives NOW: Microsoft Hyper-V (free with Windows Server), Nutanix AHV, or Proxmox. The migration is painful but the alternative is accepting Broadcom's pricing monopoly on your entire virtualization infrastructure.</div></div>
+  <div class="alert alert-gold"><div class="alert-title" style="color:#FFDF80">⚠ Oracle Java Licensing</div><div class="alert-text">Oracle changed Java SE licensing in 2023 to per-employee pricing (not per-installation). A 1,000-employee company using Java on even one server now owes Oracle $15/employee/month = $180,000/year. Many companies don't realize they owe this. Alternatives: OpenJDK, Amazon Corretto, Eclipse Temurin — all free, all production-ready. Migrate off Oracle Java before the audit letter arrives.</div></div>
+  <div class="src">Source: SEC EDGAR, annual reports, vendor pricing documentation</div>
+</div>
+
+<!-- LICENSE OPTIMIZATION -->
+<div class="tab-content" id="tab-licensing">
+  <div class="pnl-hdr"><span class="pnl-title">Software License & SaaS Optimization</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">The SaaS Sprawl Problem</div><div class="alert-text">The average mid-market company (500-5,000 employees) has 130+ SaaS subscriptions. 25-30% are unused (licenses assigned to departed employees or never-adopted tools). 15-20% are redundant (three project management tools, two CRMs, multiple file-sharing platforms). And every one auto-renews annually. Nobody is managing this portfolio — IT buys some, departments buy some on credit cards, nobody reconciles. The result: $50K-500K/year in SaaS waste.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">License Traps</span></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">MICROSOFT EA TRUE-UP</div><div class="act-text">Microsoft Enterprise Agreements require annual true-ups — counting actual usage vs. contracted licenses. If you've added users or deployed products beyond your agreement, you owe back-pay at list price (no discount). True-up audits catch companies with 20-50% more usage than contracted. Count your deployments BEFORE the true-up deadline.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">ORACLE AUDIT</div><div class="act-text">Oracle's licensing model (processor-based, named user plus, with complex virtualization rules) is designed to create non-compliance. Oracle audits more aggressively than any other vendor. The typical audit finding: $500K-5M in unintentional non-compliance. Defense: maintain a Software Asset Management (SAM) tool, document your deployment architecture, and engage a third-party Oracle licensing advisor before the audit, not after.</div></div>
+      <div class="act" style="border-left-color:#FFB898"><div class="act-pri pri-act">AUTO-RENEWAL — EVERYWHERE</div><div class="act-text">Every SaaS contract auto-renews 30-90 days before expiration. Miss the cancellation window and you're locked in for another year at whatever price the vendor set. Calendar EVERY renewal date. File cancellation notices 90 days out even for products you plan to keep — it forces a negotiation.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Optimization Playbook</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 1 — INVENTORY EVERYTHING</div><div class="act-text">Pull 12 months of AP/credit card data. Search for every recurring software charge. Build a master list: vendor, product, annual cost, number of licenses, contract end date, auto-renewal terms. Most companies discover 30-50% more subscriptions than they knew about.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 2 — MEASURE USAGE</div><div class="act-text">For every product, check actual usage: active users vs. licensed users, login frequency, feature adoption. Most SaaS admin portals have usage dashboards. If 40% of your Salesforce licenses haven't logged in for 90 days, you're paying for 40% more seats than you need.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 3 — ELIMINATE REDUNDANCY</div><div class="act-text">Map products to functions: how many project management tools? How many video conferencing platforms? How many file-sharing solutions? Standardize on one per function and eliminate the rest. Common redundancies: Slack + Teams, Dropbox + OneDrive + Google Drive, Monday + Asana + Jira.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">STEP 4 — NEGOTIATE RENEWALS</div><div class="act-text">Armed with usage data and competitive alternatives, negotiate every renewal. Tactics: right-size to actual usage, request multi-year discount (15-25% typical), time negotiations to vendor fiscal year-end, and always have a credible alternative. "We're evaluating [competitor]" is the most powerful sentence in software negotiation.</div></div>
+    </div>
+  </div>
+  <div class="src">Source: FSA analysis, Gartner SaaS management data, Zylo benchmarks</div>
+</div>
+
+<!-- CLOUD OPTIMIZATION -->
+<div class="tab-content" id="tab-cloud">
+  <div class="pnl-hdr"><span class="pnl-title">Cloud Cost Optimization — AWS / Azure / GCP</span><span class="pnl-badge">FSA ANALYSIS</span></div>
+
+  <div class="alert alert-red"><div class="alert-title" style="color:#FF8FA0">25-40% of Cloud Spend Is Wasted</div><div class="alert-text">Gartner and Flexera both estimate 25-40% of enterprise cloud spend is wasted. The causes: idle instances running 24/7 that are only needed 8 hours/day, oversized VMs (production workloads on instances with 4x the CPU/RAM they need), unattached storage volumes, forgotten dev/test environments, and failure to use reserved instances or savings plans for predictable workloads.</div></div>
+
+  <div class="grid-2" style="margin-top:0.75rem">
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Where The Waste Hides</span></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">IDLE INSTANCES — 20-30% OF COMPUTE</div><div class="act-text">Dev/test environments running 24/7 when they're only used during business hours. Auto-shutdown schedules (AWS Instance Scheduler, Azure Auto-Shutdown) eliminate 60-70% of dev/test compute cost overnight and on weekends.</div></div>
+      <div class="act" style="border-left-color:#FF8FA0"><div class="act-pri pri-urg">OVERSIZED VMs — 40%+ OF INSTANCES</div><div class="act-text">The default is to overprovision. A workload that needs 2 vCPUs and 4GB RAM runs on a 4 vCPU / 16GB instance "just in case." AWS Compute Optimizer and Azure Advisor both recommend right-sizing based on actual utilization. Average savings: 30-50% per right-sized instance.</div></div>
+      <div class="act" style="border-left-color:#FFB898"><div class="act-pri pri-act">NO RESERVED INSTANCES — PAYING ON-DEMAND</div><div class="act-text">On-demand pricing is 40-60% more expensive than 1-year reserved instances or savings plans. For any workload running consistently (24/7 production), reserved instances are the single biggest savings lever. A $100K annual on-demand spend becomes $40K-60K with a 1-year reservation commitment.</div></div>
+    </div>
+    <div>
+      <div class="pnl-hdr"><span class="pnl-title">Optimization Actions</span></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">USE NATIVE TOOLS — FREE</div><div class="act-text"><strong>AWS:</strong> Cost Explorer, Compute Optimizer, Trusted Advisor.<br><strong>Azure:</strong> Cost Management + Advisor.<br><strong>GCP:</strong> Cost Management + Recommender.<br>Every cloud provider gives you free tools to find waste. If you haven't looked at your cloud provider's cost recommendations dashboard, start there.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">COMMIT TO RESERVATIONS</div><div class="act-text">For any workload running 24/7 for the next 12 months: buy a 1-year reserved instance or savings plan. 40-60% savings vs on-demand. Start with production databases and application servers — these are the easiest to predict and the biggest on-demand costs.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">IMPLEMENT TAGGING & CHARGEBACKS</div><div class="act-text">Tag every cloud resource with owner, project, and environment (dev/test/prod). Implement monthly chargeback reporting so business units see their cloud costs. When the marketing team sees they're paying $3K/month for a dev environment nobody uses, they shut it down. Visibility drives accountability.</div></div>
+      <div class="act" style="border-left-color:#6FFFB0"><div class="act-pri pri-mon">NEGOTIATE EDP / COMMIT</div><div class="act-text">AWS Enterprise Discount Program (EDP), Azure MACC (Microsoft Azure Consumption Commitment), and GCP Committed Use Discounts all offer 10-20% additional savings on top of reserved instances for large spend commitments. If your annual cloud spend exceeds $250K, you qualify for committed-spend discounts.</div></div>
+    </div>
+  </div>
+  <div class="src">Source: FSA analysis, Gartner cloud cost optimization, Flexera State of the Cloud</div>
+</div>
+
+<!-- ACTIONS -->
+<div class="tab-content" id="tab-actions">
+  <div class="pnl-hdr"><span class="pnl-title">Strategic Sourcing Actions — IT & Telecom</span><span class="pnl-badge">FSA INTELLIGENCE</span></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS WEEK</div><div class="act-text">Calendar every software and SaaS renewal date for the next 12 months. File cancellation or non-renewal notices 90 days before each one — even for products you plan to keep. This forces a negotiation instead of an auto-renewal at the vendor's price. Missing a renewal window is the #1 source of IT overspend.</div><div class="act-cat">RENEWAL · AUTO-RENEWAL · CALENDAR</div></div>
+  <div class="act"><div class="act-pri pri-urg">URGENT — ACT THIS MONTH</div><div class="act-text">If you run VMware vSphere, your next renewal will be dramatically higher under Broadcom's new pricing. Start evaluating alternatives NOW: Hyper-V (included with Windows Server), Nutanix AHV, Proxmox, or migration to cloud-native. Even if you decide to stay with VMware, having a credible alternative is your only negotiating leverage against Broadcom's pricing.</div><div class="act-cat">VMWARE · BROADCOM · ALTERNATIVES</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Run a SaaS audit. Pull 12 months of AP and credit card data. Identify every recurring software charge. Match licenses to active users. Eliminate unused subscriptions, consolidate redundant tools, and right-size remaining licenses. Expected savings: 15-30% of total SaaS spend.</div><div class="act-cat">SaaS · AUDIT · RATIONALIZATION</div></div>
+  <div class="act"><div class="act-pri pri-act">STRATEGIC — 30 DAYS</div><div class="act-text">Check your cloud provider's cost optimization dashboard (AWS Cost Explorer + Compute Optimizer, Azure Cost Management + Advisor). Implement their recommendations: right-size oversized instances, schedule dev/test auto-shutdown, buy reserved instances for 24/7 production workloads. Expected savings: 25-40% of cloud bill.</div><div class="act-cat">CLOUD · AWS · AZURE · OPTIMIZATION</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">If you're still paying for MPLS WAN circuits, evaluate SD-WAN. Cisco Viptela, Fortinet, VMware VeloCloud, and Palo Alto Prisma all offer SD-WAN at 40-60% lower cost than MPLS with comparable or better performance. SD-WAN uses commodity internet (broadband/LTE) with intelligent routing instead of dedicated circuits. The ROI is immediate.</div><div class="act-cat">SD-WAN · MPLS · TELECOM</div></div>
+  <div class="act"><div class="act-pri pri-str">STRATEGIC — NEXT QUARTER</div><div class="act-text">Verify Oracle Java compliance. If you have Oracle Java SE installed anywhere in your environment, you may owe per-employee licensing fees under Oracle's 2023 pricing model. Audit Java installations, migrate to OpenJDK/Amazon Corretto/Eclipse Temurin where possible, and restrict Oracle Java to applications that specifically require it. Do this before Oracle's audit team contacts you.</div><div class="act-cat">ORACLE · JAVA · COMPLIANCE</div></div>
+  <div class="act"><div class="act-pri pri-mon">MONITOR</div><div class="act-text">AI/Copilot pricing is the next wave of IT cost expansion. Microsoft Copilot ($30/user/month on top of M365), Salesforce Einstein, ServiceNow AI — every major vendor is adding AI tiers at premium pricing. Before signing up for enterprise AI licenses, pilot with 10-20 users and measure actual productivity gains. Don't buy 1,000 Copilot licenses based on a demo.</div><div class="act-cat">AI · COPILOT · PILOT FIRST</div></div>
+  <div class="src">Source: FSA analyst assessment based on Gartner, IDC, Flexera, vendor pricing</div>
+</div>
+
+<div class="ftr"><span>FSA Procurement Intelligence Terminal v3.0 · IT & Telecom · All data from public sources</span><span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · © 2026 Foley Strategic Advisory</span></div>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.getElementById('tab-'+id).classList.add('active');var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){if(tabs[i].getAttribute('data-tab')===id){tabs[i].classList.add('active');break;}}}
+document.getElementById('tab-bar').addEventListener('click',function(e){var tab=e.target.closest('.tab');if(!tab)return;var id=tab.getAttribute('data-tab');if(id)showTab(id);});
+function uc(){var n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'})}setInterval(uc,1000);uc();
+</script>
+</body>
+</html>
