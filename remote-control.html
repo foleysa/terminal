@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSA Terminal — Remote Control</title>
+<link rel="icon" type="image/png" href="fsalogo300x300.png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#101824;--bg2:#151f30;--bg3:#1c2940;--bg4:#243350;--bdr:rgba(255,255,255,0.1);--gold:#FFDF80;--gold2:#FFE9A8;--grn:#6FFFB0;--red:#FF8FA0;--blu:#B0CCFF;--t1:#FFFFFF;--t2:#D4DCE8;--t3:#99A8BE}
+html{font-size:14px;-webkit-font-smoothing:antialiased;background:var(--bg)}
+body{background:var(--bg);color:var(--t2);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));position:fixed;top:0;left:0;right:0;z-index:1000}
+
+.hdr{background:var(--bg2);border-bottom:1px solid var(--bdr);padding:0.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:0.75rem}
+.logo{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:0.95rem;color:var(--bg)}
+.hdr-title{font-size:0.8rem;font-weight:600;color:var(--t1)}.hdr-sub{font-size:0.5rem;color:var(--gold);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.conn-status{font-size:0.6rem;font-weight:600;display:flex;align-items:center;gap:0.3rem}
+.conn-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.connected .conn-dot{background:var(--grn);box-shadow:0 0 6px rgba(111,255,176,0.5)}
+.connected{color:var(--grn)}
+.disconnected .conn-dot{background:var(--red);box-shadow:0 0 6px rgba(255,143,160,0.5)}
+.disconnected{color:var(--red)}
+
+.main{flex:1;display:flex;flex-direction:column;padding:1rem 1.25rem;gap:1rem}
+
+/* Quick actions */
+.sec-title{font-size:0.58rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:0.4rem;margin-bottom:0.5rem}
+.sec-title::before{content:'';width:14px;height:1px;background:var(--gold)}
+.btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.4rem}
+.rc-btn{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;padding:0.5rem 0.7rem;cursor:pointer;transition:all 0.15s;text-align:center;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;color:var(--t2)}
+.rc-btn:hover{border-color:rgba(255,223,128,0.3);color:var(--t1);background:var(--bg4)}
+.rc-btn:active{transform:scale(0.97)}
+.rc-btn.nav-active{border-color:var(--gold);color:var(--gold);background:rgba(255,223,128,0.06)}
+.rc-btn.cat-selected{border-color:var(--grn);color:var(--grn);background:rgba(111,255,176,0.06)}
+.rc-btn.action{background:rgba(255,223,128,0.08);border-color:rgba(255,223,128,0.25);color:var(--gold)}
+.rc-btn.action:hover{background:rgba(255,223,128,0.15)}
+
+/* Terminal */
+.terminal{flex:1;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;min-height:250px}
+.term-toolbar{background:var(--bg3);padding:0.35rem 0.7rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr)}
+.term-toolbar-title{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--t3)}
+.term-clear{font-size:0.55rem;color:var(--t3);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+.term-clear:hover{color:var(--t1)}
+.term-log{flex:1;overflow-y:auto;padding:0.6rem 0.85rem;font-family:'JetBrains Mono',monospace;font-size:0.65rem;line-height:1.7;color:var(--t3)}
+.term-log .in{color:var(--gold)}.term-log .out{color:var(--grn)}.term-log .err{color:var(--red)}.term-log .sys{color:var(--blu)}.term-log .info{color:var(--t2)}
+.term-input-row{display:flex;align-items:center;background:var(--bg3);border-top:1px solid var(--bdr);padding:0.4rem 0.85rem;gap:0.5rem}
+.term-prompt{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--gold);font-weight:700;white-space:nowrap}
+.term-input{flex:1;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--t1);caret-color:var(--gold)}
+.term-input::placeholder{color:var(--t3)}
+
+.ftr{background:var(--bg2);padding:0.4rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--bdr);font-size:0.48rem;color:var(--t3);margin-top:auto}
+.ftr a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="logo">F</div>
+    <div>
+      <div class="hdr-title">Remote Control</div>
+      <div class="hdr-sub">FSA Procurement Intelligence Terminal</div>
+    </div>
+  </div>
+  <div id="conn" class="conn-status disconnected"><div class="conn-dot"></div><span id="conn-text">Disconnected</span></div>
+</div>
+
+<div class="main">
+  <!-- Navigation -->
+  <div>
+    <div class="sec-title">Navigate</div>
+    <div class="btn-grid" id="nav-btns">
+      <div class="rc-btn" data-nav="dashboard" onclick="sendNav('dashboard')">Dashboard</div>
+      <div class="rc-btn" data-nav="reports" onclick="sendNav('reports')">Reports</div>
+      <div class="rc-btn" data-nav="mapper" onclick="sendNav('mapper')">Supplier Mapper</div>
+      <div class="rc-btn" data-nav="negprep" onclick="sendNav('negprep')">Negotiation Prep</div>
+      <div class="rc-btn" data-nav="blsvalidator" onclick="sendNav('blsvalidator')">Price Validator</div>
+      <div class="rc-btn" data-nav="setup" onclick="sendNav('setup')">Categories</div>
+    </div>
+  </div>
+
+  <!-- Category Selection -->
+  <div>
+    <div class="sec-title">Toggle Categories</div>
+    <div class="btn-grid" id="cat-btns">
+      <div class="rc-btn" data-cat="metals" onclick="sendCat('metals')">Metals & Alloys</div>
+      <div class="rc-btn" data-cat="chemicals" onclick="sendCat('chemicals')">Chemicals</div>
+      <div class="rc-btn" data-cat="coatings" onclick="sendCat('coatings')">Coatings</div>
+      <div class="rc-btn" data-cat="electrical" onclick="sendCat('electrical')">Electrical</div>
+      <div class="rc-btn" data-cat="pvf" onclick="sendCat('pvf')">PVF</div>
+      <div class="rc-btn" data-cat="rotating" onclick="sendCat('rotating')">Rotating</div>
+      <div class="rc-btn" data-cat="hvac" onclick="sendCat('hvac')">HVAC</div>
+      <div class="rc-btn" data-cat="lubricants" onclick="sendCat('lubricants')">Lubricants</div>
+      <div class="rc-btn" data-cat="ocean" onclick="sendCat('ocean')">Ocean Freight</div>
+      <div class="rc-btn" data-cat="energy" onclick="sendCat('energy')">Energy</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div>
+    <div class="sec-title">Actions</div>
+    <div class="btn-grid">
+      <div class="rc-btn action" onclick="send('launch')">Launch Dashboard</div>
+      <div class="rc-btn action" onclick="send('status')">Get Status</div>
+      <div class="rc-btn action" onclick="send('list-cats')">List Categories</div>
+      <div class="rc-btn action" onclick="send('get-view')">Get View</div>
+    </div>
+  </div>
+
+  <!-- Command Terminal -->
+  <div class="terminal">
+    <div class="term-toolbar">
+      <div class="term-toolbar-title">command terminal — BroadcastChannel: fsa-remote-control</div>
+      <button class="term-clear" onclick="clearLog()">clear</button>
+    </div>
+    <div class="term-log" id="log"></div>
+    <div class="term-input-row">
+      <span class="term-prompt">rc ▸</span>
+      <input type="text" class="term-input" id="cmd" placeholder="Type command and press Enter..." autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+</div>
+
+<div class="ftr">
+  <span>FSA Remote Control · Open the terminal in another tab and activate remote control (Ctrl+Shift+R)</span>
+  <span><a href="https://foleystrategicadvisory.com">foleystrategicadvisory.com</a> · &copy; 2026 Foley Strategic Advisory</span>
+</div>
+
+<script>
+var channel=null;
+var connected=false;
+var history=[];
+var histIdx=-1;
+
+function log(msg,type){
+  var el=document.getElementById('log');
+  var div=document.createElement('div');
+  div.className=type||'info';
+  div.textContent=msg;
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+}
+
+function clearLog(){document.getElementById('log').innerHTML=''}
+
+function updateConn(state){
+  var el=document.getElementById('conn');
+  var txt=document.getElementById('conn-text');
+  connected=state;
+  el.className='conn-status '+(state?'connected':'disconnected');
+  txt.textContent=state?'Connected':'Disconnected';
+}
+
+function initChannel(){
+  if(typeof BroadcastChannel==='undefined'){
+    log('BroadcastChannel not supported in this browser','err');
+    return;
+  }
+  channel=new BroadcastChannel('fsa-remote-control');
+  channel.onmessage=function(e){
+    var data=e.data;
+    if(data.type==='fsa-rc-event'){
+      if(data.event==='activated'){
+        updateConn(true);
+        log('Terminal remote control activated','sys');
+      } else if(data.event==='deactivated'){
+        updateConn(false);
+        log('Terminal remote control deactivated','sys');
+      }
+    } else if(data.type==='fsa-rc-response'){
+      log('Response for "'+data.command+'": '+JSON.stringify(data.result),'out');
+    }
+  };
+  log('BroadcastChannel initialized — waiting for terminal...','sys');
+  log('Open index.html in another tab and press Ctrl+Shift+R or click "Remote"','info');
+
+  // Ping to check if terminal is already listening
+  channel.postMessage({command:'status'});
+}
+
+function send(cmd){
+  if(!channel){log('Channel not initialized','err');return}
+  log('▸ '+cmd,'in');
+  channel.postMessage({command:cmd});
+}
+
+function sendNav(view){
+  send('navigate '+view);
+  document.querySelectorAll('#nav-btns .rc-btn').forEach(function(b){
+    b.classList.toggle('nav-active',b.getAttribute('data-nav')===view);
+  });
+}
+
+function sendCat(id){
+  send('select-cat '+id);
+  var btn=document.querySelector('#cat-btns .rc-btn[data-cat="'+id+'"]');
+  if(btn)btn.classList.toggle('cat-selected');
+}
+
+// Terminal input
+document.getElementById('cmd').addEventListener('keydown',function(e){
+  if(e.key==='Enter'){
+    var val=this.value.trim();
+    if(val){
+      history.unshift(val);histIdx=-1;
+      send(val);
+      this.value='';
+    }
+  } else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    if(history.length>0&&histIdx<history.length-1){histIdx++;this.value=history[histIdx]}
+  } else if(e.key==='ArrowDown'){
+    e.preventDefault();
+    if(histIdx>0){histIdx--;this.value=history[histIdx]}else{histIdx=-1;this.value=''}
+  }
+});
+
+// Init
+initChannel();
+</script>
+</body>
+</html>
